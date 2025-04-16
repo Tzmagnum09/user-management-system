@@ -1,0 +1,18 @@
+parameters:
+    app.email_sender_address: '%env(EMAIL_SENDER_ADDRESS)%'
+    app.email_sender_name: '%env(EMAIL_SENDER_NAME)%'
+    app.locale: '%env(APP_LOCALE)%'
+    app.supported_locales: '%env(APP_SUPPORTED_LOCALES)%'
+    app.url: '%env(APP_URL)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'

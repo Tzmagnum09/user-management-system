@@ -1,0 +1,75 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uw rechten zijn gewijzigd</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .header {
+        background: linear-gradient(135deg, #8e44ad, #3498db);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    .content {
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+    .button {
+        display: inline-block;
+        background: linear-gradient(135deg, #8e44ad, #3498db);
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+        margin-top: 20px;
+    }
+    .permission-changes {
+        background-color: #f1f1f1;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="container">
+    <div class="header">
+        <h1>Uw rechten zijn gewijzigd</h1>
+    </div>
+    <div class="content">
+        <p>Beste {{ firstName }},</p>
+        
+        <p>We informeren u dat uw rechten op de Dmqode.be-website zijn gewijzigd.</p>
+
+        <div class="permission-changes">
+            <h3>Details van de wijzigingen</h3>
+            <p>{{ permissionChanges|raw }}</p>
+        </div>
+        
+        <p>Als u vragen heeft over deze wijzigingen, aarzel dan niet om contact op te nemen met onze ondersteuning.</p>
+        
+        <p style="text-align: center;">
+            <a href="https://{{ domain }}/login" class="button">Inloggen</a>
+        </p>
+        
+        <p>Met vriendelijke groeten,<br>Het Dmqode.be-team</p>
+    </div>
+    <div class="footer">
+        <p>Deze e-mail is automatisch verzonden; gelieve er niet op te reageren.</p>
+    </div>
+</div>

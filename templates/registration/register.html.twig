@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Register'|trans }} - {{ parent() }}{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>{{ 'Register'|trans }}</h2>
+            </div>
+            <div class="card-body">
+                {{ form_start(registrationForm) }}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_row(registrationForm.firstName, {
+                                label: 'First name'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_row(registrationForm.lastName, {
+                                label: 'Last name'|trans
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_row(registrationForm.email, {
+                                label: 'Email'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_row(registrationForm.username, {
+                                label: 'Username'|trans
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_row(registrationForm.plainPassword.first, {
+                                label: 'Password'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_row(registrationForm.plainPassword.second, {
+                                label: 'Repeat Password'|trans
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            {{ form_row(registrationForm.street, {
+                                label: 'Street'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            {{ form_row(registrationForm.houseNumber, {
+                                label: 'House number'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            {{ form_row(registrationForm.boxNumber, {
+                                label: 'Box number'|trans
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            {{ form_row(registrationForm.postalCode, {
+                                label: 'Postal code'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form_row(registrationForm.city, {
+                                label: 'City'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form_row(registrationForm.country, {
+                                label: 'Country'|trans
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            {{ form_row(registrationForm.phoneNumber, {
+                                label: 'Phone number'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form_row(registrationForm.birthDate, {
+                                label: 'Birth date'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form_row(registrationForm.locale, {
+                                label: 'Preferred language'|trans
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(registrationForm.agreeTerms, {
+                            label: 'I agree to the terms of service'|trans
+                        }) }}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">{{ 'Register'|trans }}</button>
+                    </div>
+                {{ form_end(registrationForm) }}
+            </div>
+            <div class="card-footer text-center">
+                <div>
+                    <a href="{{ path('app_login') }}">{{ 'Already have an account? Sign in'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

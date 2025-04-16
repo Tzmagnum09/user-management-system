@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: docker/apache/Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ${PROJECT_ROOT}:${SERVER_PATH}
+      - ${CACHE_DIR}:${SERVER_PATH}/var/cache
+      - ${LOG_DIR}:${SERVER_PATH}/var/log
+    depends_on:
+      - database
+    environment:
+      - APP_ENV=${APP_ENV}
+      - DATABASE_URL=${DATABASE_URL}
+      - SERVER_PATH=${SERVER_PATH}
+
+  database:
+    image: mysql:8.0.31
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
