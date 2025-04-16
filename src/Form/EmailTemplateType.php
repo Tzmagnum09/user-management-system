@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\EmailTemplate;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,6 +31,7 @@ class EmailTemplateType extends AbstractType
                         'message' => 'Please select a template code',
                     ]),
                 ],
+                'label' => 'Code du modèle',
             ])
             ->add('subject', TextType::class, [
                 'attr' => ['class' => 'form-control'],
@@ -38,17 +40,20 @@ class EmailTemplateType extends AbstractType
                         'message' => 'Please enter a subject',
                     ]),
                 ],
+                'label' => 'Sujet de l\'email',
             ])
             ->add('htmlContent', TextareaType::class, [
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 20,
+                    'style' => 'height: 500px;', // Pour TinyMCE
                 ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter HTML content',
                     ]),
                 ],
+                'label' => 'Contenu HTML',
             ])
             ->add('locale', ChoiceType::class, [
                 'choices' => [
@@ -63,6 +68,7 @@ class EmailTemplateType extends AbstractType
                         'message' => 'Please select a locale',
                     ]),
                 ],
+                'label' => 'Langue',
             ])
         ;
     }

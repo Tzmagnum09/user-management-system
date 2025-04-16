@@ -1,0 +1,359 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Edit Email Template'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .email-editor-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .variables-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .variables-header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .variables-content {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+        .variables-description {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .variables-group {
+            margin-bottom: 20px;
+        }
+        .variables-group-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+        .variable-input {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 8px;
+            margin-bottom: 8px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+        }
+        .variable-input:hover {
+            background-color: #f1f1f1;
+        }
+        .tox-tinymce {
+            border-radius: 4px;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <a href="{{ path('admin_email_templates') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> {{ 'Back to email templates'|trans }}
+        </a>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4>{{ 'Modifier le modèle d\'email'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">{{ 'Code du modèle'|trans }}</label>
+                        <div class="form-control-plaintext">
+                            {{ form_widget(form.code, {'attr': {'class': 'form-select'}}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">{{ 'Langue'|trans }}</label>
+                        <div class="form-control-plaintext">
+                            {{ form_widget(form.locale, {'attr': {'class': 'form-select'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ 'Sujet de l\'email'|trans }}</label>
+                    {{ form_widget(form.subject, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <!-- Éditeur HTML sans onglets -->
+                <div class="email-editor-container">
+                    {{ form_widget(form.htmlContent, { 'attr': {'class': 'tinymce-editor'} }) }}
+                </div>
+
+                <!-- Variables disponibles - Déplacé en dessous de l'éditeur -->
+                <div class="variables-container">
+                    <p>Vous pouvez utiliser les variables ci-dessous dans votre modèle. Elles seront remplacées par les valeurs réelles lors de l'envoi.</p>
+                    
+                    <div class="variables-header">
+                        Variables disponibles
+                    </div>
+                    <div class="variables-content">
+                        <!-- Informations personnelles -->
+                        <div class="variables-group">
+                            <div class="variables-group-title">Informations personnelles</div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Prénom de l'utilisateur" data-var="firstName">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Nom de l'utilisateur" data-var="lastName">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Nom complet de l'utilisateur" data-var="fullName">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Adresse email de l'utilisateur" data-var="email">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Nom d'utilisateur" data-var="username">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Numéro de téléphone" data-var="phoneNumber">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Date de naissance" data-var="birthDate">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Âge de l'utilisateur" data-var="age">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Adresse -->
+                        <div class="variables-group">
+                            <div class="variables-group-title">Adresse</div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Rue" data-var="street">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Numéro de maison" data-var="houseNumber">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Numéro de boîte" data-var="boxNumber">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Code postal" data-var="postalCode">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Ville" data-var="city">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Pays" data-var="country">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Adresse complète" data-var="fullAddress">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Système et dates -->
+                        <div class="variables-group">
+                            <div class="variables-group-title">Système et dates</div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="text" readonly class="variable-input" value="Langue préférée de l'utilisateur" data-var="locale">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" readonly class="variable-input" value="Nom de domaine du site" data-var="domain">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" readonly class="variable-input" value="Date d'inscription" data-var="createdAt">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Variables spécifiques -->
+                        <div class="variables-group">
+                            <div class="variables-group-title">Variables spécifiques</div>
+                            <div class="row">
+                                {% if form.vars.data.code == 'registration_confirmation' %}
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="URL de vérification d'email" data-var="signedUrl">
+                                </div>
+                                {% endif %}
+                                
+                                {% if form.vars.data.code == 'reset_password' %}
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Token de réinitialisation de mot de passe" data-var="resetToken">
+                                </div>
+                                {% endif %}
+                                
+                                {% if form.vars.data.code == 'role_change' %}
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Rôle précédent" data-var="previousRole">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Nouveau rôle" data-var="newRole">
+                                </div>
+                                {% endif %}
+                                
+                                {% if form.vars.data.code == 'permission_update' %}
+                                <div class="col-md-6">
+                                    <input type="text" readonly class="variable-input" value="Détails des modifications de permissions" data-var="permissionChanges">
+                                </div>
+                                {% endif %}
+                                
+                                <div class="col-md-3">
+                                    <input type="text" readonly class="variable-input" value="Durée de validité du lien" data-var="tokenLifetime">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <div>
+                        <a href="{{ path('admin_email_templates') }}" class="btn btn-secondary">
+                            {{ 'Annuler'|trans }}
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{{ path('admin_email_template_preview', {'id': form.vars.data.id}) }}" 
+                           class="btn btn-info" target="_blank" {% if is_new|default(false) %}style="display: none;"{% endif %}>
+                            <i class="fas fa-eye"></i> {{ 'Aperçu'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {{ 'Enregistrer'|trans }}
+                        </button>
+                    </div>
+                </div>
+                
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- TinyMCE avec API key -->
+    <script src="https://cdn.tiny.cloud/1/mdyxgt84w9fonoc3bvhrh3kfezt64bf9ah4fc8zitm8w1gjb/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtenir la langue de l'utilisateur depuis la locale de l'application
+            const userLocale = '{{ app.request.locale }}';
+            
+            // Conversion de la locale vers le format TinyMCE
+            let tinyMceLanguage = 'fr_FR'; // Par défaut le français
+            
+            // Correspondance des locales
+            const localeMapping = {
+                'fr': 'fr_FR',
+                'en': 'en_US',
+                'de': 'de',
+                'nl': 'nl'
+            };
+            
+            // Si la locale est supportée, utilisez-la
+            if (localeMapping[userLocale]) {
+                tinyMceLanguage = localeMapping[userLocale];
+            }
+            
+            // Initialisation de TinyMCE avec la langue adaptée
+            tinymce.init({
+                selector: '.tinymce-editor',
+                height: 500,
+                menubar: true,
+                plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                ],
+                toolbar: 'undo redo | blocks | ' +
+                    'bold italic forecolor backcolor | ' +
+                    'alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | removeformat | ' +
+                    'link image media table | code | help',
+                // Activation des styles en ligne
+                inline_styles: true,
+                // Configuration des styles de contenu
+                content_style: `
+                    body {
+                        font-family: Arial, sans-serif;
+                        line-height: 1.6;
+                        color: #333;
+                        margin: 0;
+                        padding: 20px;
+                    }
+                    .header {
+                        background: linear-gradient(135deg, #8e44ad, #3498db);
+                        color: white;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    .content {
+                        padding: 20px;
+                        background-color: #f9f9f9;
+                    }
+                    .button {
+                        display: inline-block;
+                        background: linear-gradient(135deg, #8e44ad, #3498db);
+                        color: white;
+                        text-decoration: none;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        margin-top: 20px;
+                    }
+                    .footer {
+                        text-align: center;
+                        font-size: 12px;
+                        color: #777;
+                        margin-top: 20px;
+                    }
+                `,
+                language: tinyMceLanguage, // Utiliser la langue détectée
+                branding: false, // Supprimer la marque TinyMCE
+                promotion: false, // Supprimer la promotion
+            });
+            
+            // Variables cliquables avec format %variableName%
+            const variables = document.querySelectorAll('.variable-input');
+            variables.forEach(function(variable) {
+                variable.addEventListener('click', function() {
+                    const variableName = this.getAttribute('data-var');
+                    const activeEditor = tinymce.activeEditor;
+                    
+                    if (activeEditor) {
+                        // Insertion au format %variableName%
+                        activeEditor.execCommand('mceInsertContent', false, '%' + variableName + '%');
+                        activeEditor.focus();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

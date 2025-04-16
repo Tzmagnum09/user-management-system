@@ -96,9 +96,10 @@ class EmailTemplateController extends AbstractController
             return $this->redirectToRoute('admin_email_templates');
         }
 
-        return $this->render('admin/email_templates/new.html.twig', [
+        return $this->render('admin/email_templates/edit_enhanced.html.twig', [
             'email_template' => $emailTemplate,
             'form' => $form->createView(),
+            'is_new' => true,
         ]);
     }
 
@@ -133,9 +134,11 @@ class EmailTemplateController extends AbstractController
             return $this->redirectToRoute('admin_email_templates');
         }
 
-        return $this->render('admin/email_templates/edit.html.twig', [
+        // Render the enhanced editor template
+        return $this->render('admin/email_templates/edit_enhanced.html.twig', [
             'email_template' => $emailTemplate,
             'form' => $form->createView(),
+            'is_new' => false,
         ]);
     }
 
@@ -165,7 +168,8 @@ class EmailTemplateController extends AbstractController
         // Replace variables in the content
         $content = $emailTemplate->getHtmlContent();
         foreach ($sampleVariables as $key => $value) {
-            $content = str_replace('{{ ' . $key . ' }}', $value, $content);
+            // Modifier ici pour utiliser le format %variable%
+            $content = str_replace('%' . $key . '%', $value, $content);
         }
 
         return new Response($content);
@@ -212,7 +216,22 @@ class EmailTemplateController extends AbstractController
             'firstName' => 'John',
             'lastName' => 'Doe',
             'username' => 'john.doe',
+            'email' => 'john.doe@example.com',
             'domain' => 'example.com',
+            'app_name' => 'Dmqode.be',
+            'birthDate' => '01/01/1980',
+            'phoneNumber' => '+32 123 456 789',
+            'street' => 'Rue de l\'Exemple',
+            'houseNumber' => '42',
+            'boxNumber' => 'A',
+            'postalCode' => '1000',
+            'city' => 'Bruxelles',
+            'country' => 'Belgique',
+            'locale' => 'Français',
+            'createdAt' => date('d/m/Y'),
+            'fullName' => 'John Doe',
+            'fullAddress' => 'Rue de l\'Exemple 42A, 1000 Bruxelles, Belgique',
+            'age' => '43'
         ];
 
         switch ($code) {
@@ -223,15 +242,16 @@ class EmailTemplateController extends AbstractController
             case 'reset_password':
                 return array_merge($commonVariables, [
                     'resetToken' => 'https://example.com/reset-password/sample-token',
+                    'tokenLifetime' => '1 heure',
                 ]);
             case 'role_change':
                 return array_merge($commonVariables, [
-                    'previousRole' => 'User',
-                    'newRole' => 'Administrator',
+                    'previousRole' => 'Utilisateur',
+                    'newRole' => 'Administrateur',
                 ]);
             case 'permission_update':
                 return array_merge($commonVariables, [
-                    'permissionChanges' => 'view_users: Denied → Granted<br>edit_users: Denied → Granted<br>view_email_templates: Granted → Denied',
+                    'permissionChanges' => 'view_users: Refusé → Accordé<br>edit_users: Refusé → Accordé<br>view_email_templates: Accordé → Refusé',
                 ]);
             default:
                 return $commonVariables;

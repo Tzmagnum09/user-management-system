@@ -100,7 +100,8 @@ class EmailManager
     private function replaceVariables(string $content, array $variables): string
     {
         foreach ($variables as $key => $value) {
-            $content = str_replace('{{ ' . $key . ' }}', $value, $content);
+            // Modifier le format des variables %key% au lieu de {{ key }}
+            $content = str_replace('%' . $key . '%', $value, $content);
         }
 
         return $content;
@@ -153,6 +154,9 @@ class EmailManager
                             $templates[$locale]['template'], 
                             $sampleVariables
                         );
+                        
+                        // Convertir les variables twig au format %variable%
+                        $content = preg_replace('/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/', '%$1%', $content);
                         
                         $template = new EmailTemplate();
                         $template->setCode($code);
