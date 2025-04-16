@@ -2,6 +2,66 @@
 
 {% block title %}{{ 'Dashboard'|trans }} - {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Style pour le dégradé du header des cartes, identique à la bannière */
+        .card-header-gradient {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+    <div class="admin-header py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <a href="{{ path('app_dashboard') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="Dmqode.be">
+                </a>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="{{ path('app_dashboard') }}" class="nav-link me-3">
+                    <i class="fas fa-home"></i> {{ 'Dashboard'|trans }}
+                </a>
+                <div class="dropdown me-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cogs"></i> {{ 'Administration'|trans }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="{{ path('admin_users') }}"><i class="fas fa-users"></i> {{ 'Users'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_users_pending_approval') }}"><i class="fas fa-user-clock"></i> {{ 'Pending Approval'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_email_templates') }}"><i class="fas fa-envelope-open-text"></i> {{ 'Email Templates'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_audit_logs') }}"><i class="fas fa-history"></i> {{ 'Audit Logs'|trans }}</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown me-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe"></i> {{ app.request.locale|upper }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        {% set locales = app_supported_locales|split(',') %}
+                        {% for locale in locales %}
+                            <li><a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({_locale: locale})) }}">{{ locale|upper }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> {{ app.user.firstName }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> {{ 'Profile'|trans }}</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> {{ 'Logout'|trans }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block body %}
 <div class="row">
     <div class="col-md-12 mb-4">
@@ -21,7 +81,7 @@
     <!-- Users Pending Email Verification -->
     <div class="col-md-6 mb-4">
         <div class="card">
-            <div class="card-header bg-warning text-white">
+            <div class="card-header card-header-gradient">
                 <h4>{{ 'Users Pending Email Verification'|trans }}</h4>
             </div>
             <div class="card-body">
@@ -61,7 +121,7 @@
     <!-- Users Pending Approval -->
     <div class="col-md-6 mb-4">
         <div class="card">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header card-header-gradient">
                 <h4>{{ 'Users Pending Approval'|trans }}</h4>
             </div>
             <div class="card-body">
@@ -101,7 +161,7 @@
     <!-- Administrators -->
     <div class="col-md-6 mb-4">
         <div class="card">
-            <div class="card-header bg-dark text-white">
+            <div class="card-header card-header-gradient">
                 <h4>{{ 'Administrators'|trans }}</h4>
             </div>
             <div class="card-body">
@@ -143,7 +203,7 @@
     <!-- Active Users -->
     <div class="col-md-6 mb-4">
         <div class="card">
-            <div class="card-header bg-success text-white">
+            <div class="card-header card-header-gradient">
                 <h4>{{ 'Active Users'|trans }}</h4>
             </div>
             <div class="card-body">

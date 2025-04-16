@@ -2,16 +2,82 @@
 
 {% block title %}{{ 'Users Pending Approval'|trans }} - {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Style pour les boutons dégradés */
+        .btn-gradient {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+    <div class="admin-header py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <a href="{{ path('app_dashboard') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="Dmqode.be">
+                </a>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="{{ path('app_dashboard') }}" class="nav-link me-3">
+                    <i class="fas fa-home"></i> {{ 'Dashboard'|trans }}
+                </a>
+                <div class="dropdown me-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cogs"></i> {{ 'Administration'|trans }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="{{ path('admin_users') }}"><i class="fas fa-users"></i> {{ 'Users'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_users_pending_approval') }}"><i class="fas fa-user-clock"></i> {{ 'Pending Approval'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_email_templates') }}"><i class="fas fa-envelope-open-text"></i> {{ 'Email Templates'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_audit_logs') }}"><i class="fas fa-history"></i> {{ 'Audit Logs'|trans }}</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown me-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe"></i> {{ app.request.locale|upper }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        {% set locales = app_supported_locales|split(',') %}
+                        {% for locale in locales %}
+                            <li><a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({_locale: locale})) }}">{{ locale|upper }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> {{ app.user.firstName }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> {{ 'Profile'|trans }}</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> {{ 'Logout'|trans }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block body %}
 <div class="row">
     <div class="col-md-12 mb-4">
         <div class="d-flex justify-content-between align-items-center">
             <h2>{{ 'Users Pending Approval'|trans }}</h2>
             <div>
-                <a href="{{ path('admin_users') }}" class="btn btn-secondary">
+                <a href="{{ path('admin_users') }}" class="btn btn-gradient">
                     <i class="fas fa-arrow-left"></i> {{ 'Back to users'|trans }}
                 </a>
-                <a href="{{ path('admin_users_pending_verification') }}" class="btn btn-warning">
+                <a href="{{ path('admin_users_pending_verification') }}" class="btn btn-gradient">
                     <i class="fas fa-envelope"></i> {{ 'Pending Verification'|trans }}
                 </a>
             </div>
@@ -20,7 +86,7 @@
 
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header bg-info text-white">
+            <div class="card-header card-header-gradient">
                 <h4>{{ 'Pending Admin Approval'|trans }}</h4>
             </div>
             <div class="card-body">
@@ -95,5 +161,11 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="mt-4">
+    <a href="{{ path('admin_users') }}" class="btn btn-gradient">
+        <i class="fas fa-users"></i> {{ 'View all users'|trans }}
+    </a>
 </div>
 {% endblock %}

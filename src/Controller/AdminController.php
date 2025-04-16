@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/admin')]
 class AdminController extends AbstractController
@@ -20,15 +21,18 @@ class AdminController extends AbstractController
     private AuditLogger $auditLogger;
     private UserManager $userManager;
     private PermissionManager $permissionManager;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(
         AuditLogger $auditLogger,
         UserManager $userManager,
-        PermissionManager $permissionManager
+        PermissionManager $permissionManager,
+        EntityManagerInterface $entityManager
     ) {
         $this->auditLogger = $auditLogger;
         $this->userManager = $userManager;
         $this->permissionManager = $permissionManager;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/users', name: 'admin_users')]
@@ -173,8 +177,7 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             // Log the action
             $this->auditLogger->log(

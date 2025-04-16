@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/admin/email-templates')]
 class EmailTemplateController extends AbstractController
@@ -20,15 +21,18 @@ class EmailTemplateController extends AbstractController
     private EmailManager $emailManager;
     private AuditLogger $auditLogger;
     private PermissionManager $permissionManager;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(
         EmailManager $emailManager,
         AuditLogger $auditLogger,
-        PermissionManager $permissionManager
+        PermissionManager $permissionManager,
+        EntityManagerInterface $entityManager
     ) {
         $this->emailManager = $emailManager;
         $this->auditLogger = $auditLogger;
         $this->permissionManager = $permissionManager;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/', name: 'admin_email_templates')]
@@ -77,9 +81,8 @@ class EmailTemplateController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($emailTemplate);
-            $entityManager->flush();
+            $this->entityManager->persist($emailTemplate);
+            $this->entityManager->flush();
 
             // Log the action
             $this->auditLogger->log(
@@ -116,7 +119,7 @@ class EmailTemplateController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             // Log the action
             $this->auditLogger->log(
@@ -185,9 +188,8 @@ class EmailTemplateController extends AbstractController
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($emailTemplate);
-        $entityManager->flush();
+        $this->entityManager->remove($emailTemplate);
+        $this->entityManager->flush();
 
         // Log the action
         $this->auditLogger->log(

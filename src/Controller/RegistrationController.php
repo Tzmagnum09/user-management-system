@@ -26,24 +26,26 @@ class RegistrationController extends AbstractController
     private UserManager $userManager;
     private EmailManager $emailManager;
     private AuditLogger $auditLogger;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(
         VerifyEmailHelperInterface $verifyEmailHelper,
         UserManager $userManager,
         EmailManager $emailManager,
-        AuditLogger $auditLogger
+        AuditLogger $auditLogger,
+        EntityManagerInterface $entityManager
     ) {
         $this->verifyEmailHelper = $verifyEmailHelper;
         $this->userManager = $userManager;
         $this->emailManager = $emailManager;
         $this->auditLogger = $auditLogger;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/register', name: 'app_register')]
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        EntityManagerInterface $entityManager,
         TokenStorageInterface $tokenStorage
     ): Response {
         // Redirect if already logged in
