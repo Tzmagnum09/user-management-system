@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Dashboard'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ 'Welcome'|trans }}, {{ app.user.firstName }}!</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <p><strong>{{ 'Super Administrator Dashboard'|trans }}</strong></p>
+                    <p>{{ 'You have full access to all system features and settings.'|trans }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Pending Email Verification -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h4>{{ 'Users Pending Email Verification'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {% if pendingVerification|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'Name'|trans }}</th>
+                                    <th>{{ 'Email'|trans }}</th>
+                                    <th>{{ 'Actions'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in pendingVerification %}
+                                    <tr>
+                                        <td>{{ user.firstName }} {{ user.lastName }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>
+                                            <form method="post" action="{{ path('admin_user_verify', {'id': user.id}) }}" style="display:inline;">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('verify' ~ user.id) }}">
+                                                <button type="submit" class="btn btn-sm btn-success">{{ 'Verify'|trans }}</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p>{{ 'No users waiting for email verification.'|trans }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Pending Approval -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>{{ 'Users Pending Approval'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {% if pendingApproval|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'Name'|trans }}</th>
+                                    <th>{{ 'Email'|trans }}</th>
+                                    <th>{{ 'Actions'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in pendingApproval %}
+                                    <tr>
+                                        <td>{{ user.firstName }} {{ user.lastName }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>
+                                            <form method="post" action="{{ path('admin_user_approve', {'id': user.id}) }}" style="display:inline;">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ user.id) }}">
+                                                <button type="submit" class="btn btn-sm btn-success">{{ 'Approve'|trans }}</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p>{{ 'No users waiting for approval.'|trans }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Administrators -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h4>{{ 'Administrators'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {% if admins|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'Name'|trans }}</th>
+                                    <th>{{ 'Email'|trans }}</th>
+                                    <th>{{ 'Actions'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for admin in admins %}
+                                    <tr>
+                                        <td>{{ admin.firstName }} {{ admin.lastName }}</td>
+                                        <td>{{ admin.email }}</td>
+                                        <td>
+                                            <a href="{{ path('admin_user_edit', {'id': admin.id}) }}" class="btn btn-sm btn-primary">{{ 'Edit'|trans }}</a>
+                                            <a href="{{ path('admin_user_roles', {'id': admin.id}) }}" class="btn btn-sm btn-info">{{ 'Roles'|trans }}</a>
+                                            <a href="{{ path('admin_user_permissions', {'id': admin.id}) }}" class="btn btn-sm btn-warning">{{ 'Permissions'|trans }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p>{{ 'No administrators found.'|trans }}</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{{ path('admin_users') }}" class="btn btn-primary">{{ 'View All Users'|trans }}</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Users -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4>{{ 'Active Users'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                <p>{{ 'Total Active Users'|trans }}: {{ users|length }}</p>
+                <a href="{{ path('admin_users') }}" class="btn btn-primary">{{ 'Manage Users'|trans }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

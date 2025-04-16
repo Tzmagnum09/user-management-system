@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'New Email Template'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <a href="{{ path('admin_email_templates') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> {{ 'Back to email templates'|trans }}
+        </a>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4>{{ 'Create New Email Template'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.code, {
+                                label: 'Template Code'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.locale, {
+                                label: 'Language'|trans
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(form.subject, {
+                            label: 'Email Subject'|trans
+                        }) }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ 'HTML Content'|trans }}</label>
+                        <div class="alert alert-info">
+                            <strong>{{ 'Available Variables'|trans }}:</strong>
+                            <ul class="mb-0">
+                                <li><code>firstName</code> - {{ 'User\'s first name'|trans }}</li>
+                                <li><code>lastName</code> - {{ 'User\'s last name'|trans }}</li>
+                                <li><code>username</code> - {{ 'User\'s username'|trans }}</li>
+                                <li><code>domain</code> - {{ 'Site domain name'|trans }}</li>
+                                <li><code>signedUrl</code> - {{ 'Email verification URL (for registration templates)'|trans }}</li>
+                                <li><code>resetToken</code> - {{ 'Password reset URL (for reset templates)'|trans }}</li>
+                                <li><code>previousRole</code> - {{ 'User\'s previous role (for role change templates)'|trans }}</li>
+                                <li><code>newRole</code> - {{ 'User\'s new role (for role change templates)'|trans }}</li>
+                                <li><code>permissionChanges</code> - {{ 'Details of permission changes (for permission templates)'|trans }}</li>
+                            </ul>
+                        </div>
+                        <div class="alert alert-warning">
+                            <strong>{{ 'Template Structure'|trans }}:</strong>
+                            <p>{{ 'Your email template should include proper HTML structure with styling. Consider including:'|trans }}</p>
+                            <ul class="mb-0">
+                                <li>{{ 'Header section with logo/title'|trans }}</li>
+                                <li>{{ 'Content section with variables'|trans }}</li>
+                                <li>{{ 'Footer section with contact info'|trans }}</li>
+                                <li>{{ 'Inline CSS styles for better email client compatibility'|trans }}</li>
+                            </ul>
+                        </div>
+                        {{ form_widget(form.htmlContent, {
+                            'attr': {'rows': 20}
+                        }) }}
+                        {{ form_errors(form.htmlContent) }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ path('admin_email_templates') }}" class="btn btn-secondary me-md-2">
+                            {{ 'Cancel'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {{ 'Create'|trans }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Add editor enhancement here if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            // If you want to add a rich text editor like CodeMirror or TinyMCE,
+            // this would be the place to initialize it
+        });
+    </script>
+{% endblock %}

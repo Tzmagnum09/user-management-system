@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Audit Logs'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <h2>{{ 'Audit Logs'|trans }}</h2>
+        <p class="text-muted">{{ 'System activity log showing user actions and system events.'|trans }}</p>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4>{{ 'Recent Activity'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {% if logs|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'Date/Time'|trans }}</th>
+                                    <th>{{ 'User'|trans }}</th>
+                                    <th>{{ 'Action'|trans }}</th>
+                                    <th>{{ 'IP Address'|trans }}</th>
+                                    <th>{{ 'Details'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in logs %}
+                                    <tr>
+                                        <td>{{ log.createdAt|date('d/m/Y H:i:s') }}</td>
+                                        <td>
+                                            <a href="{{ path('admin_audit_logs_user', {'id': log.user.id}) }}">
+                                                {{ log.user.firstName }} {{ log.user.lastName }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {% set badge_class = '' %}
+                                            {% if log.action starts with 'create' %}
+                                                {% set badge_class = 'bg-success' %}
+                                            {% elseif log.action starts with 'edit' or log.action starts with 'update' %}
+                                                {% set badge_class = 'bg-primary' %}
+                                            {% elseif log.action starts with 'delete' %}
+                                                {% set badge_class = 'bg-danger' %}
+                                            {% elseif log.action starts with 'login' %}
+                                                {% set badge_class = 'bg-info' %}
+                                            {% elseif log.action starts with 'approve' or log.action starts with 'verify' %}
+                                                {% set badge_class = 'bg-warning' %}
+                                            {% else %}
+                                                {% set badge_class = 'bg-secondary' %}
+                                            {% endif %}
+                                            
+                                            <span class="badge {{ badge_class }}">
+                                                {{ log.action|replace({'_': ' '})|title }}
+                                            </span>
+                                        </td>
+                                        <td>{{ log.ipAddress }}</td>
+                                        <td>
+                                            {% if log.details %}
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#detailsModal{{ log.id }}">
+                                                    <i class="fas fa-info-circle"></i> {{ 'View Details'|trans }}
+                                                </button>
+                                                
+                                                <!-- Details Modal -->
+                                                <div class="modal fade" id="detailsModal{{ log.id }}" tabindex="-1" aria-labelledby="detailsModalLabel{{ log.id }}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="detailsModalLabel{{ log.id }}">{{ 'Log Details'|trans }}</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <dl class="row">
+                                                                    <dt class="col-sm-3">{{ 'Date/Time'|trans }}</dt>
+                                                                    <dd class="col-sm-9">{{ log.createdAt|date('d/m/Y H:i:s') }}</dd>
+                                                                    
+                                                                    <dt class="col-sm-3">{{ 'User'|trans }}</dt>
+                                                                    <dd class="col-sm-9">{{ log.user.firstName }} {{ log.user.lastName }} ({{ log.user.email }})</dd>
+                                                                    
+                                                                    <dt class="col-sm-3">{{ 'Action'|trans }}</dt>
+                                                                    <dd class="col-sm-9">{{ log.action|replace({'_': ' '})|title }}</dd>
+                                                                    
+                                                                    <dt class="col-sm-3">{{ 'IP Address'|trans }}</dt>
+                                                                    <dd class="col-sm-9">{{ log.ipAddress }}</dd>
+                                                                    
+                                                                    <dt class="col-sm-3">{{ 'Details'|trans }}</dt>
+                                                                    <dd class="col-sm-9">{{ log.details|nl2br }}</dd>
+                                                                </dl>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <span class="text-muted">{{ 'No details provided'|trans }}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>{{ 'No audit logs found.'|trans }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

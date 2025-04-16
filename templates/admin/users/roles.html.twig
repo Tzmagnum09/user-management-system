@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'User Roles'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <a href="{{ path('admin_users') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> {{ 'Back to users'|trans }}
+        </a>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4>{{ 'Edit Roles for'|trans }} {{ user.firstName }} {{ user.lastName }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <p>{{ 'Email'|trans }}: {{ user.email }}</p>
+                    <p>{{ 'Current Role(s)'|trans }}: 
+                        {% for role in user.roles %}
+                            {% if role != 'ROLE_USER' %}
+                                {{ role|replace({'ROLE_': ''}) }}
+                                {% if not loop.last %}, {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+
+                {{ form_start(form) }}
+                    <div class="form-group mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>{{ 'Select Roles'|trans }}</h5>
+                            </div>
+                            <div class="card-body">
+                                {{ form_widget(form.roles) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        {{ 'Warning: Changing user roles will affect their permissions and access throughout the system.'|trans }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ path('admin_users') }}" class="btn btn-secondary me-md-2">
+                            {{ 'Cancel'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {{ 'Save Roles'|trans }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
