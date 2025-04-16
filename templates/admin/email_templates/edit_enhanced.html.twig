@@ -63,6 +63,90 @@
             display: flex;
             justify-content: space-between;
         }
+        /* Style du bouton Aperçu identique à Enregistrer */
+        .btn-preview {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-preview:hover {
+            opacity: 0.9;
+            color: white;
+        }
+        /* Style pour la modal d'aperçu */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .preview-modal-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 0;
+            border: 1px solid #888;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        }
+        .preview-modal-header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .preview-modal-title {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        .preview-modal-close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 0.8;
+        }
+        .preview-modal-close:hover {
+            color: #f1f1f1;
+        }
+        .preview-modal-body {
+            padding: 15px;
+            max-height: calc(90vh - 130px);
+            overflow-y: auto;
+        }
+        .preview-modal-footer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-top: 1px solid #e9ecef;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            text-align: right;
+        }
+        .preview-iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .preview-loading {
+            text-align: center;
+            padding: 50px 0;
+        }
     </style>
 {% endblock %}
 
@@ -240,10 +324,9 @@
                         </a>
                     </div>
                     <div>
-                        <a href="{{ path('admin_email_template_preview', {'id': form.vars.data.id}) }}" 
-                           class="btn btn-info" target="_blank" {% if is_new|default(false) %}style="display: none;"{% endif %}>
+                        <button type="button" id="previewButton" class="btn btn-preview" {% if is_new|default(false) %}style="display: none;"{% endif %}>
                             <i class="fas fa-eye"></i> {{ 'Aperçu'|trans }}
-                        </a>
+                        </button>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> {{ 'Enregistrer'|trans }}
                         </button>
@@ -252,6 +335,28 @@
                 
                 {{ form_end(form) }}
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal d'aperçu -->
+<div id="previewModal" class="preview-modal">
+    <div class="preview-modal-content">
+        <div class="preview-modal-header">
+            <h5 class="preview-modal-title">{{ 'Aperçu du modèle'|trans }}</h5>
+            <button type="button" class="preview-modal-close">&times;</button>
+        </div>
+        <div class="preview-modal-body">
+            <div id="previewLoading" class="preview-loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+                <p class="mt-2">Chargement de l'aperçu...</p>
+            </div>
+            <iframe id="previewFrame" class="preview-iframe" style="display: none;"></iframe>
+        </div>
+        <div class="preview-modal-footer">
+            <button type="button" class="btn btn-secondary" id="previewCloseButton">{{ 'Fermer'|trans }}</button>
         </div>
     </div>
 </div>
@@ -353,6 +458,64 @@
                         activeEditor.focus();
                     }
                 });
+            });
+
+            // Gestion de la modal d'aperçu
+            const modal = document.getElementById('previewModal');
+            const modalClose = document.querySelector('.preview-modal-close');
+            const closeButton = document.getElementById('previewCloseButton');
+            const previewButton = document.getElementById('previewButton');
+            const previewFrame = document.getElementById('previewFrame');
+            const previewLoading = document.getElementById('previewLoading');
+            
+            // Fonction pour ouvrir la modal
+            function openModal() {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Empêcher le défilement en arrière-plan
+
+                // Récupérer le contenu actuel de l'éditeur TinyMCE
+                const templateId = '{{ form.vars.data.id }}';
+                const previewUrl = '{{ path("admin_email_template_preview", {"id": "TEMPLATE_ID"}) }}'.replace('TEMPLATE_ID', templateId);
+                
+                // Afficher le chargement et masquer l'iframe
+                previewLoading.style.display = 'block';
+                previewFrame.style.display = 'none';
+                
+                // Charger l'aperçu dans l'iframe
+                previewFrame.onload = function() {
+                    // Masquer le chargement et afficher l'iframe une fois chargé
+                    previewLoading.style.display = 'none';
+                    previewFrame.style.display = 'block';
+                };
+                
+                previewFrame.src = previewUrl;
+            }
+            
+            // Fonction pour fermer la modal
+            function closeModal() {
+                modal.style.display = 'none';
+                document.body.style.overflow = ''; // Restaurer le défilement
+            }
+            
+            // Écouteurs d'événements pour le bouton d'aperçu
+            previewButton.addEventListener('click', openModal);
+            
+            // Écouteurs d'événements pour fermer la modal
+            modalClose.addEventListener('click', closeModal);
+            closeButton.addEventListener('click', closeModal);
+            
+            // Fermer la modal si on clique en dehors
+            window.addEventListener('click', function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            });
+            
+            // Fermer la modal avec la touche Echap
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.style.display === 'block') {
+                    closeModal();
+                }
             });
         });
     </script>
