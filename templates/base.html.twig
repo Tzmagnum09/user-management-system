@@ -8,7 +8,6 @@
         {% block stylesheets %}
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-            <link rel="stylesheet" href="{{ asset('css/cookie-consent.css') }}">
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -91,6 +90,10 @@
                     font-size: 0.95rem;
                     line-height: 1.5;
                 }
+                /* Style pour la modal des cookies */
+                .cookie-modal {
+                    z-index: 9999;
+                }
             </style>
         {% endblock %}
     </head>
@@ -170,35 +173,35 @@
 
         {% block footer %}
             <footer class="footer mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <p>&copy; {{ 'now'|date('Y') }} {{ app_name|default('Dmqode.be') }}. {{ 'Tous droits réservés.'|trans }}</p>
-                <p>
-                    <a href="{{ path('app_cookie_preferences') }}" id="cookie-settings-link" class="me-2">
-                        {{ 'Paramètres des cookies'|trans }}
-                    </a>
-                    <span class="mx-2">|</span>
-                    <a href="{{ path('app_terms') }}" class="ms-2">
-                        {{ 'Conditions d\'utilisation'|trans }}
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-</footer>        {% endblock %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <p>&copy; {{ 'now'|date('Y') }} {{ app_name|default('Dmqode.be') }}. {{ 'Tous droits réservés.'|trans }}</p>
+                            <p>
+                                <a href="{{ path('app_cookie_preferences') }}" id="cookie-settings-link" class="cookie-settings-footer-link me-2">
+                                    {{ 'Préférences des cookies'|trans }}
+                                </a>
+                                <span class="mx-2">|</span>
+                                <a href="{{ path('app_terms') }}" class="cookie-settings-footer-link ms-2">
+                                    {{ 'Conditions d\'utilisation'|trans }}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        {% endblock %}
 
         {% block javascripts %}
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="{{ asset('assets/js/cookie_consent_modal.js') }}"></script>
             {{ importmap('terms') }}
             <script>
                 // Initialisation du consentement aux cookies
-                document.addEventListener('cookieConsentUpdated', function(event) {
+                document.addEventListener('cookiePreferencesUpdated', function(event) {
                     console.log('Préférences de cookies mises à jour:', event.detail);
                     
                     // Si les cookies d'analytics sont acceptés
-                    if (event.detail.analytics) {
+                    if (event.detail.statistics) {
                         // Ici vous pourriez initialiser des outils d'analyse comme Google Analytics
                         console.log('Analytics acceptés, initialisation...');
                     }
@@ -210,49 +213,14 @@
                     }
                     
                     // Si les cookies fonctionnels sont acceptés
-                    if (event.detail.functional) {
+                    if (event.detail.preferences) {
                         // Ici vous pourriez initialiser des fonctionnalités supplémentaires
                         console.log('Fonctionnalités acceptées, initialisation...');
                     }
                 });
             </script>
+            <link rel="stylesheet" href="{{ asset('css/cookie-modal.css') }}">
+            <script src="{{ asset('js/cookie-modal.js') }}"></script>
         {% endblock %}
-<script src="{{ asset('js/cookie-consent.js') }}"></script>
-<script>
-    document.addEventListener('cookiePreferencesUpdated', function(event) {
-        console.log('Préférences de cookies mises à jour:', event.detail);
-        
-        // Activer les scripts appropriés basés sur les préférences
-        if (event.detail.statistics) {
-            // Initialiser les scripts d'analyse comme Google Analytics
-            // Exemple :
-            /*
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-XXXXX-Y', 'auto');
-            ga('send', 'pageview');
-            */
-        }
-        
-        if (event.detail.marketing) {
-            // Initialiser les scripts marketing comme Facebook Pixel
-            // Exemple :
-            /*
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', 'XXXXXXXXXXXXX');
-            fbq('track', 'PageView');
-            */
-        }
-    });
-</script>
     </body>
 </html>
