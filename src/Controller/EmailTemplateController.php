@@ -108,6 +108,22 @@ class EmailTemplateController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Check if this exact combination of code and locale already exists
+            $existing = $this->emailTemplateRepository->findByCodeAndLocale(
+                $emailTemplate->getCode(),
+                $emailTemplate->getLocale()
+            );
+            
+            // If it exists and this is a new template (not editing), show an error
+            if ($existing) {
+                $this->addFlash('error', 'Un modèle avec ce code et cette langue existe déjà. Veuillez modifier le modèle existant ou choisir une autre combinaison.');
+                
+                return $this->render('admin/email_templates/new.html.twig', [
+                    'email_template' => $emailTemplate,
+                    'form' => $form->createView(),
+                ]);
+            }
+            
             $this->entityManager->persist($emailTemplate);
             $this->entityManager->flush();
 
@@ -123,7 +139,7 @@ class EmailTemplateController extends AbstractController
             return $this->redirectToRoute('admin_email_templates');
         }
 
-        return $this->render('admin/email_templates/edit_enhanced.html.twig', [
+        return $this->render('admin/email_templates/new.html.twig', [
             'email_template' => $emailTemplate,
             'form' => $form->createView(),
             'is_new' => true,

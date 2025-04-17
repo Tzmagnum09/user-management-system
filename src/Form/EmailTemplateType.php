@@ -32,6 +32,7 @@ class EmailTemplateType extends AbstractType
                     ]),
                 ],
                 'label' => 'Code du modèle',
+                'disabled' => !$options['is_new'], // Désactiver le champ code si on édite un modèle existant
             ])
             ->add('subject', TextType::class, [
                 'attr' => ['class' => 'form-control'],
@@ -69,6 +70,7 @@ class EmailTemplateType extends AbstractType
                     ]),
                 ],
                 'label' => 'Langue',
+                'disabled' => !$options['is_new'], // Désactiver le champ locale si on édite un modèle existant
             ])
         ;
     }
@@ -77,6 +79,7 @@ class EmailTemplateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => EmailTemplate::class,
+            'is_new' => false, // Par défaut, on considère qu'on édite un modèle existant
         ]);
     }
 }
