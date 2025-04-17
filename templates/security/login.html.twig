@@ -2,52 +2,244 @@
 
 {% block title %}{{ 'Login'|trans }} - {{ parent() }}{% endblock %}
 
-{% block navbar %}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .login-content {
+            padding: 25px;
+        }
+        
+        .login-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-control:hover {
+            border-color: #3498db;
+            box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.3);
+        }
+        
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+            outline: none;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group-text {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-right: none;
+            border-radius: 5px 0 0 5px;
+            color: #777;
+        }
+        
+        .input-group .form-control {
+            padding-left: 50px;
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .form-check-input {
+            margin-right: 8px;
+        }
+        
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            border: none;
+            padding: 12px 0;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-login:hover {
+            opacity: 0.9;
+        }
+        
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .signup-link {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/logo.png') }}" height="30" alt="Dmqode.be">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_home') }}">{{ 'Accueil'|trans }}</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ path('app_login') }}">
+                        <i class="fas fa-sign-in-alt"></i> {{ 'Connexion'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_register') }}">
+                        <i class="fas fa-user-plus"></i> {{ 'Inscription'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe"></i> {{ app.request.locale|upper }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                        {% set locales = app_supported_locales|split(',') %}
+                        {% for locale in locales %}
+                            <li><a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({_locale: locale})) }}">{{ locale|upper }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
 
 {% block body %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header text-center">
-                <h2>{{ 'Sign in'|trans }}</h2>
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
-
-                    <div class="mb-3">
-                        <label for="inputEmail" class="form-label">{{ 'Email'|trans }}</label>
-                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+<div class="container">
+    <div class="login-container">
+        <div class="login-header">
+            <h5 class="m-0">{{ 'Connectez-vous à votre compte'|trans }}</h5>
+        </div>
+        
+        <div class="login-content">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            
+            <form method="post">
+                <div class="form-group">
+                    <label for="inputEmail" class="form-label">{{ 'Nom d\'utilisateur ou Email'|trans }}</label>
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <input type="text" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="inputPassword" class="form-label">{{ 'Password'|trans }}</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputPassword" class="form-label">{{ 'Mot de passe'|trans }}</label>
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </div>
                         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
                     </div>
-
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" id="remember_me" name="_remember_me" class="form-check-input">
-                        <label class="form-check-label" for="remember_me">{{ 'Remember me'|trans }}</label>
-                    </div>
-
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="submit">{{ 'Sign in'|trans }}</button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer text-center">
-                <div class="mb-2">
-                    <a href="{{ path('app_register') }}">{{ 'Create an account'|trans }}</a>
                 </div>
-                <div>
-                    <a href="#">{{ 'Forgot your password?'|trans }}</a>
+                
+                <div class="form-check">
+                    <input type="checkbox" id="remember_me" name="_remember_me" class="form-check-input">
+                    <label class="form-check-label" for="remember_me">{{ 'Se souvenir de moi'|trans }}</label>
                 </div>
-            </div>
+                
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                
+                <button type="submit" class="btn-login">{{ 'Se connecter'|trans }}</button>
+                
+                <a href="#" class="forgot-password">{{ 'Mot de passe oublié ?'|trans }}</a>
+            </form>
+        </div>
+        
+        <div class="login-footer">
+            {{ 'Vous n\'avez pas de compte ?'|trans }} <a href="{{ path('app_register') }}" class="signup-link">{{ 'Inscrivez-vous'|trans }}</a>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer mt-5">
+    <div class="container text-center">
+        <p>&copy; {{ 'now'|date('Y') }} {{ app_name }}. {{ 'Tous droits réservés.'|trans }}</p>
+    </div>
+</footer>
 {% endblock %}

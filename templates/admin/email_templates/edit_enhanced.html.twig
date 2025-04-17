@@ -186,6 +186,9 @@
                     {{ form_widget(form.subject, {'attr': {'class': 'form-control'}}) }}
                 </div>
 
+                <!-- Champ caché pour stocker l'ID du template -->
+                <input type="hidden" name="templateId" value="{{ form.vars.data.id|default('') }}">
+
                 <!-- Éditeur HTML sans onglets -->
                 <div class="email-editor-container">
                     {{ form_widget(form.htmlContent, { 'attr': {'class': 'tinymce-editor'} }) }}
@@ -443,6 +446,12 @@
                 language: tinyMceLanguage, // Utiliser la langue détectée
                 branding: false, // Supprimer la marque TinyMCE
                 promotion: false, // Supprimer la promotion
+                setup: function(editor) {
+                    // Ajout d'un événement pour notifier quand l'éditeur est prêt
+                    editor.on('init', function() {
+                        window.tinyMCEInitialized = true;
+                    });
+                }
             });
             
             // Variables cliquables avec format %variableName%
@@ -459,6 +468,103 @@
                     }
                 });
             });
+
+            // Écouteur d'événement pour le changement de langue
+            const localeSelect = document.querySelector('#email_template_locale');
+            const codeSelect = document.querySelector('#email_template_code');
+            const subjectField = document.querySelector('#email_template_subject');
+            
+            if (localeSelect && codeSelect) {
+                localeSelect.addEventListener('change', function() {
+                    loadTemplateForCodeAndLocale();
+                });
+                
+                // Également changer quand le code du template change
+                codeSelect.addEventListener('change', function() {
+                    loadTemplateForCodeAndLocale();
+                });
+            }
+            
+            // Fonction pour charger le template correspondant au code et à la locale
+            function loadTemplateForCodeAndLocale() {
+                const code = codeSelect.value;
+                const locale = localeSelect.value;
+                
+                if (!code || !locale) return;
+                
+                // Afficher un indicateur de chargement
+                const loadingIndicator = document.createElement('div');
+                loadingIndicator.id = 'template-loading-indicator';
+                loadingIndicator.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Chargement...</span></div><p class="mt-2">Chargement du template...</p>';
+                loadingIndicator.style.position = 'fixed';
+                loadingIndicator.style.top = '50%';
+                loadingIndicator.style.left = '50%';
+                loadingIndicator.style.transform = 'translate(-50%, -50%)';
+                loadingIndicator.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                loadingIndicator.style.padding = '20px';
+                loadingIndicator.style.borderRadius = '5px';
+                loadingIndicator.style.zIndex = '9999';
+                loadingIndicator.style.textAlign = 'center';
+                document.body.appendChild(loadingIndicator);
+                
+                // Créer et envoyer la requête AJAX
+                const formData = new FormData();
+                formData.append('code', code);
+                formData.append('locale', locale);
+                
+                fetch('{{ path("admin_email_template_by_code_locale") }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Supprimer l'indicateur de chargement
+                    document.body.removeChild(loadingIndicator);
+                    
+                    if (data.success && data.template) {
+                        // Mettre à jour le sujet
+                        if (subjectField) {
+                            subjectField.value = data.template.subject;
+                        }
+                        
+                        // Mettre à jour le contenu de l'éditeur TinyMCE
+                        const waitForTinyMCE = setInterval(function() {
+                            if (window.tinyMCEInitialized && tinymce.activeEditor) {
+                                clearInterval(waitForTinyMCE);
+                                tinymce.activeEditor.setContent(data.template.htmlContent);
+                            }
+                        }, 100);
+                        
+                        // Optionnel: mettre à jour l'ID si vous avez un champ caché pour l'ID
+                        const idField = document.querySelector('input[name="templateId"]');
+                        if (idField) {
+                            idField.value = data.template.id;
+                        }
+                    } else {
+                        // Afficher un message d'erreur
+                        const errorMessage = data.message || 'Erreur lors du chargement du template';
+                        alert(errorMessage);
+                        
+                        // Optionnel: Réinitialiser les champs
+                        if (subjectField) {
+                            subjectField.value = '';
+                        }
+                        
+                        if (tinymce.activeEditor) {
+                            tinymce.activeEditor.setContent('');
+                        }
+                    }
+                })
+                .catch(error => {
+                    // Supprimer l'indicateur de chargement
+                    document.body.removeChild(loadingIndicator);
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors du chargement du template');
+                });
+            }
 
             // Gestion de la modal d'aperçu
             const modal = document.getElementById('previewModal');
@@ -498,22 +604,28 @@
             }
             
             // Écouteurs d'événements pour le bouton d'aperçu
-            previewButton.addEventListener('click', openModal);
+            if (previewButton) {
+                previewButton.addEventListener('click', openModal);
+            }
             
             // Écouteurs d'événements pour fermer la modal
-            modalClose.addEventListener('click', closeModal);
-            closeButton.addEventListener('click', closeModal);
+            if (modalClose) {
+                modalClose.addEventListener('click', closeModal);
+            }
+            if (closeButton) {
+                closeButton.addEventListener('click', closeModal);
+            }
             
             // Fermer la modal si on clique en dehors
             window.addEventListener('click', function(event) {
-                if (event.target == modal) {
+                if (modal && event.target == modal) {
                     closeModal();
                 }
             });
             
             // Fermer la modal avec la touche Echap
             document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape' && modal.style.display === 'block') {
+                if (modal && event.key === 'Escape' && modal.style.display === 'block') {
                     closeModal();
                 }
             });

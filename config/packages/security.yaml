@@ -7,7 +7,6 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
-        # used to reload user from session & other features (e.g. switch_user)
     
     firewalls:
         dev:
@@ -25,7 +24,7 @@ security:
                 password_parameter: password
             logout:
                 path: app_logout
-                target: app_login
+                target: app_home  # Modifié pour rediriger vers la page d'accueil après déconnexion
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 2592000 # 30 jours
@@ -41,4 +40,5 @@ security:
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^/verify/email, roles: PUBLIC_ACCESS }
+        - { path: ^/$, roles: PUBLIC_ACCESS }  # Ajout de cette ligne pour permettre l'accès à la page d'accueil
         - { path: ^/, roles: ROLE_USER }

@@ -67,7 +67,7 @@ class EmailManager
             ->from(sprintf('%s <%s>', $this->senderName, $this->senderEmail))
             ->to($recipientEmail)
             ->subject($subject)
-            ->html($htmlContent);
+            ->html($htmlContent);  // Ensure we're sending HTML content
 
         $this->mailer->send($email);
     }
@@ -85,6 +85,7 @@ class EmailManager
                 'lastName' => $user->getLastName(),
                 'username' => $user->getUsername(),
                 'domain' => $this->params->get('app.url'),
+                'app_name' => $this->params->get('app.name', 'Dmqode.be'),
             ]),
             $user->getLocale()
         );
@@ -100,8 +101,17 @@ class EmailManager
     private function replaceVariables(string $content, array $variables): string
     {
         foreach ($variables as $key => $value) {
-            // Modifier le format des variables %key% au lieu de {{ key }}
-            $content = str_replace('%' . $key . '%', $value, $content);
+            // Format des variables sous différentes formes pour assurer la compatibilité
+            $formats = [
+                '%' . $key . '%',           // Format %key%
+                '{{ ' . $key . ' }}',       // Format {{ key }}
+                '{{' . $key . '}}',         // Format {{key}}
+                '{{ ' . $key . ' }}',       // Format {{ key }}
+            ];
+            
+            foreach ($formats as $format) {
+                $content = str_replace($format, $value, $content);
+            }
         }
 
         return $content;
@@ -146,7 +156,7 @@ class EmailManager
                             'newRole' => 'Administrator',
                             'permissionChanges' => 'view_users: Denied → Granted<br>edit_users: Denied → Granted',
                             'domain' => $this->params->get('app.url'),
-                            'app_name' => $this->params->get('app.email_sender_name'),
+                            'app_name' => $this->params->get('app.name', 'Dmqode.be'),
                         ];
                         
                         // Rendre le template avec les variables de test
@@ -155,6 +165,7 @@ class EmailManager
                             $sampleVariables
                         );
                         
+                        // Conserver le format HTML
                         // Convertir les variables twig au format %variable%
                         $content = preg_replace('/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/', '%$1%', $content);
                         

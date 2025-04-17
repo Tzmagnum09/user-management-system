@@ -2,127 +2,382 @@
 
 {% block title %}{{ 'Register'|trans }} - {{ parent() }}{% endblock %}
 
-{% block navbar %}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        .register-container {
+            max-width: 650px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .register-content {
+            padding: 20px 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-control:hover {
+            border-color: #3498db;
+            box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.3);
+        }
+        
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+            outline: none;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            background-color: white;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-select:hover {
+            border-color: #3498db;
+            box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.3);
+        }
+        
+        .form-select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .validation-message {
+            background-color: #d4edff;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        .validation-message i {
+            margin-right: 5px;
+            color: #3498db;
+        }
+        
+        .btn-register {
+            width: 100%;
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            border: none;
+            padding: 10px 0;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        
+        .btn-register:hover {
+            opacity: 0.9;
+        }
+        
+        .login-link {
+            text-align: center;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        
+        .login-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .form-check {
+            margin-top: 15px;
+        }
+        
+        .form-check-input {
+            margin-right: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/logo.png') }}" height="30" alt="Dmqode.be">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_home') }}">{{ 'Accueil'|trans }}</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_login') }}">
+                        <i class="fas fa-sign-in-alt"></i> {{ 'Connexion'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ path('app_register') }}">
+                        <i class="fas fa-user-plus"></i> {{ 'Inscription'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe"></i> {{ app.request.locale|upper }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                        {% set locales = app_supported_locales|split(',') %}
+                        {% for locale in locales %}
+                            <li><a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({_locale: locale})) }}">{{ locale|upper }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
 
 {% block body %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header text-center">
-                <h2>{{ 'Register'|trans }}</h2>
-            </div>
-            <div class="card-body">
-                {{ form_start(registrationForm) }}
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            {{ form_row(registrationForm.firstName, {
-                                label: 'First name'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form_row(registrationForm.lastName, {
-                                label: 'Last name'|trans
-                            }) }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            {{ form_row(registrationForm.email, {
-                                label: 'Email'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form_row(registrationForm.username, {
-                                label: 'Username'|trans
-                            }) }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            {{ form_row(registrationForm.plainPassword.first, {
-                                label: 'Password'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form_row(registrationForm.plainPassword.second, {
-                                label: 'Repeat Password'|trans
-                            }) }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-8 mb-3">
-                            {{ form_row(registrationForm.street, {
-                                label: 'Street'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form_row(registrationForm.houseNumber, {
-                                label: 'House number'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form_row(registrationForm.boxNumber, {
-                                label: 'Box number'|trans
-                            }) }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            {{ form_row(registrationForm.postalCode, {
-                                label: 'Postal code'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form_row(registrationForm.city, {
-                                label: 'City'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form_row(registrationForm.country, {
-                                label: 'Country'|trans
-                            }) }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            {{ form_row(registrationForm.phoneNumber, {
-                                label: 'Phone number'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form_row(registrationForm.birthDate, {
-                                label: 'Birth date'|trans
-                            }) }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form_row(registrationForm.locale, {
-                                label: 'Preferred language'|trans
-                            }) }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_row(registrationForm.agreeTerms, {
-                            label: 'I agree to the terms of service'|trans
+<div class="container">
+    <div class="register-container">
+        <div class="register-header">
+            <h5 class="m-0">{{ 'Créez votre compte'|trans }}</h5>
+        </div>
+        
+        <div class="register-content">
+            {{ form_start(registrationForm) }}
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Adresse e-mail'|trans }}</label>
+                        {{ form_widget(registrationForm.email, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'exemple@domaine.com'
+                            }
                         }) }}
                     </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">{{ 'Register'|trans }}</button>
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Nom d\'utilisateur'|trans }}</label>
+                        {{ form_widget(registrationForm.username, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'votre pseudo'
+                            }
+                        }) }}
                     </div>
-                {{ form_end(registrationForm) }}
-            </div>
-            <div class="card-footer text-center">
-                <div>
-                    <a href="{{ path('app_login') }}">{{ 'Already have an account? Sign in'|trans }}</a>
                 </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Prénom'|trans }}</label>
+                        {{ form_widget(registrationForm.firstName, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Votre prénom'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Nom'|trans }}</label>
+                        {{ form_widget(registrationForm.lastName, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Votre nom'
+                            }
+                        }) }}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Date de naissance'|trans }}</label>
+                        {{ form_widget(registrationForm.birthDate, {
+                            'attr': {
+                                'class': 'form-control'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Numéro de téléphone'|trans }}</label>
+                        {{ form_widget(registrationForm.phoneNumber, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': '+32 470 12 34 56'
+                            }
+                        }) }}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Rue'|trans }}</label>
+                        {{ form_widget(registrationForm.street, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Nom de la rue'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Numéro'|trans }}</label>
+                        {{ form_widget(registrationForm.houseNumber, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': '123'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Boîte'|trans }}</label>
+                        {{ form_widget(registrationForm.boxNumber, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'A'
+                            }
+                        }) }}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Code postal'|trans }}</label>
+                        {{ form_widget(registrationForm.postalCode, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': '1000'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Ville'|trans }}</label>
+                        {{ form_widget(registrationForm.city, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Bruxelles'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Pays'|trans }}</label>
+                        {{ form_widget(registrationForm.country, {
+                            'attr': {
+                                'class': 'form-select'
+                            }
+                        }) }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">{{ 'Langue'|trans }}</label>
+                    {{ form_widget(registrationForm.locale, {
+                        'attr': {
+                            'class': 'form-select'
+                        }
+                    }) }}
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Mot de passe'|trans }}</label>
+                        {{ form_widget(registrationForm.plainPassword.first, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': '8 caractères minimum'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-col">
+                        <label class="form-label">{{ 'Confirmer le mot de passe'|trans }}</label>
+                        {{ form_widget(registrationForm.plainPassword.second, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Répétez votre mot de passe'
+                            }
+                        }) }}
+                    </div>
+                </div>
+                
+                <div class="form-check">
+                    {{ form_widget(registrationForm.agreeTerms, {
+                        'attr': {
+                            'class': 'form-check-input'
+                        }
+                    }) }}
+                    <label class="form-check-label" for="{{ registrationForm.agreeTerms.vars.id }}">
+                        {{ "J'accepte les conditions d'utilisation"|trans }}
+                        <a href="#" target="_blank">{{ "Conditions d'utilisation"|trans }}</a>
+                    </label>
+                </div>
+                
+                <div class="validation-message">
+                    <i class="fas fa-info-circle"></i>
+                    {{ "Après votre inscription, vous devrez vérifier votre adresse e-mail. Ensuite, un administrateur devra approuver votre compte."|trans }}
+                </div>
+                
+                <button type="submit" class="btn-register">{{ 'S\'inscrire'|trans }}</button>
+            {{ form_end(registrationForm) }}
+            
+            <div class="login-link">
+                {{ "Vous avez déjà un compte?"|trans }} <a href="{{ path('app_login') }}">{{ "Connectez-vous"|trans }}</a>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer mt-5">
+    <div class="container text-center">
+        <p>&copy; {{ 'now'|date('Y') }} {{ app_name }}. {{ 'Tous droits réservés.'|trans }}</p>
+    </div>
+</footer>
 {% endblock %}

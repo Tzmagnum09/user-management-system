@@ -208,6 +208,50 @@ class EmailTemplateController extends AbstractController
     }
 
     /**
+     * Récupère un template email par code et locale en AJAX.
+     */
+    #[Route('/get-template-by-code-locale', name: 'admin_email_template_by_code_locale', methods: ['POST'])]
+    public function getTemplateByCodeAndLocale(Request $request, EmailTemplateRepository $emailTemplateRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        // Check permissions
+        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+            $user = $this->getUser();
+            if ($user instanceof User && !$this->permissionManager->hasPermission($user, 'view_email_templates')) {
+                throw $this->createAccessDeniedException('You do not have permission to view email templates.');
+            }
+        }
+
+        // Récupérer les paramètres de la requête
+        $code = $request->request->get('code');
+        $locale = $request->request->get('locale');
+
+        if (!$code || !$locale) {
+            return $this->json(['success' => false, 'message' => 'Code and locale are required'], 400);
+        }
+
+        // Rechercher le template dans la base de données
+        $template = $emailTemplateRepository->findByCodeAndLocale($code, $locale);
+
+        if (!$template) {
+            return $this->json(['success' => false, 'message' => 'Template not found'], 404);
+        }
+
+        // Retourner les données du template au format JSON
+        return $this->json([
+            'success' => true,
+            'template' => [
+                'id' => $template->getId(),
+                'code' => $template->getCode(),
+                'subject' => $template->getSubject(),
+                'htmlContent' => $template->getHtmlContent(),
+                'locale' => $template->getLocale()
+            ]
+        ]);
+    }
+
+    /**
      * Get sample variables for email template preview.
      */
     private function getSampleVariables(string $code): array
