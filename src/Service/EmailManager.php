@@ -8,6 +8,7 @@ use App\Repository\EmailTemplateRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
 use Twig\Environment;
 
 class EmailManager
@@ -62,12 +63,13 @@ class EmailManager
         $subject = $this->replaceVariables($template->getSubject(), $variables);
         $htmlContent = $this->replaceVariables($template->getHtmlContent(), $variables);
 
-        // Create and send email
+        // Create and send email with proper HTML content type
         $email = (new Email())
-            ->from(sprintf('%s <%s>', $this->senderName, $this->senderEmail))
+            ->from(new Address($this->senderEmail, $this->senderName))
             ->to($recipientEmail)
             ->subject($subject)
-            ->html($htmlContent);  // Ensure we're sending HTML content
+            ->html($htmlContent)
+            ->text(strip_tags(preg_replace('/<br\s*\/?>/', "\n", $htmlContent)));  // Provide a plain text alternative
 
         $this->mailer->send($email);
     }
