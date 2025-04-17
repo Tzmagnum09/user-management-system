@@ -45,9 +45,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="cookie-modal-header">
                     <h4>${getTranslation('cookiePreferences', currentLang)}</h4>
                     <div class="cookie-modal-header-content">
-                        <select class="cookie-language-selector">
-                            ${langOptions}
-                        </select>
+                        <div class="dropdown-language-selector">
+                            <i class="fas fa-globe"></i>
+                            <select class="cookie-language-selector">
+                                ${langOptions}
+                            </select>
+                        </div>
                         <button class="btn-close">&times;</button>
                     </div>
                 </div>
@@ -452,51 +455,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 const selectedLang = this.value;
                 updateModalLanguage(selectedLang);
                 
-                // Si possible, synchroniser avec le sélecteur de langue du site
-                synchronizeWithSiteLanguage(selectedLang);
+                // Trouver et cliquer sur le lien de langue correspondant
+                findAndClickLanguageLink(selectedLang);
             });
         }
     }
     
     /**
-     * Synchronise le sélecteur de langue de la modal avec celui du site
+     * Cherche le lien de langue correspondant dans le menu du site et le clique
      */
-    function synchronizeWithSiteLanguage(selectedLang) {
-        // Rechercher un lien de langue correspondant dans le menu du site
-        const siteLanguageLinks = document.querySelectorAll('#languageDropdown + .dropdown-menu .dropdown-item');
+    function findAndClickLanguageLink(lang) {
+        // Rechercher les liens de langue dans le menu déroulant
+        const langLinks = document.querySelectorAll('#languageDropdown + .dropdown-menu .dropdown-item');
         
-        siteLanguageLinks.forEach(link => {
-            const langMatch = link.getAttribute('href').match(/\/(fr|en|nl|de)\//);
-            if (langMatch && langMatch[1] === selectedLang) {
-                // Simuler un clic sur le lien de langue correspondant
-                if (!link.classList.contains('active')) {
+        if (langLinks.length > 0) {
+            // Trouver le lien qui correspond à la langue sélectionnée
+            langLinks.forEach(link => {
+                if (link.textContent.trim() === lang.toUpperCase()) {
+                    // Simuler un clic sur ce lien
                     link.click();
-                }
-            }
-        });
-    }
-    
-    /**
-     * Synchronise le sélecteur de langue du site avec celui de la modal
-     */
-    function synchronizeLanguageSelector() {
-        // Écouteur de changement de langue pour le site
-        const siteLangSelector = document.querySelector('#languageDropdown');
-        if (siteLangSelector) {
-            siteLangSelector.addEventListener('click', function(e) {
-                if (e.target.tagName === 'A' && e.target.classList.contains('dropdown-item')) {
-                    const lang = e.target.getAttribute('href').match(/\/(fr|en|nl|de)\//);
-                    if (lang && lang[1]) {
-                        updateModalLanguage(lang[1]);
-                        
-                        // Mettre à jour également le sélecteur de langue de la modal
-                        const modalLangSelector = document.querySelector('.cookie-language-selector');
-                        if (modalLangSelector) {
-                            modalLangSelector.value = lang[1];
-                        }
-                    }
+                    return;
                 }
             });
+        } else {
+            // Si les liens ne sont pas trouvés, essayer une autre approche
+            // Vérifier s'il y a un paramètre _locale dans l'URL actuelle
+            const currentUrl = new URL(window.location.href);
+            const params = new URLSearchParams(currentUrl.search);
+            
+            if (params.has('_locale')) {
+                // Si oui, mettre à jour ce paramètre et recharger
+                params.set('_locale', lang);
+                currentUrl.search = params.toString();
+                window.location.href = currentUrl.toString();
+            } else {
+                // Sinon, ajouter le paramètre et recharger
+                params.append('_locale', lang);
+                currentUrl.search = params.toString();
+                window.location.href = currentUrl.toString();
+            }
         }
     }
     
@@ -611,6 +608,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modal) {
             modal.classList.add('show');
             document.body.style.overflow = 'hidden'; // Empêcher le défilement
+            
+            // Synchroniser avec la langue du site
+            const currentLang = getCurrentLanguage();
+            const modalLangSelector = modal.querySelector('.cookie-language-selector');
+            if (modalLangSelector && modalLangSelector.value !== currentLang) {
+                modalLangSelector.value = currentLang;
+                updateModalLanguage(currentLang);
+            }
         }
     }
     
@@ -642,12 +647,11 @@ document.addEventListener('DOMContentLoaded', function() {
      * Obtient la langue actuelle
      */
     function getCurrentLanguage() {
-        // Essayer d'obtenir la langue à partir de l'URL
-        const path = window.location.pathname;
-        const langMatch = path.match(/^\/(fr|en|nl|de)\//);
-        
-        if (langMatch && langMatch[1]) {
-            return langMatch[1];
+        // Essayer de trouver la langue dans l'URL en vérifiant le paramètre _locale
+        const urlParams = new URLSearchParams(window.location.search);
+        const localeParam = urlParams.get('_locale');
+        if (localeParam && ['fr', 'en', 'nl', 'de'].includes(localeParam)) {
+            return localeParam;
         }
         
         // Sinon, essayer de l'obtenir du tag HTML
@@ -655,6 +659,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (htmlLang) {
             // Extraire les deux premiers caractères (fr-FR -> fr)
             return htmlLang.substring(0, 2);
+        }
+        
+        // Vérifier s'il y a un élément actif dans le menu des langues
+        const activeLangItem = document.querySelector('#languageDropdown + .dropdown-menu .dropdown-item.active');
+        if (activeLangItem) {
+            const langText = activeLangItem.textContent.trim().toLowerCase();
+            if (langText === 'fr' || langText === 'français') return 'fr';
+            if (langText === 'en' || langText === 'english') return 'en';
+            if (langText === 'nl' || langText === 'nederlands') return 'nl';
+            if (langText === 'de' || langText === 'deutsch') return 'de';
         }
         
         // Par défaut, retourner français
