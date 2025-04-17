@@ -46,9 +46,10 @@
             display: block;
         }
         
+        /* Style standard pour les champs de formulaire */
         .form-control {
             width: 100%;
-            padding: 10px 12px;
+            padding: 10px 12px 10px 40px; /* Padding supplémentaire à gauche pour l'icône */
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 0.9rem;
@@ -57,37 +58,27 @@
         
         .form-control:hover {
             border-color: #3498db;
-            box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.3);
         }
         
         .form-control:focus {
             border-color: #3498db;
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
             outline: none;
         }
         
-        .input-group {
+        /* Conteneur pour le champ avec icône */
+        .input-with-icon {
             position: relative;
         }
         
-        .input-group-text {
+        /* Style pour l'icône dans le champ */
+        .field-icon {
             position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-right: none;
-            border-radius: 5px 0 0 5px;
-            color: #777;
-        }
-        
-        .input-group .form-control {
-            padding-left: 50px;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 16px;
         }
         
         .form-check {
@@ -198,20 +189,16 @@
             <form method="post">
                 <div class="form-group">
                     <label for="inputEmail" class="form-label">{{ 'Nom d\'utilisateur ou Email'|trans }}</label>
-                    <div class="input-group">
-                        <div class="input-group-text">
-                            <i class="fas fa-user"></i>
-                        </div>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user field-icon"></i>
                         <input type="text" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="inputPassword" class="form-label">{{ 'Mot de passe'|trans }}</label>
-                    <div class="input-group">
-                        <div class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </div>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock field-icon"></i>
                         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
                     </div>
                 </div>
