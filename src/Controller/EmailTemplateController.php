@@ -104,7 +104,7 @@ class EmailTemplateController extends AbstractController
             $emailTemplate->setHtmlContent($this->getDefaultTemplate($templateCode, $locale));
         }
         
-        $form = $this->createForm(EmailTemplateType::class, $emailTemplate);
+        $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['is_new' => true]); // Important: définir is_new à true
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -121,6 +121,7 @@ class EmailTemplateController extends AbstractController
                 return $this->render('admin/email_templates/new.html.twig', [
                     'email_template' => $emailTemplate,
                     'form' => $form->createView(),
+                    'is_new' => true
                 ]);
             }
             
@@ -159,7 +160,7 @@ class EmailTemplateController extends AbstractController
             }
         }
 
-        $form = $this->createForm(EmailTemplateType::class, $emailTemplate);
+        $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['is_new' => false]); // Important: définir is_new à false
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -100,9 +100,6 @@
                         }) }}
                     </div>
 
-                    <!-- Champ caché pour stocker l'ID du template -->
-                    <input type="hidden" name="templateId" value="{{ form.vars.data.id|default('') }}">
-
                     <!-- Éditeur HTML -->
                     <div class="email-editor-container">
                         {{ form_widget(form.htmlContent, { 'attr': {'class': 'tinymce-editor'} }) }}
@@ -425,12 +422,6 @@
                                 tinymce.activeEditor.setContent(data.template.htmlContent);
                             }
                         }, 100);
-                        
-                        // Optionnel: mettre à jour l'ID si vous avez un champ caché pour l'ID
-                        const idField = document.querySelector('input[name="templateId"]');
-                        if (idField) {
-                            idField.value = data.template.id;
-                        }
 
                         // Afficher un message si c'est un template par défaut
                         if (data.isDefault) {
