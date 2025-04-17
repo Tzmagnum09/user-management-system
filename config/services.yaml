@@ -4,6 +4,7 @@ parameters:
     app.locale: '%env(APP_LOCALE)%'
     app.supported_locales: '%env(APP_SUPPORTED_LOCALES)%'
     app.url: '%env(APP_URL)%'
+    app.name: '%env(APP_NAME)%'
 
 services:
     _defaults:
