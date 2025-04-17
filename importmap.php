@@ -16,8 +16,8 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
-    'cookie_consent' => [
-        'path' => './assets/js/cookie_consent.js',
+    'cookie_consent_modal' => [
+        'path' => './assets/js/cookie_consent_modal.js',
         'entrypoint' => true,
     ],
     '@hotwired/stimulus' => [
