@@ -8,6 +8,7 @@
         {% block stylesheets %}
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <link rel="stylesheet" href="{{ asset('assets/styles/cookie_styles.css') }}">
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -150,12 +151,40 @@
             <footer class="footer mt-5">
                 <div class="container text-center">
                     <p>&copy; {{ 'now'|date('Y') }} {{ app_name }}. {{ 'All rights reserved.'|trans }}</p>
+                    <a href="#" onclick="window.cookieConsent && window.cookieConsent.showSettings(); return false;" class="text-white text-decoration-underline">
+                        {{ 'Cookie Settings'|trans }}
+                    </a>
                 </div>
             </footer>
         {% endblock %}
 
         {% block javascripts %}
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            {{ importmap('cookie_consent') }}
+            <script>
+                // Initialisation du consentement aux cookies
+                document.addEventListener('cookieConsentUpdated', function(event) {
+                    console.log('Préférences de cookies mises à jour:', event.detail);
+                    
+                    // Si les cookies d'analytics sont acceptés
+                    if (event.detail.analytics) {
+                        // Ici vous pourriez initialiser des outils d'analyse comme Google Analytics
+                        console.log('Analytics acceptés, initialisation...');
+                    }
+                    
+                    // Si les cookies marketing sont acceptés
+                    if (event.detail.marketing) {
+                        // Ici vous pourriez initialiser des outils marketing
+                        console.log('Marketing accepté, initialisation...');
+                    }
+                    
+                    // Si les cookies fonctionnels sont acceptés
+                    if (event.detail.functional) {
+                        // Ici vous pourriez initialiser des fonctionnalités supplémentaires
+                        console.log('Fonctionnalités acceptées, initialisation...');
+                    }
+                });
+            </script>
         {% endblock %}
     </body>
 </html>

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'cookie.preferences.title'|trans }}{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h1 class="h3 mb-0">{{ 'cookie.preferences.title'|trans }}</h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ 'cookie.preferences.intro'|trans }}</p>
+                    
+                    <div class="cookie-settings-container mt-4">
+                        <div class="d-grid gap-2">
+                            <button type="button" id="open-cookie-settings" class="btn btn-primary">
+                                <i class="fas fa-cookie-bite me-2"></i> {{ 'cookie.banner.customize'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ouvrir automatiquement la modale des préférences de cookies
+            const openCookieSettingsBtn = document.getElementById('open-cookie-settings');
+            if (openCookieSettingsBtn) {
+                openCookieSettingsBtn.addEventListener('click', function() {
+                    const cookieModal = document.getElementById('cookie-preferences-modal');
+                    if (cookieModal) {
+                        if (typeof bootstrap !== 'undefined') {
+                            const modal = new bootstrap.Modal(cookieModal);
+                            modal.show();
+                        } else {
+                            // Fallback pour une ouverture manuelle
+                            cookieModal.classList.add('show');
+                            cookieModal.style.display = 'block';
+                            document.body.classList.add('modal-open');
+                            
+                            // Créer un backdrop
+                            const backdrop = document.createElement('div');
+                            backdrop.className = 'modal-backdrop fade show';
+                            document.body.appendChild(backdrop);
+                        }
+                    }
+                });
+                
+                // Déclencher le clic automatiquement
+                setTimeout(function() {
+                    openCookieSettingsBtn.click();
+                }, 500);
+            }
+        });
+    </script>
+{% endblock %}
+{% endblock %}
