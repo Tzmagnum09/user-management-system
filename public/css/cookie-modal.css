@@ -19,7 +19,7 @@
 .cookie-modal-content {
     background-color: #fff;
     width: 90%;
-    max-width: 800px;
+    max-width: 900px; /* Augmentation de la largeur */
     max-height: 85vh;
     border-radius: 8px;
     overflow: hidden;
@@ -28,7 +28,7 @@
     flex-direction: column;
 }
 
-/* Modification de l'en-tête pour avoir un fond dégradé comme le bouton */
+/* Modification de l'en-tête pour avoir un fond dégradé violet-bleu */
 .cookie-modal-header {
     display: flex;
     justify-content: space-between;
@@ -56,10 +56,40 @@
     line-height: 1;
 }
 
+/* Ajout d'un sélecteur de langue dans l'en-tête */
+.cookie-language-selector {
+    background-color: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    margin-right: 15px;
+}
+
+.cookie-language-selector option {
+    background-color: #fff;
+    color: #333;
+}
+
+.cookie-modal-header-content {
+    display: flex;
+    align-items: center;
+}
+
 .cookie-modal-body {
     padding: 0;
     overflow-y: auto;
     flex-grow: 1;
+}
+
+/* Texte d'introduction */
+.cookie-intro-text {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555;
 }
 
 /* Style des onglets */
@@ -303,6 +333,15 @@ input:checked + .cookie-toggle-slider:before {
     line-height: 1.6;
 }
 
+/* Style pour la date de mise à jour dans les conditions d'utilisation */
+.last-update {
+    font-size: 0.8rem;
+    color: #888;
+    text-align: right;
+    margin-top: 20px;
+    font-style: italic;
+}
+
 /* About section */
 .about-section h4 {
     color: #8e44ad;
@@ -397,5 +436,15 @@ input:checked + .cookie-toggle-slider:before {
     .cookie-toggle {
         margin-top: 10px;
         align-self: flex-end;
+    }
+    
+    .cookie-modal-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .cookie-language-selector {
+        margin-top: 10px;
+        margin-right: 0;
     }
 }

@@ -37,11 +37,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // Récupération de la langue actuelle
         const currentLang = getCurrentLanguage();
         
+        // Création du sélecteur de langue
+        const langOptions = createLanguageOptions(currentLang);
+        
         modal.innerHTML = `
             <div class="cookie-modal-content">
                 <div class="cookie-modal-header">
                     <h4>${getTranslation('cookiePreferences', currentLang)}</h4>
-                    <button class="btn-close">&times;</button>
+                    <div class="cookie-modal-header-content">
+                        <select class="cookie-language-selector">
+                            ${langOptions}
+                        </select>
+                        <button class="btn-close">&times;</button>
+                    </div>
+                </div>
+                <div class="cookie-intro-text">
+                    En tant que visiteur de notre site, nous essayons de vous offrir une expérience aussi agréable que possible. Nous utilisons des cookies en premier lieu pour améliorer votre expérience utilisateur et pour améliorer le fonctionnement de nos services en ligne. En outre, nous utilisons des cookies pour rendre le contenu de nos sites web et applications (mobiles) plus intéressant pour vous. Nous utilisons également des cookies pour cartographier votre comportement de navigation.
                 </div>
                 <div class="cookie-modal-body">
                     <div class="cookie-tabs">
@@ -286,7 +297,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="terms-section">
                             <h4>8. Contact</h4>
                             <p>Si vous avez des questions concernant ces conditions d'utilisation, veuillez nous contacter à l'adresse suivante : <a href="mailto:contact@dmqode.be">contact@dmqode.be</a></p>
-                            <p>Dernière mise à jour : 17/04/2025.</p>
+                        </div>
+                        
+                        <div class="last-update">
+                            Dernière mise à jour : 17/04/2025
                         </div>
                     </div>
                     
@@ -315,6 +329,22 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         document.body.appendChild(modal);
+    }
+    
+    /**
+     * Créer les options du sélecteur de langue
+     */
+    function createLanguageOptions(currentLang) {
+        const languages = [
+            { code: 'fr', name: 'Français' },
+            { code: 'en', name: 'English' },
+            { code: 'nl', name: 'Nederlands' },
+            { code: 'de', name: 'Deutsch' }
+        ];
+        
+        return languages.map(lang => 
+            `<option value="${lang.code}" ${lang.code === currentLang ? 'selected' : ''}>${lang.name}</option>`
+        ).join('');
     }
     
     /**
@@ -408,8 +438,42 @@ document.addEventListener('DOMContentLoaded', function() {
         // Gestion du lien dans le footer
         setupCookieSettingsLink();
         
-        // Synchroniser avec le sélecteur de langue du site
-        synchronizeLanguageSelector();
+        // Gestion du sélecteur de langue de la modal
+        setupLanguageSelector();
+    }
+    
+    /**
+     * Configuration du sélecteur de langue
+     */
+    function setupLanguageSelector() {
+        const languageSelector = document.querySelector('.cookie-language-selector');
+        if (languageSelector) {
+            languageSelector.addEventListener('change', function() {
+                const selectedLang = this.value;
+                updateModalLanguage(selectedLang);
+                
+                // Si possible, synchroniser avec le sélecteur de langue du site
+                synchronizeWithSiteLanguage(selectedLang);
+            });
+        }
+    }
+    
+    /**
+     * Synchronise le sélecteur de langue de la modal avec celui du site
+     */
+    function synchronizeWithSiteLanguage(selectedLang) {
+        // Rechercher un lien de langue correspondant dans le menu du site
+        const siteLanguageLinks = document.querySelectorAll('#languageDropdown + .dropdown-menu .dropdown-item');
+        
+        siteLanguageLinks.forEach(link => {
+            const langMatch = link.getAttribute('href').match(/\/(fr|en|nl|de)\//);
+            if (langMatch && langMatch[1] === selectedLang) {
+                // Simuler un clic sur le lien de langue correspondant
+                if (!link.classList.contains('active')) {
+                    link.click();
+                }
+            }
+        });
     }
     
     /**
@@ -424,55 +488,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     const lang = e.target.getAttribute('href').match(/\/(fr|en|nl|de)\//);
                     if (lang && lang[1]) {
                         updateModalLanguage(lang[1]);
+                        
+                        // Mettre à jour également le sélecteur de langue de la modal
+                        const modalLangSelector = document.querySelector('.cookie-language-selector');
+                        if (modalLangSelector) {
+                            modalLangSelector.value = lang[1];
+                        }
                     }
                 }
             });
         }
-    }
-    
-    /**
-     * Met à jour la langue de la modal
-     */
-    function updateModalLanguage(lang) {
-        const modal = document.getElementById('cookieModal');
-        if (!modal) return;
-        
-        // Mise à jour des textes d'interface
-        modal.querySelector('.cookie-modal-header h4').textContent = getTranslation('cookiePreferences', lang);
-        
-        // Onglets
-        const tabs = modal.querySelectorAll('.cookie-tab');
-        tabs[0].textContent = getTranslation('tabOverview', lang);
-        tabs[1].textContent = getTranslation('tabDetails', lang);
-        tabs[2].textContent = getTranslation('tabTerms', lang);
-        tabs[3].textContent = getTranslation('tabAbout', lang);
-        
-        // Vue d'ensemble
-        const settingTitles = modal.querySelectorAll('.cookie-setting-title');
-        settingTitles[0].textContent = getTranslation('necessaryCookies', lang);
-        settingTitles[1].textContent = getTranslation('preferencesCookies', lang);
-        settingTitles[2].textContent = getTranslation('statisticsCookies', lang);
-        settingTitles[3].textContent = getTranslation('marketingCookies', lang);
-        
-        const settingDescs = modal.querySelectorAll('.cookie-setting-description');
-        settingDescs[0].textContent = getTranslation('necessaryDescription', lang);
-        settingDescs[1].textContent = getTranslation('preferencesDescription', lang);
-        settingDescs[2].textContent = getTranslation('statisticsDescription', lang);
-        settingDescs[3].textContent = getTranslation('marketingDescription', lang);
-        
-        // Boutons de pied de page
-        modal.querySelector('.btn-cookie-necessary').textContent = getTranslation('necessaryOnly', lang);
-        modal.querySelector('.btn-cookie-accept').textContent = getTranslation('savePreferences', lang);
-        
-        // Détails
-        const typeHeaders = modal.querySelectorAll('.cookie-type-header h5');
-        typeHeaders[0].textContent = getTranslation('necessaryCookies', lang);
-        typeHeaders[1].textContent = getTranslation('preferencesCookies', lang);
-        typeHeaders[2].textContent = getTranslation('statisticsCookies', lang);
-        typeHeaders[3].textContent = getTranslation('marketingCookies', lang);
-        
-        // Les descriptions et les entêtes de tableau seraient aussi à mettre à jour
-        // mais je les laisse en français pour simplifier
     }
     
     /**
@@ -508,6 +533,54 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('input[data-type="preferences"]').checked = cookieConfig.preferences;
         document.querySelector('input[data-type="statistics"]').checked = cookieConfig.statistics;
         document.querySelector('input[data-type="marketing"]').checked = cookieConfig.marketing;
+    }
+    
+    /**
+     * Met à jour la langue de la modal
+     */
+    function updateModalLanguage(lang) {
+        const modal = document.getElementById('cookieModal');
+        if (!modal) return;
+        
+        // Mise à jour des textes d'interface
+        modal.querySelector('.cookie-modal-header h4').textContent = getTranslation('cookiePreferences', lang);
+        
+        // Onglets
+        const tabs = modal.querySelectorAll('.cookie-tab');
+        tabs[0].textContent = getTranslation('tabOverview', lang);
+        tabs[1].textContent = getTranslation('tabDetails', lang);
+        tabs[2].textContent = getTranslation('tabTerms', lang);
+        tabs[3].textContent = getTranslation('tabAbout', lang);
+        
+        // Texte d'introduction (on ne traduit pas pour l'instant)
+        // modal.querySelector('.cookie-intro-text').textContent = getTranslation('cookieIntro', lang);
+        
+        // Vue d'ensemble
+        const settingTitles = modal.querySelectorAll('.cookie-setting-title');
+        settingTitles[0].textContent = getTranslation('necessaryCookies', lang);
+        settingTitles[1].textContent = getTranslation('preferencesCookies', lang);
+        settingTitles[2].textContent = getTranslation('statisticsCookies', lang);
+        settingTitles[3].textContent = getTranslation('marketingCookies', lang);
+        
+        const settingDescs = modal.querySelectorAll('.cookie-setting-description');
+        settingDescs[0].textContent = getTranslation('necessaryDescription', lang);
+        settingDescs[1].textContent = getTranslation('preferencesDescription', lang);
+        settingDescs[2].textContent = getTranslation('statisticsDescription', lang);
+        settingDescs[3].textContent = getTranslation('marketingDescription', lang);
+        
+        // Boutons de pied de page
+        modal.querySelector('.btn-cookie-necessary').textContent = getTranslation('necessaryOnly', lang);
+        modal.querySelector('.btn-cookie-accept').textContent = getTranslation('savePreferences', lang);
+        
+        // Détails
+        const typeHeaders = modal.querySelectorAll('.cookie-type-header h5');
+        typeHeaders[0].textContent = getTranslation('necessaryCookies', lang);
+        typeHeaders[1].textContent = getTranslation('preferencesCookies', lang);
+        typeHeaders[2].textContent = getTranslation('statisticsCookies', lang);
+        typeHeaders[3].textContent = getTranslation('marketingCookies', lang);
+        
+        // Les descriptions et les entêtes de tableau seraient aussi à mettre à jour
+        // mais je les laisse en français pour simplifier
     }
     
     /**
@@ -597,6 +670,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const translations = {
             fr: {
                 cookiePreferences: 'Préférences de cookies',
+                cookieIntro: 'En tant que visiteur de notre site, nous essayons de vous offrir une expérience aussi agréable que possible. Nous utilisons des cookies en premier lieu pour améliorer votre expérience utilisateur et pour améliorer le fonctionnement de nos services en ligne. En outre, nous utilisons des cookies pour rendre le contenu de nos sites web et applications (mobiles) plus intéressant pour vous. Nous utilisons également des cookies pour cartographier votre comportement de navigation.',
                 tabOverview: 'Vue d\'ensemble',
                 tabDetails: 'Détails',
                 tabTerms: 'Conditions d\'utilisation',
@@ -633,6 +707,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             en: {
                 cookiePreferences: 'Cookie settings',
+                cookieIntro: 'As a visitor to our site, we try to offer you an experience as pleasant as possible. We use cookies primarily to improve your user experience and to improve the functioning of our online services. In addition, we use cookies to make the content of our websites and (mobile) applications more interesting for you. We also use cookies to map your browsing behavior.',
                 tabOverview: 'Overview',
                 tabDetails: 'Details',
                 tabTerms: 'Terms of Use',
@@ -669,6 +744,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             nl: {
                 cookiePreferences: 'Cookie-instellingen',
+                cookieIntro: 'Als bezoeker van onze site proberen we u een zo aangenaam mogelijke ervaring te bieden. We gebruiken cookies in de eerste plaats om uw gebruikerservaring te verbeteren en om de werking van onze online diensten te verbeteren. Daarnaast gebruiken we cookies om de inhoud van onze websites en (mobiele) applicaties interessanter voor u te maken. We gebruiken ook cookies om uw surfgedrag in kaart te brengen.',
                 tabOverview: 'Overzicht',
                 tabDetails: 'Details',
                 tabTerms: 'Gebruiksvoorwaarden',
@@ -686,6 +762,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             de: {
                 cookiePreferences: 'Cookie-Einstellungen',
+                cookieIntro: 'Als Besucher unserer Website versuchen wir, Ihnen ein möglichst angenehmes Erlebnis zu bieten. Wir verwenden Cookies in erster Linie, um Ihre Benutzererfahrung zu verbessern und die Funktionsweise unserer Online-Dienste zu optimieren. Darüber hinaus verwenden wir Cookies, um die Inhalte unserer Websites und (mobilen) Anwendungen für Sie interessanter zu gestalten. Wir verwenden auch Cookies, um Ihr Surfverhalten zu erfassen.',
                 tabOverview: 'Übersicht',
                 tabDetails: 'Details',
                 tabTerms: 'Nutzungsbedingungen',
