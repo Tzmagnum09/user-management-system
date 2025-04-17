@@ -158,7 +158,7 @@ class EmailManager
                 'firstName' => $user->getFirstName(),
                 'lastName' => $user->getLastName(),
                 'username' => $user->getUsername(),
-                'domain' => str_replace('http://', '', $this->params->get('app.url')),
+                'domain' => str_replace(['http://', 'https://'], '', $this->params->get('app.url')),
                 'app_name' => $this->params->get('app.name', 'Dmqode.be'),
             ]),
             $user->getLocale()
@@ -223,7 +223,7 @@ class EmailManager
                             'previousRole' => 'User',
                             'newRole' => 'Administrator',
                             'permissionChanges' => 'view_users: Denied → Granted<br>edit_users: Denied → Granted',
-                            'domain' => $this->params->get('app.url'),
+                            'domain' => str_replace(['http://', 'https://'], '', $this->params->get('app.url')),
                             'app_name' => $this->params->get('app.name', 'Dmqode.be'),
                         ];
                         

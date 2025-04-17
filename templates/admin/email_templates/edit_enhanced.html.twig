@@ -74,11 +74,11 @@
             opacity: 0.9;
             color: white;
         }
-        /* Style pour la modal d'aperçu */
+        /* Style de la modal d'aperçu */
         .preview-modal {
             display: none;
             position: fixed;
-            z-index: 1050;
+            z-index: 2000;
             left: 0;
             top: 0;
             width: 100%;
@@ -96,6 +96,8 @@
             max-width: 1000px;
             max-height: 90vh;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
         }
         .preview-modal-header {
             background: linear-gradient(135deg, #8e44ad, #3498db);
@@ -128,6 +130,7 @@
             padding: 15px;
             max-height: calc(90vh - 130px);
             overflow-y: auto;
+            flex: 1;
         }
         .preview-modal-footer {
             background-color: #f8f9fa;
@@ -580,7 +583,7 @@
                 document.body.style.overflow = 'hidden'; // Empêcher le défilement en arrière-plan
 
                 // Récupérer le contenu actuel de l'éditeur TinyMCE
-                const templateId = '{{ form.vars.data.id }}';
+                const templateId = '{{ email_template.id }}';
                 const previewUrl = '{{ path("admin_email_template_preview", {"id": "TEMPLATE_ID"}) }}'.replace('TEMPLATE_ID', templateId);
                 
                 // Afficher le chargement et masquer l'iframe
@@ -601,6 +604,8 @@
             function closeModal() {
                 modal.style.display = 'none';
                 document.body.style.overflow = ''; // Restaurer le défilement
+                // Réinitialiser l'iframe
+                previewFrame.src = 'about:blank';
             }
             
             // Écouteurs d'événements pour le bouton d'aperçu

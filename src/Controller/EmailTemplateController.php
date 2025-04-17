@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Twig\Environment;
 
 #[Route('/admin/email-templates')]
 class EmailTemplateController extends AbstractController
@@ -22,17 +23,20 @@ class EmailTemplateController extends AbstractController
     private AuditLogger $auditLogger;
     private PermissionManager $permissionManager;
     private EntityManagerInterface $entityManager;
+    private Environment $twig;
 
     public function __construct(
         EmailManager $emailManager,
         AuditLogger $auditLogger,
         PermissionManager $permissionManager,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        Environment $twig
     ) {
         $this->emailManager = $emailManager;
         $this->auditLogger = $auditLogger;
         $this->permissionManager = $permissionManager;
         $this->entityManager = $entityManager;
+        $this->twig = $twig;
     }
 
     #[Route('/', name: 'admin_email_templates')]
@@ -165,14 +169,80 @@ class EmailTemplateController extends AbstractController
         // Create sample variables based on the email code
         $sampleVariables = $this->getSampleVariables($emailTemplate->getCode());
 
+        // Get the HTML content from the template
+        $htmlContent = $emailTemplate->getHtmlContent();
+
         // Replace variables in the content
-        $content = $emailTemplate->getHtmlContent();
         foreach ($sampleVariables as $key => $value) {
-            // Modifier ici pour utiliser le format %variable%
-            $content = str_replace('%' . $key . '%', $value, $content);
+            $htmlContent = str_replace('%' . $key . '%', $value, $htmlContent);
+            $htmlContent = str_replace('{{ ' . $key . ' }}', $value, $htmlContent);
+            $htmlContent = str_replace('{{' . $key . '}}', $value, $htmlContent);
         }
 
-        return new Response($content);
+        // Make sure the HTML has proper styling by ensuring it's a complete HTML document
+        if (!str_contains($htmlContent, '<!DOCTYPE') && !str_contains($htmlContent, '<html')) {
+            $htmlContent = $this->wrapInHtmlDocument($htmlContent);
+        }
+
+        // Return the HTML directly as a response
+        return new Response($htmlContent);
+    }
+
+    /**
+     * Wrap content in a complete HTML document structure with embedded styles.
+     */
+    private function wrapInHtmlDocument(string $content): string
+    {
+        return '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white !important;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    ' . $content . '
+</body>
+</html>';
     }
 
     #[Route('/{id}/delete', name: 'admin_email_template_delete', methods: ['POST'])]
@@ -261,7 +331,7 @@ class EmailTemplateController extends AbstractController
             'lastName' => 'Doe',
             'username' => 'john.doe',
             'email' => 'john.doe@example.com',
-            'domain' => 'example.com',
+            'domain' => 'dmqode.be',
             'app_name' => 'Dmqode.be',
             'birthDate' => '01/01/1980',
             'phoneNumber' => '+32 123 456 789',
