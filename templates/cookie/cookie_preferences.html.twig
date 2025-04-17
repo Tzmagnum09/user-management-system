@@ -1,24 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'cookie.preferences.title'|trans }}{% endblock %}
+{% block title %}{{ 'Préférences de cookies'|trans }} - {{ parent() }}{% endblock %}
 
 {% block body %}
-<div class="container my-5">
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card shadow">
+        <div class="col-md-10">
+            <div class="card">
                 <div class="card-header">
-                    <h1 class="h3 mb-0">{{ 'cookie.preferences.title'|trans }}</h1>
+                    <h1 class="h3 mb-0">{{ 'Préférences de cookies'|trans }}</h1>
                 </div>
                 <div class="card-body">
-                    <p class="lead">{{ 'cookie.preferences.intro'|trans }}</p>
+                    <p>{{ 'Sur cette page, vous pouvez gérer vos préférences concernant l\'utilisation des cookies sur notre site.'|trans }}</p>
                     
-                    <div class="cookie-settings-container mt-4">
-                        <div class="d-grid gap-2">
-                            <button type="button" id="open-cookie-settings" class="btn btn-primary">
-                                <i class="fas fa-cookie-bite me-2"></i> {{ 'cookie.banner.customize'|trans }}
-                            </button>
-                        </div>
+                    <div class="alert alert-info">
+                        <p>
+                            <i class="fas fa-info-circle"></i> 
+                            {{ 'Certains cookies sont nécessaires au bon fonctionnement du site et ne peuvent pas être désactivés. D\'autres cookies nous aident à améliorer votre expérience en personnalisant le contenu ou en analysant l\'utilisation du site.'|trans }}
+                        </p>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="button" id="open-cookie-settings" class="btn btn-primary">
+                            <i class="fas fa-cog me-2"></i> {{ 'Gérer mes préférences de cookies'|trans }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -26,39 +31,24 @@
     </div>
 </div>
 
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Ouvrir automatiquement la modale des préférences de cookies
-            const openCookieSettingsBtn = document.getElementById('open-cookie-settings');
-            if (openCookieSettingsBtn) {
-                openCookieSettingsBtn.addEventListener('click', function() {
-                    const cookieModal = document.getElementById('cookie-preferences-modal');
-                    if (cookieModal) {
-                        if (typeof bootstrap !== 'undefined') {
-                            const modal = new bootstrap.Modal(cookieModal);
-                            modal.show();
-                        } else {
-                            // Fallback pour une ouverture manuelle
-                            cookieModal.classList.add('show');
-                            cookieModal.style.display = 'block';
-                            document.body.classList.add('modal-open');
-                            
-                            // Créer un backdrop
-                            const backdrop = document.createElement('div');
-                            backdrop.className = 'modal-backdrop fade show';
-                            document.body.appendChild(backdrop);
-                        }
-                    }
+            // Bouton pour ouvrir la modale de préférences
+            const openSettingsBtn = document.getElementById('open-cookie-settings');
+            if (openSettingsBtn && window.cookieConsent) {
+                openSettingsBtn.addEventListener('click', function() {
+                    window.cookieConsent.showModal();
                 });
                 
-                // Déclencher le clic automatiquement
+                // Ouvrir automatiquement la modale
                 setTimeout(function() {
-                    openCookieSettingsBtn.click();
+                    window.cookieConsent.showModal();
                 }, 500);
             }
         });
     </script>
-{% endblock %}
 {% endblock %}

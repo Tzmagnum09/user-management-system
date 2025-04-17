@@ -8,7 +8,7 @@
         {% block stylesheets %}
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-            <link rel="stylesheet" href="{{ asset('assets/styles/cookie_modal.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/cookie-consent.css') }}">
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -170,18 +170,23 @@
 
         {% block footer %}
             <footer class="footer mt-5">
-                <div class="container text-center">
-                    <p>&copy; {{ 'now'|date('Y') }} {{ app_name }}. {{ 'All rights reserved.'|trans }}</p>
-                    <a href="#" id="cookie-settings-link" class="cookie-settings-footer-link">
-                        {{ 'Cookie Settings'|trans }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p>&copy; {{ 'now'|date('Y') }} {{ app_name|default('Dmqode.be') }}. {{ 'Tous droits réservés.'|trans }}</p>
+                <p>
+                    <a href="{{ path('app_cookie_preferences') }}" id="cookie-settings-link" class="me-2">
+                        {{ 'Paramètres des cookies'|trans }}
                     </a>
                     <span class="mx-2">|</span>
-                    <a href="{{ path('app_terms') }}" class="cookie-settings-footer-link terms-link">
-                        {{ 'Terms of Use'|trans }}
+                    <a href="{{ path('app_terms') }}" class="ms-2">
+                        {{ 'Conditions d\'utilisation'|trans }}
                     </a>
-                </div>
-            </footer>
-        {% endblock %}
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>        {% endblock %}
 
         {% block javascripts %}
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -212,5 +217,42 @@
                 });
             </script>
         {% endblock %}
+<script src="{{ asset('js/cookie-consent.js') }}"></script>
+<script>
+    document.addEventListener('cookiePreferencesUpdated', function(event) {
+        console.log('Préférences de cookies mises à jour:', event.detail);
+        
+        // Activer les scripts appropriés basés sur les préférences
+        if (event.detail.statistics) {
+            // Initialiser les scripts d'analyse comme Google Analytics
+            // Exemple :
+            /*
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-XXXXX-Y', 'auto');
+            ga('send', 'pageview');
+            */
+        }
+        
+        if (event.detail.marketing) {
+            // Initialiser les scripts marketing comme Facebook Pixel
+            // Exemple :
+            /*
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', 'XXXXXXXXXXXXX');
+            fbq('track', 'PageView');
+            */
+        }
+    });
+</script>
     </body>
 </html>
