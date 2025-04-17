@@ -1,0 +1,55 @@
+.btn-gradient {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+.modal-body h4 {
+    color: #8e44ad;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.terms-section {
+    margin-bottom: 25px;
+}
+
+.terms-section ul {
+    padding-left: 20px;
+}
+
+.terms-section p {
+    margin-bottom: 10px;
+}
+
+/* Pour assurer que le modal est bien visible par-dessus tout */
+.modal-backdrop {
+    z-index: 1040;
+}
+
+.modal {
+    z-index: 1050;
+}
+
+/* Style pour le contenu des termes */
+.terms-content {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Style pour le lien des conditions d'utilisation */
+.terms-link {
+    color: #3498db;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.terms-link:hover {
+    color: #8e44ad;
+}

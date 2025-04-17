@@ -13,4 +13,10 @@ class TermsController extends AbstractController
     {
         return $this->render('terms/index.html.twig');
     }
+    
+    #[Route('/terms/modal', name: 'app_terms_modal')]
+    public function modal(): Response
+    {
+        return $this->render('terms/modal.html.twig');
+    }
 }

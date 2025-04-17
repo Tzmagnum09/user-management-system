@@ -20,6 +20,10 @@ return [
         'path' => './assets/js/cookie_consent_modal.js',
         'entrypoint' => true,
     ],
+    'terms' => [
+        'path' => './assets/js/terms.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],

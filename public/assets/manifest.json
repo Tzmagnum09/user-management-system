@@ -1,0 +1,16 @@
+{
+    "@symfony\/stimulus-bundle\/controllers.js": "\/assets\/@symfony\/stimulus-bundle\/controllers-qoRywO9.js",
+    "@symfony\/stimulus-bundle\/loader.js": "\/assets\/@symfony\/stimulus-bundle\/loader-kxG46ja.js",
+    "@symfony\/ux-turbo\/turbo_controller.js": "\/assets\/@symfony\/ux-turbo\/turbo_controller-zl4y2v3.js",
+    "@symfony\/ux-turbo\/turbo_stream_controller.js": "\/assets\/@symfony\/ux-turbo\/turbo_stream_controller-k6A1X0A.js",
+    "app.js": "\/assets\/app-jgPm2-L.js",
+    "bootstrap.js": "\/assets\/bootstrap-xCO4u8H.js",
+    "controllers\/csrf_protection_controller.js": "\/assets\/controllers\/csrf_protection_controller-E_gSC5e.js",
+    "controllers\/hello_controller.js": "\/assets\/controllers\/hello_controller-VYgvytJ.js",
+    "js\/app.js": "\/assets\/js\/app-savsTe5.js",
+    "js\/cookie_consent.js": "\/assets\/js\/cookie_consent-Yw6mr7V.js",
+    "styles\/app.css": "\/assets\/styles\/app-cT2YKNc.css",
+    "styles\/cookie_styles.css": "\/assets\/styles\/cookie_styles-4axG9t4.css",
+    "vendor\/@hotwired\/stimulus\/stimulus.index.js": "\/assets\/vendor\/@hotwired\/stimulus\/stimulus.index-S4zNcea.js",
+    "vendor\/@hotwired\/turbo\/turbo.index.js": "\/assets\/vendor\/@hotwired\/turbo\/turbo.index-pT15T6h.js"
+}
