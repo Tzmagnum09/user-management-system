@@ -63,6 +63,15 @@
             display: flex;
             justify-content: space-between;
         }
+        /* Ajout pour gérer l'affichage du champ de code personnalisé */
+        #custom_code_container {
+            transition: all 0.3s ease;
+        }
+        .help-text {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
     </style>
 {% endblock %}
 
@@ -81,23 +90,32 @@
             </div>
             <div class="card-body">
                 {{ form_start(form) }}
+                    {% if form.template_selection is defined %}
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            {{ form_row(form.code, {
-                                label: 'Template Code'|trans
-                            }) }}
+                            {{ form_row(form.template_selection) }}
                         </div>
-                        <div class="col-md-6">
-                            {{ form_row(form.locale, {
-                                label: 'Language'|trans
-                            }) }}
+                        <div class="col-md-6" id="custom_code_container">
+                            {{ form_row(form.code) }}
                         </div>
                     </div>
+                    {% else %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.code) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.locale) }}
+                        </div>
+                    </div>
+                    {% endif %}
 
                     <div class="mb-3">
-                        {{ form_row(form.subject, {
-                            label: 'Email Subject'|trans
-                        }) }}
+                        {{ form_row(form.subject) }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form_row(form.locale) }}
                     </div>
 
                     <!-- Éditeur HTML -->
@@ -196,33 +214,23 @@
                             <div class="variables-group">
                                 <div class="variables-group-title">Variables spécifiques</div>
                                 <div class="row">
-                                    {% if form.vars.data.code == 'registration_confirmation' %}
                                     <div class="col-md-3">
                                         <input type="text" readonly class="variable-input" value="URL de vérification d'email" data-var="signedUrl">
                                     </div>
-                                    {% endif %}
-                                    
-                                    {% if form.vars.data.code == 'reset_password' %}
                                     <div class="col-md-3">
                                         <input type="text" readonly class="variable-input" value="Token de réinitialisation de mot de passe" data-var="resetToken">
                                     </div>
-                                    {% endif %}
-                                    
-                                    {% if form.vars.data.code == 'role_change' %}
                                     <div class="col-md-3">
                                         <input type="text" readonly class="variable-input" value="Rôle précédent" data-var="previousRole">
                                     </div>
                                     <div class="col-md-3">
                                         <input type="text" readonly class="variable-input" value="Nouveau rôle" data-var="newRole">
                                     </div>
-                                    {% endif %}
-                                    
-                                    {% if form.vars.data.code == 'permission_update' %}
+                                </div>
+                                <div class="row mt-2">
                                     <div class="col-md-6">
                                         <input type="text" readonly class="variable-input" value="Détails des modifications de permissions" data-var="permissionChanges">
                                     </div>
-                                    {% endif %}
-                                    
                                     <div class="col-md-3">
                                         <input type="text" readonly class="variable-input" value="Durée de validité du lien" data-var="tokenLifetime">
                                     </div>
@@ -257,6 +265,37 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Gestion du champ de code personnalisé
+            const templateSelector = document.getElementById('template_selection');
+            const customCodeContainer = document.getElementById('custom_code_container');
+            const customCodeInput = document.getElementById('custom_code');
+            
+            // Fonction pour afficher/masquer le champ de code personnalisé
+            if (templateSelector && customCodeContainer && customCodeInput) {
+                // Initialisation au chargement de la page
+                if (templateSelector.value !== 'custom') {
+                    customCodeInput.value = templateSelector.value;
+                    customCodeInput.readOnly = true;
+                } else {
+                    customCodeInput.readOnly = false;
+                }
+                
+                // Écouteur d'événement pour le changement de sélection
+                templateSelector.addEventListener('change', function() {
+                    if (this.value === 'custom') {
+                        // Option personnalisée sélectionnée
+                        customCodeInput.value = '';
+                        customCodeInput.readOnly = false;
+                        customCodeInput.placeholder = 'Saisissez votre code personnalisé';
+                        customCodeInput.focus();
+                    } else {
+                        // Option prédéfinie sélectionnée
+                        customCodeInput.value = this.value;
+                        customCodeInput.readOnly = true;
+                    }
+                });
+            }
+            
             // Obtenir la langue de l'utilisateur depuis la locale de l'application
             const userLocale = '{{ app.request.locale }}';
             
@@ -356,26 +395,24 @@
 
             // Écouteur d'événement pour le changement de langue
             const localeSelect = document.querySelector('#email_template_locale');
-            const codeSelect = document.querySelector('#email_template_code');
-            const subjectField = document.querySelector('#email_template_subject');
             
-            if (localeSelect && codeSelect) {
-                localeSelect.addEventListener('change', function() {
-                    loadTemplateForCodeAndLocale();
-                });
-                
-                // Également changer quand le code du template change
-                codeSelect.addEventListener('change', function() {
-                    loadTemplateForCodeAndLocale();
-                });
-            }
+            // Initialiser le chargement du template par défaut une fois que TinyMCE est initialisé
+            const waitForInitialLoad = setInterval(function() {
+                if (window.tinyMCEInitialized && tinymce.activeEditor) {
+                    clearInterval(waitForInitialLoad);
+                    // Attendre un peu pour s'assurer que tout est bien initialisé
+                    setTimeout(() => {
+                        // Charger le template par défaut basé sur les valeurs initiales
+                        if (templateSelector && templateSelector.value && templateSelector.value !== 'custom') {
+                            loadTemplateForCodeAndLocale(templateSelector.value, localeSelect.value);
+                        }
+                    }, 500);
+                }
+            }, 100);
             
             // Fonction pour charger le template correspondant au code et à la locale
-            function loadTemplateForCodeAndLocale() {
-                const code = codeSelect.value;
-                const locale = localeSelect.value;
-                
-                if (!code || !locale) return;
+            function loadTemplateForCodeAndLocale(code, locale) {
+                if (!code || !locale || code === 'custom') return;
                 
                 // Afficher un indicateur de chargement
                 const loadingIndicator = document.createElement('div');
@@ -411,17 +448,15 @@
                     
                     if (data.success && data.template) {
                         // Mettre à jour le sujet
+                        const subjectField = document.querySelector('#email_template_subject');
                         if (subjectField) {
                             subjectField.value = data.template.subject;
                         }
                         
                         // Mettre à jour le contenu de l'éditeur TinyMCE
-                        const waitForTinyMCE = setInterval(function() {
-                            if (window.tinyMCEInitialized && tinymce.activeEditor) {
-                                clearInterval(waitForTinyMCE);
-                                tinymce.activeEditor.setContent(data.template.htmlContent);
-                            }
-                        }, 100);
+                        if (tinymce.activeEditor) {
+                            tinymce.activeEditor.setContent(data.template.htmlContent);
+                        }
 
                         // Afficher un message si c'est un template par défaut
                         if (data.isDefault) {
@@ -448,15 +483,6 @@
                         // Afficher un message d'erreur
                         const errorMessage = data.message || 'Erreur lors du chargement du template';
                         alert(errorMessage);
-                        
-                        // Optionnel: Réinitialiser les champs
-                        if (subjectField) {
-                            subjectField.value = '';
-                        }
-                        
-                        if (tinymce.activeEditor) {
-                            tinymce.activeEditor.setContent('');
-                        }
                     }
                 })
                 .catch(error => {
@@ -466,18 +492,24 @@
                     alert('Une erreur est survenue lors du chargement du template');
                 });
             }
-
-            // Initialiser le chargement du template par défaut une fois que TinyMCE est initialisé
-            const waitForInitialLoad = setInterval(function() {
-                if (window.tinyMCEInitialized && tinymce.activeEditor) {
-                    clearInterval(waitForInitialLoad);
-                    // Attendre un peu pour s'assurer que tout est bien initialisé
-                    setTimeout(() => {
-                        // Charger le template par défaut basé sur les valeurs initiales
-                        loadTemplateForCodeAndLocale();
-                    }, 500);
-                }
-            }, 100);
+            
+            // Ajouter un écouteur d'événement pour le changement de modèle
+            if (templateSelector) {
+                templateSelector.addEventListener('change', function() {
+                    if (this.value && this.value !== 'custom') {
+                        loadTemplateForCodeAndLocale(this.value, localeSelect.value);
+                    }
+                });
+            }
+            
+            // Ajouter un écouteur d'événement pour le changement de langue
+            if (localeSelect && templateSelector) {
+                localeSelect.addEventListener('change', function() {
+                    if (templateSelector.value && templateSelector.value !== 'custom') {
+                        loadTemplateForCodeAndLocale(templateSelector.value, this.value);
+                    }
+                });
+            }
         });
     </script>
 {% endblock %}

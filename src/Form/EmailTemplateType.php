@@ -16,29 +16,60 @@ class EmailTemplateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('code', ChoiceType::class, [
+        // Si c'est un nouveau modèle, afficher le champ code personnalisé
+        if ($options['is_new']) {
+            // Option pour sélectionner un modèle prédéfini ou saisir un nouveau code
+            $builder->add('template_selection', ChoiceType::class, [
+                'mapped' => false,
+                'required' => false,
                 'choices' => [
-                    'Registration Confirmation' => 'registration_confirmation',
-                    'Account Approved' => 'account_approved',
-                    'Reset Password' => 'reset_password',
-                    'Role Change' => 'role_change',
-                    'Permission Update' => 'permission_update',
+                    'Sélectionner un modèle' => [
+                        'Confirmation d\'inscription' => 'registration_confirmation',
+                        'Compte approuvé' => 'account_approved',
+                        'Réinitialisation de mot de passe' => 'reset_password',
+                        'Changement de rôle' => 'role_change',
+                        'Mise à jour des permissions' => 'permission_update',
+                    ],
+                    'Ajouter un nouveau code' => 'custom',
                 ],
-                'attr' => ['class' => 'form-select'],
+                'attr' => [
+                    'class' => 'form-select',
+                    'id' => 'template_selection',
+                ],
+                'label' => 'Type de modèle',
+            ]);
+            
+            // Champ pour le code personnalisé
+            $builder->add('code', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'custom_code',
+                ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please select a template code',
+                        'message' => 'Veuillez saisir un code de modèle',
                     ]),
                 ],
                 'label' => 'Code du modèle',
-                'disabled' => !$options['is_new'], // Désactiver le champ code si on édite un modèle existant
-            ])
+                'help' => 'Utilisez uniquement des lettres minuscules, chiffres et underscores (ex: newsletter_bienvenue)',
+            ]);
+        } else {
+            // Pour l'édition, le code est en lecture seule
+            $builder->add('code', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control', 
+                    'readonly' => true
+                ],
+                'label' => 'Code du modèle',
+            ]);
+        }
+        
+        $builder
             ->add('subject', TextType::class, [
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a subject',
+                        'message' => 'Veuillez saisir un sujet',
                     ]),
                 ],
                 'label' => 'Sujet de l\'email',
@@ -51,7 +82,7 @@ class EmailTemplateType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter HTML content',
+                        'message' => 'Veuillez saisir le contenu HTML',
                     ]),
                 ],
                 'label' => 'Contenu HTML',
@@ -66,7 +97,7 @@ class EmailTemplateType extends AbstractType
                 'attr' => ['class' => 'form-select'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please select a locale',
+                        'message' => 'Veuillez sélectionner une langue',
                     ]),
                 ],
                 'label' => 'Langue',

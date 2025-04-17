@@ -104,10 +104,24 @@ class EmailTemplateController extends AbstractController
             $emailTemplate->setHtmlContent($this->getDefaultTemplate($templateCode, $locale));
         }
         
-        $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['is_new' => true]); // Important: définir is_new à true
+        $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['is_new' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Si le formulaire est soumis et valide
+            
+            // Vérifier si un code personnalisé est soumis via le formulaire
+            $templateSelectionValue = $form->has('template_selection') 
+                ? $form->get('template_selection')->getData() 
+                : null;
+                
+            // Si on a sélectionné une option prédéfinie (différent de 'custom')
+            // et que ce n'est pas null, on l'utilise comme code
+            if ($templateSelectionValue && $templateSelectionValue !== 'custom') {
+                $emailTemplate->setCode($templateSelectionValue);
+            }
+            // Sinon on utilise le code personnalisé saisi (déjà mappé à l'entité)
+
             // Check if this exact combination of code and locale already exists
             $existing = $this->emailTemplateRepository->findByCodeAndLocale(
                 $emailTemplate->getCode(),
