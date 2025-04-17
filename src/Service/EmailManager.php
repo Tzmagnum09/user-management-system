@@ -36,11 +36,6 @@ class EmailManager
 
     /**
      * Send an email using a template from the database.
-     *
-     * @param string $templateCode The code of the template to use
-     * @param string $recipientEmail The recipient's email address
-     * @param array $variables Variables to replace in the template
-     * @param string|null $locale The locale to use for the template (defaults to user's locale)
      */
     public function sendTemplatedEmail(string $templateCode, string $recipientEmail, array $variables = [], ?string $locale = null): void
     {
@@ -62,16 +57,93 @@ class EmailManager
         // Replace variables in the subject and content
         $subject = $this->replaceVariables($template->getSubject(), $variables);
         $htmlContent = $this->replaceVariables($template->getHtmlContent(), $variables);
+        
+        // Ensure HTML content is properly formatted
+        $htmlContent = $this->prepareHtmlContent($htmlContent);
+        
+        // Create plain text version for email clients that prefer it
+        $textContent = strip_tags(str_replace(['<br>', '<br />', '</p>'], "\n", $htmlContent));
 
-        // Create and send email with proper HTML content type
-        $email = (new Email())
+        // Create and send email
+        $email = new Email();
+        $email
             ->from(new Address($this->senderEmail, $this->senderName))
             ->to($recipientEmail)
             ->subject($subject)
             ->html($htmlContent)
-            ->text(strip_tags(preg_replace('/<br\s*\/?>/', "\n", $htmlContent)));  // Provide a plain text alternative
+            ->text($textContent);
 
         $this->mailer->send($email);
+    }
+    
+    /**
+     * Prepare HTML content for email sending.
+     */
+    private function prepareHtmlContent(string $content): string
+    {
+        // Make sure the HTML is properly formatted as a complete document
+        if (!str_contains($content, '<!DOCTYPE') && !str_contains($content, '<html')) {
+            $content = $this->wrapInHtmlDocument($content);
+        }
+        
+        return $content;
+    }
+    
+    /**
+     * Wrap content in a complete HTML document structure.
+     */
+    private function wrapInHtmlDocument(string $content): string
+    {
+        return '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white !important;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    ' . $content . '
+</body>
+</html>';
     }
 
     /**
@@ -86,7 +158,7 @@ class EmailManager
                 'firstName' => $user->getFirstName(),
                 'lastName' => $user->getLastName(),
                 'username' => $user->getUsername(),
-                'domain' => $this->params->get('app.url'),
+                'domain' => str_replace('http://', '', $this->params->get('app.url')),
                 'app_name' => $this->params->get('app.name', 'Dmqode.be'),
             ]),
             $user->getLocale()
@@ -95,10 +167,6 @@ class EmailManager
 
     /**
      * Replace variables in a string.
-     *
-     * @param string $content The content with variables to replace
-     * @param array $variables The variables to replace
-     * @return string The content with variables replaced
      */
     private function replaceVariables(string $content, array $variables): string
     {
@@ -121,8 +189,6 @@ class EmailManager
 
     /**
      * Get all available templates grouped by code.
-     *
-     * @return array
      */
     public function getAllTemplatesGrouped(): array
     {
@@ -167,7 +233,6 @@ class EmailManager
                             $sampleVariables
                         );
                         
-                        // Conserver le format HTML
                         // Convertir les variables twig au format %variable%
                         $content = preg_replace('/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/', '%$1%', $content);
                         
@@ -186,8 +251,6 @@ class EmailManager
 
     /**
      * Get default templates for all supported email types and locales.
-     *
-     * @return array
      */
     private function getDefaultTemplates(): array
     {
