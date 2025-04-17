@@ -1,65 +1,370 @@
-# Security
-'Login': 'Login'
-'Sign in': 'Sign in'
-'Email': 'Email'
-'Password': 'Password'
-'Remember me': 'Remember me'
-'Create an account': 'Create an account'
-'Forgot your password?': 'Forgot your password?'
-'Already have an account? Sign in': 'Already have an account? Sign in'
+# General translations
+app:
+  title: "User Management"
+  welcome: "Welcome to the User Management application"
+  footer:
+    copyright: "© %year% Dmqode.be - All rights reserved"
+  menu:
+    dashboard: "Dashboard"
+    users: "Users"
+    user_list: "User List"
+    pending_approval: "Pending Approval"
+    pending_verification: "Pending Verification"
+    email_templates: "Email Templates"
+    audit_logs: "Audit Logs"
+    profile: "My Profile"
+    settings: "Settings"
+    logout: "Logout"
+  action:
+    new: "Add"
+    edit: "Edit"
+    delete: "Delete"
+    show: "View"
+    save: "Save"
+    cancel: "Cancel"
+    back: "Back"
+    confirm: "Confirm"
+    search: "Search"
+    filter: "Filter"
+    reset: "Reset"
+    approve: "Approve"
+    reject: "Reject"
+    verify: "Verify"
+    download: "Download"
+    refresh: "Refresh"
+    login: "Login"
+    register: "Register"
+    send: "Send"
+    preview: "Preview"
+    update: "Update"
+  flash:
+    success:
+      general: "Operation successful."
+      create: "Successfully created."
+      update: "Successfully updated."
+      delete: "Successfully deleted."
+      approve: "Successfully approved."
+      verify: "Successfully verified."
+    error:
+      general: "An error has occurred."
+      create: "Error during creation."
+      update: "Error during update."
+      delete: "Error during deletion."
+      approve: "Error during approval."
+      verify: "Error during verification."
+  confirm:
+    delete: "Are you sure you want to delete this item? This action cannot be undone."
+    approve: "Are you sure you want to approve this user?"
+    reject: "Are you sure you want to reject this user?"
+    verify: "Are you sure you want to verify this email?"
 
-# Registration
-'Register': 'Register'
-'First name': 'First name'
-'Last name': 'Last name'
-'Username': 'Username'
-'Repeat Password': 'Repeat Password'
-'Street': 'Street'
-'House number': 'House number'
-'Box number': 'Box number'
-'Postal code': 'Postal code'
-'City': 'City'
-'Country': 'Country'
-'Phone number': 'Phone number'
-'Birth date': 'Birth date'
-'Preferred language': 'Preferred language'
-'I agree to the terms of service': 'I agree to the terms of service'
-'Registration Complete': 'Registration Complete'
-'An email has been sent to': 'An email has been sent to'
-'to verify your email address.': 'to verify your email address.'
-'Please check your email and click on the verification link to complete your registration.': 'Please check your email and click on the verification link to complete your registration.'
-'Once verified, your account will be reviewed by an administrator for approval.': 'Once verified, your account will be reviewed by an administrator for approval.'
-'If you do not receive an email within a few minutes, please check your spam folder.': 'If you do not receive an email within a few minutes, please check your spam folder.'
-'Return to login': 'Return to login'
+# Authentication
+security:
+  login:
+    title: "Login"
+    username: "Username"
+    password: "Password"
+    remember_me: "Remember me"
+    submit: "Login"
+    forgot_password: "Forgot password?"
+    register: "Create an account"
+  logout: "Logout"
+  register:
+    title: "Register"
+    submit: "Register"
+    already_registered: "Already registered? Login"
+  password:
+    reset:
+      title: "Reset Password"
+      request: "Request a new password"
+      email_sent: "An email has been sent with instructions to reset your password."
+      submit: "Reset my password"
+    new:
+      title: "New Password"
+      submit: "Save new password"
+  verification:
+    email:
+      title: "Email Verification"
+      success: "Your email address has been successfully verified."
+      already_verified: "Your email address is already verified."
+      check_inbox: "Check your inbox and click on the link to verify your email address."
+      resend: "Resend verification email"
+
+# Users
+user:
+  title: "Users"
+  list:
+    title: "User List"
+    empty: "No users found."
+  pending:
+    approval:
+      title: "Users Pending Approval"
+      empty: "No users pending approval."
+    verification:
+      title: "Users Pending Email Verification"
+      empty: "No users pending email verification."
+  show:
+    title: "User Details"
+  edit:
+    title: "Edit User"
+  new:
+    title: "New User"
+  delete:
+    title: "Delete User"
+  field:
+    id: "ID"
+    username: "Username"
+    email: "Email"
+    roles: "Roles"
+    firstName: "First Name"
+    lastName: "Last Name"
+    fullName: "Full Name"
+    street: "Street"
+    houseNumber: "House Number"
+    boxNumber: "Box Number"
+    postalCode: "Postal Code"
+    city: "City"
+    country: "Country"
+    phone: "Phone"
+    locale: "Language"
+    isVerified: "Email Verified"
+    isApproved: "Account Approved"
+    createdAt: "Created On"
+    lastLoginAt: "Last Login"
+    emailVerifiedAt: "Email Verified On"
+    approvedAt: "Approved On"
+    birthDate: "Birth Date"
+    password: "Password"
+    password_confirmation: "Password Confirmation"
+  roles:
+    ROLE_USER: "User"
+    ROLE_ADMIN: "Administrator"
+    ROLE_SUPER_ADMIN: "Super Administrator"
+  status:
+    active: "Active"
+    inactive: "Inactive"
+    pending_verification: "Pending Verification"
+    pending_approval: "Pending Approval"
+    approved: "Approved"
+    not_approved: "Not Approved"
+    verified: "Verified"
+    not_verified: "Not Verified"
+
+# Email Templates
+email_template:
+  title: "Email Templates"
+  list:
+    title: "Email Template List"
+    empty: "No email templates found."
+  show:
+    title: "Email Template Details"
+  edit:
+    title: "Edit Email Template"
+  preview:
+    title: "Email Template Preview"
+  field:
+    id: "ID"
+    code: "Code"
+    subject: "Subject"
+    htmlContent: "HTML Content"
+    locale: "Language"
+    createdAt: "Created On"
+    updatedAt: "Updated On"
+  codes:
+    registration_confirmation: "Registration Confirmation"
+    account_approved: "Account Approved"
+    reset_password: "Password Reset"
+    role_change: "Role Change"
+    permission_update: "Permission Update"
+  placeholders:
+    firstName: "First Name"
+    lastName: "Last Name"
+    email: "Email"
+    username: "Username"
+    signedUrl: "Signed URL"
+    previousRole: "Previous Role"
+    newRole: "New Role"
+
+# Audit Log
+audit_log:
+  title: "Audit Log"
+  list:
+    title: "Audit Log List"
+    empty: "No audit logs found."
+  field:
+    id: "ID"
+    userId: "User ID"
+    username: "Username"
+    action: "Action"
+    details: "Details"
+    ipAddress: "IP Address"
+    createdAt: "Date"
+  actions:
+    user_logged_in: "Login"
+    user_registered: "Registration"
+    verify_user_email: "Email Verification"
+    approve_user: "User Approval"
+    reject_user: "User Rejection"
+    delete_user: "User Deletion"
+    edit_user: "User Edit"
+    change_user_role: "Role Change"
+    view_users: "Users Viewed"
+    view_pending_approval: "Pending Approvals Viewed"
+    view_pending_verification: "Pending Verifications Viewed"
+    view_audit_logs: "Audit Logs Viewed"
+    view_email_templates: "Email Templates Viewed"
+    edit_email_template: "Email Template Edit"
+    preview_email_template: "Email Template Preview"
+
+# Profile
+profile:
+  title: "My Profile"
+  edit:
+    title: "Edit My Profile"
+    success: "Your profile has been successfully updated."
+  password:
+    title: "Change My Password"
+    current: "Current Password"
+    new: "New Password"
+    confirm: "Confirm New Password"
+    success: "Your password has been successfully changed."
 
 # Dashboard
-'Dashboard': 'Dashboard'
-'Administration': 'Administration'
-'Users': 'Users'
-'Pending Approval': 'Pending Approval'
-'Email Templates': 'Email Templates'
-'Audit Logs': 'Audit Logs'
-'Profile': 'Profile'
-'Logout': 'Logout'
-'Welcome': 'Welcome'
-'Account Information': 'Account Information'
-'Personal Information': 'Personal Information'
-'Last login': 'Last login'
-'Name': 'Name'
-'Address': 'Address'
-'Phone': 'Phone'
-'N/A': 'N/A'
+dashboard:
+  title: "Dashboard"
+  welcome: "Welcome, %username%!"
+  stats:
+    total_users: "Total Users"
+    pending_approval: "Pending Approval"
+    pending_verification: "Pending Verification"
+    new_today: "New Today"
+  recent:
+    users: "Recent Users"
+    activity: "Recent Activity"
+  no_data: "No data available."
 
-# Admin
-'Edit': 'Edit'
-'Delete': 'Delete'
-'Approve': 'Approve'
-'Verify': 'Verify'
-'Actions': 'Actions'
-'Are you sure you want to delete this user?': 'Are you sure you want to delete this user?'
-'User has been updated.': 'User has been updated.'
-'User has been deleted.': 'User has been deleted.'
-'User email has been verified.': 'User email has been verified.'
-'User account has been approved.': 'User account has been approved.'
-'User roles have been updated.': 'User roles have been updated.'
-'User permissions have been updated.': 'User permissions have been updated.'
+# Permissions
+permission:
+  title: "Permissions"
+  list:
+    title: "Permission List"
+  edit:
+    title: "Edit Permissions"
+  field:
+    permission: "Permission"
+    isGranted: "Granted"
+  permissions:
+    view_users: "View Users"
+    edit_users: "Edit Users"
+    delete_users: "Delete Users"
+    approve_users: "Approve Users"
+    view_audit_logs: "View Audit Logs"
+    manage_email_templates: "Manage Email Templates"
+    manage_permissions: "Manage Permissions"
+
+# Settings
+settings:
+  title: "Settings"
+  general:
+    title: "General Settings"
+    site_name: "Site Name"
+    admin_email: "Admin Email"
+    default_locale: "Default Language"
+    require_email_verification: "Require Email Verification"
+    require_account_approval: "Require Account Approval"
+  email:
+    title: "Email Settings"
+    sender_name: "Sender Name"
+    sender_email: "Sender Email"
+    smtp_host: "SMTP Host"
+    smtp_port: "SMTP Port"
+    smtp_username: "SMTP Username"
+    smtp_password: "SMTP Password"
+    smtp_encryption: "SMTP Encryption"
+
+# Validation
+validation:
+  not_blank: "This field cannot be empty."
+  min_length: "This field must contain at least {{ limit }} characters."
+  max_length: "This field cannot contain more than {{ limit }} characters."
+  email: "Please enter a valid email address."
+  unique_email: "This email address is already in use."
+  unique_username: "This username is already in use."
+  password_match: "Passwords must match."
+  password_strength: "Password must contain at least 8 characters, including uppercase letters, lowercase letters, numbers, and special characters."
+  date_format: "Invalid date format."
+  phone_format: "Invalid phone number format."
+
+# Pagination
+pagination:
+  previous: "Previous"
+  next: "Next"
+  first: "First"
+  last: "Last"
+  summary: "Showing %start% to %end% of %total% items"
+
+# Exceptions and errors
+error:
+  403:
+    title: "Access Denied"
+    message: "You do not have the necessary permissions to access this page."
+  404:
+    title: "Page Not Found"
+    message: "The page you are looking for does not exist or has been moved."
+  500:
+    title: "Internal Server Error"
+    message: "An error occurred on the server. Please try again later."
+  generic:
+    title: "Error"
+    message: "An error has occurred. Please try again later."
+  home: "Return to Home"
+
+# Dates and formats
+date:
+  format:
+    short: "m/d/Y"
+    medium: "M d, Y"
+    long: "F d, Y"
+    time: "h:i A"
+    datetime: "m/d/Y h:i A"
+  day:
+    monday: "Monday"
+    tuesday: "Tuesday"
+    wednesday: "Wednesday"
+    thursday: "Thursday"
+    friday: "Friday"
+    saturday: "Saturday"
+    sunday: "Sunday"
+  month:
+    january: "January"
+    february: "February"
+    march: "March"
+    april: "April"
+    may: "May"
+    june: "June"
+    july: "July"
+    august: "August"
+    september: "September"
+    october: "October"
+    november: "November"
+    december: "December"
+
+# Countries
+country:
+  BE: "Belgium"
+  FR: "France"
+  DE: "Germany"
+  NL: "Netherlands"
+  LU: "Luxembourg"
+  CH: "Switzerland"
+  IT: "Italy"
+  ES: "Spain"
+  GB: "United Kingdom"
+  US: "United States"
+
+# Languages
+locale:
+  fr: "French"
+  en: "English"
+  nl: "Dutch"
+  de: "German"

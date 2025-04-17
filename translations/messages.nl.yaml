@@ -1,65 +1,370 @@
-# Security
-'Login': 'Inloggen'
-'Sign in': 'Aanmelden'
-'Email': 'E-mail'
-'Password': 'Wachtwoord'
-'Remember me': 'Onthoud mij'
-'Create an account': 'Account aanmaken'
-'Forgot your password?': 'Wachtwoord vergeten?'
-'Already have an account? Sign in': 'Heeft u al een account? Meld u aan'
+# Algemene vertalingen
+app:
+  title: "Gebruikersbeheer"
+  welcome: "Welkom bij de gebruikersbeheerapp"
+  footer:
+    copyright: "© %year% Dmqode.be - Alle rechten voorbehouden"
+  menu:
+    dashboard: "Dashboard"
+    users: "Gebruikers"
+    user_list: "Gebruikerslijst"
+    pending_approval: "Wachtend op goedkeuring"
+    pending_verification: "Wachtend op verificatie"
+    email_templates: "E-mailsjablonen"
+    audit_logs: "Auditlogboeken"
+    profile: "Mijn profiel"
+    settings: "Instellingen"
+    logout: "Afmelden"
+  action:
+    new: "Toevoegen"
+    edit: "Bewerken"
+    delete: "Verwijderen"
+    show: "Bekijken"
+    save: "Opslaan"
+    cancel: "Annuleren"
+    back: "Terug"
+    confirm: "Bevestigen"
+    search: "Zoeken"
+    filter: "Filteren"
+    reset: "Resetten"
+    approve: "Goedkeuren"
+    reject: "Afwijzen"
+    verify: "Verifiëren"
+    download: "Downloaden"
+    refresh: "Vernieuwen"
+    login: "Inloggen"
+    register: "Registreren"
+    send: "Verzenden"
+    preview: "Voorbeeldweergave"
+    update: "Bijwerken"
+  flash:
+    success:
+      general: "Operatie geslaagd."
+      create: "Succesvol aangemaakt."
+      update: "Succesvol bijgewerkt."
+      delete: "Succesvol verwijderd."
+      approve: "Goedkeuring geslaagd."
+      verify: "Verificatie geslaagd."
+    error:
+      general: "Er is een fout opgetreden."
+      create: "Fout bij het aanmaken."
+      update: "Fout bij het bijwerken."
+      delete: "Fout bij het verwijderen."
+      approve: "Fout bij het goedkeuren."
+      verify: "Fout bij het verifiëren."
+  confirm:
+    delete: "Weet u zeker dat u dit item wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt."
+    approve: "Weet u zeker dat u deze gebruiker wilt goedkeuren?"
+    reject: "Weet u zeker dat u deze gebruiker wilt afwijzen?"
+    verify: "Weet u zeker dat u deze e-mail wilt verifiëren?"
 
-# Registration
-'Register': 'Registreren'
-'First name': 'Voornaam'
-'Last name': 'Achternaam'
-'Username': 'Gebruikersnaam'
-'Repeat Password': 'Herhaal wachtwoord'
-'Street': 'Straat'
-'House number': 'Huisnummer'
-'Box number': 'Busnummer'
-'Postal code': 'Postcode'
-'City': 'Stad'
-'Country': 'Land'
-'Phone number': 'Telefoonnummer'
-'Birth date': 'Geboortedatum'
-'Preferred language': 'Voorkeurstaal'
-'I agree to the terms of service': 'Ik ga akkoord met de servicevoorwaarden'
-'Registration Complete': 'Registratie voltooid'
-'An email has been sent to': 'Er is een e-mail verzonden naar'
-'to verify your email address.': 'om uw e-mailadres te verifiëren.'
-'Please check your email and click on the verification link to complete your registration.': 'Controleer uw e-mail en klik op de verificatielink om uw registratie te voltooien.'
-'Once verified, your account will be reviewed by an administrator for approval.': 'Na verificatie wordt uw account door een beheerder beoordeeld voor goedkeuring.'
-'If you do not receive an email within a few minutes, please check your spam folder.': 'Als u binnen enkele minuten geen e-mail ontvangt, controleer dan uw spammap.'
-'Return to login': 'Terug naar inloggen'
+# Authenticatie
+security:
+  login:
+    title: "Inloggen"
+    username: "Gebruikersnaam"
+    password: "Wachtwoord"
+    remember_me: "Onthoud mij"
+    submit: "Inloggen"
+    forgot_password: "Wachtwoord vergeten?"
+    register: "Account aanmaken"
+  logout: "Uitloggen"
+  register:
+    title: "Registreren"
+    submit: "Registreren"
+    already_registered: "Al geregistreerd? Log in"
+  password:
+    reset:
+      title: "Wachtwoord resetten"
+      request: "Nieuw wachtwoord aanvragen"
+      email_sent: "Er is een e-mail verzonden met instructies om uw wachtwoord te resetten."
+      submit: "Mijn wachtwoord resetten"
+    new:
+      title: "Nieuw wachtwoord"
+      submit: "Nieuw wachtwoord opslaan"
+  verification:
+    email:
+      title: "E-mailverificatie"
+      success: "Uw e-mailadres is succesvol geverifieerd."
+      already_verified: "Uw e-mailadres is al geverifieerd."
+      check_inbox: "Controleer uw inbox en klik op de link om uw e-mailadres te verifiëren."
+      resend: "Verificatie-e-mail opnieuw verzenden"
+
+# Gebruikers
+user:
+  title: "Gebruikers"
+  list:
+    title: "Gebruikerslijst"
+    empty: "Geen gebruikers gevonden."
+  pending:
+    approval:
+      title: "Gebruikers wachtend op goedkeuring"
+      empty: "Geen gebruikers wachtend op goedkeuring."
+    verification:
+      title: "Gebruikers wachtend op e-mailverificatie"
+      empty: "Geen gebruikers wachtend op e-mailverificatie."
+  show:
+    title: "Gebruikersdetails"
+  edit:
+    title: "Gebruiker bewerken"
+  new:
+    title: "Nieuwe gebruiker"
+  delete:
+    title: "Gebruiker verwijderen"
+  field:
+    id: "ID"
+    username: "Gebruikersnaam"
+    email: "E-mail"
+    roles: "Rollen"
+    firstName: "Voornaam"
+    lastName: "Achternaam"
+    fullName: "Volledige naam"
+    street: "Straat"
+    houseNumber: "Huisnummer"
+    boxNumber: "Bus"
+    postalCode: "Postcode"
+    city: "Stad"
+    country: "Land"
+    phone: "Telefoon"
+    locale: "Taal"
+    isVerified: "E-mail geverifieerd"
+    isApproved: "Account goedgekeurd"
+    createdAt: "Aangemaakt op"
+    lastLoginAt: "Laatste login"
+    emailVerifiedAt: "E-mail geverifieerd op"
+    approvedAt: "Goedgekeurd op"
+    birthDate: "Geboortedatum"
+    password: "Wachtwoord"
+    password_confirmation: "Wachtwoordbevestiging"
+  roles:
+    ROLE_USER: "Gebruiker"
+    ROLE_ADMIN: "Beheerder"
+    ROLE_SUPER_ADMIN: "Superbeheerder"
+  status:
+    active: "Actief"
+    inactive: "Inactief"
+    pending_verification: "Wachtend op verificatie"
+    pending_approval: "Wachtend op goedkeuring"
+    approved: "Goedgekeurd"
+    not_approved: "Niet goedgekeurd"
+    verified: "Geverifieerd"
+    not_verified: "Niet geverifieerd"
+
+# E-mailsjablonen
+email_template:
+  title: "E-mailsjablonen"
+  list:
+    title: "Lijst van e-mailsjablonen"
+    empty: "Geen e-mailsjablonen gevonden."
+  show:
+    title: "Details van e-mailsjabloon"
+  edit:
+    title: "E-mailsjabloon bewerken"
+  preview:
+    title: "Voorbeeldweergave van e-mailsjabloon"
+  field:
+    id: "ID"
+    code: "Code"
+    subject: "Onderwerp"
+    htmlContent: "HTML-inhoud"
+    locale: "Taal"
+    createdAt: "Aangemaakt op"
+    updatedAt: "Bijgewerkt op"
+  codes:
+    registration_confirmation: "Registratiebevestiging"
+    account_approved: "Account goedgekeurd"
+    reset_password: "Wachtwoord resetten"
+    role_change: "Rolwijziging"
+    permission_update: "Rechtenupdate"
+  placeholders:
+    firstName: "Voornaam"
+    lastName: "Achternaam"
+    email: "E-mail"
+    username: "Gebruikersnaam"
+    signedUrl: "Ondertekende URL"
+    previousRole: "Vorige rol"
+    newRole: "Nieuwe rol"
+
+# Auditlogboek
+audit_log:
+  title: "Auditlogboek"
+  list:
+    title: "Lijst van auditlogboeken"
+    empty: "Geen auditlogboeken gevonden."
+  field:
+    id: "ID"
+    userId: "Gebruikers-ID"
+    username: "Gebruikersnaam"
+    action: "Actie"
+    details: "Details"
+    ipAddress: "IP-adres"
+    createdAt: "Datum"
+  actions:
+    user_logged_in: "Ingelogd"
+    user_registered: "Geregistreerd"
+    verify_user_email: "E-mail geverifieerd"
+    approve_user: "Gebruiker goedgekeurd"
+    reject_user: "Gebruiker afgewezen"
+    delete_user: "Gebruiker verwijderd"
+    edit_user: "Gebruiker bewerkt"
+    change_user_role: "Rol gewijzigd"
+    view_users: "Gebruikers bekeken"
+    view_pending_approval: "Wachtende goedkeuringen bekeken"
+    view_pending_verification: "Wachtende verificaties bekeken"
+    view_audit_logs: "Auditlogboeken bekeken"
+    view_email_templates: "E-mailsjablonen bekeken"
+    edit_email_template: "E-mailsjabloon bewerkt"
+    preview_email_template: "Voorbeeldweergave van e-mailsjabloon"
+
+# Profiel
+profile:
+  title: "Mijn profiel"
+  edit:
+    title: "Mijn profiel bewerken"
+    success: "Uw profiel is succesvol bijgewerkt."
+  password:
+    title: "Mijn wachtwoord wijzigen"
+    current: "Huidig wachtwoord"
+    new: "Nieuw wachtwoord"
+    confirm: "Bevestig nieuw wachtwoord"
+    success: "Uw wachtwoord is succesvol gewijzigd."
 
 # Dashboard
-'Dashboard': 'Dashboard'
-'Administration': 'Beheer'
-'Users': 'Gebruikers'
-'Pending Approval': 'Wachtend op goedkeuring'
-'Email Templates': 'E-mailsjablonen'
-'Audit Logs': 'Auditlogboeken'
-'Profile': 'Profiel'
-'Logout': 'Uitloggen'
-'Welcome': 'Welkom'
-'Account Information': 'Accountinformatie'
-'Personal Information': 'Persoonlijke gegevens'
-'Last login': 'Laatste aanmelding'
-'Name': 'Naam'
-'Address': 'Adres'
-'Phone': 'Telefoon'
-'N/A': 'N.v.t.'
+dashboard:
+  title: "Dashboard"
+  welcome: "Welkom, %username%!"
+  stats:
+    total_users: "Totaal aantal gebruikers"
+    pending_approval: "Wachtend op goedkeuring"
+    pending_verification: "Wachtend op verificatie"
+    new_today: "Nieuw vandaag"
+  recent:
+    users: "Recente gebruikers"
+    activity: "Recente activiteit"
+  no_data: "Geen gegevens beschikbaar."
 
-# Admin
-'Edit': 'Bewerken'
-'Delete': 'Verwijderen'
-'Approve': 'Goedkeuren'
-'Verify': 'Verifiëren'
-'Actions': 'Acties'
-'Are you sure you want to delete this user?': 'Weet u zeker dat u deze gebruiker wilt verwijderen?'
-'User has been updated.': 'Gebruiker is bijgewerkt.'
-'User has been deleted.': 'Gebruiker is verwijderd.'
-'User email has been verified.': 'E-mailadres van gebruiker is geverifieerd.'
-'User account has been approved.': 'Gebruikersaccount is goedgekeurd.'
-'User roles have been updated.': 'Gebruikersrollen zijn bijgewerkt.'
-'User permissions have been updated.': 'Gebruikersrechten zijn bijgewerkt.'
+# Rechten
+permission:
+  title: "Rechten"
+  list:
+    title: "Lijst van rechten"
+  edit:
+    title: "Rechten bewerken"
+  field:
+    permission: "Recht"
+    isGranted: "Toegekend"
+  permissions:
+    view_users: "Gebruikers bekijken"
+    edit_users: "Gebruikers bewerken"
+    delete_users: "Gebruikers verwijderen"
+    approve_users: "Gebruikers goedkeuren"
+    view_audit_logs: "Auditlogboeken bekijken"
+    manage_email_templates: "E-mailsjablonen beheren"
+    manage_permissions: "Rechten beheren"
+
+# Instellingen
+settings:
+  title: "Instellingen"
+  general:
+    title: "Algemene instellingen"
+    site_name: "Sitenaam"
+    admin_email: "Admin-e-mail"
+    default_locale: "Standaardtaal"
+    require_email_verification: "E-mailverificatie vereisen"
+    require_account_approval: "Accountgoedkeuring vereisen"
+  email:
+    title: "E-mailinstellingen"
+    sender_name: "Naam afzender"
+    sender_email: "E-mail afzender"
+    smtp_host: "SMTP-host"
+    smtp_port: "SMTP-poort"
+    smtp_username: "SMTP-gebruikersnaam"
+    smtp_password: "SMTP-wachtwoord"
+    smtp_encryption: "SMTP-versleuteling"
+
+# Validatie
+validation:
+  not_blank: "Dit veld mag niet leeg zijn."
+  min_length: "Dit veld moet minstens {{ limit }} tekens bevatten."
+  max_length: "Dit veld mag niet meer dan {{ limit }} tekens bevatten."
+  email: "Voer een geldig e-mailadres in."
+  unique_email: "Dit e-mailadres is al in gebruik."
+  unique_username: "Deze gebruikersnaam is al in gebruik."
+  password_match: "Wachtwoorden moeten overeenkomen."
+  password_strength: "Het wachtwoord moet minstens 8 tekens bevatten, inclusief hoofdletters, kleine letters, cijfers en speciale tekens."
+  date_format: "Ongeldig datumformaat."
+  phone_format: "Ongeldig telefoonnummerformaat."
+
+# Paginering
+pagination:
+  previous: "Vorige"
+  next: "Volgende"
+  first: "Eerste"
+  last: "Laatste"
+  summary: "Weergave van %start% tot %end% van %total% items"
+
+# Uitzonderingen en fouten
+error:
+  403:
+    title: "Toegang geweigerd"
+    message: "U heeft niet de benodigde rechten om deze pagina te bekijken."
+  404:
+    title: "Pagina niet gevonden"
+    message: "De pagina die u zoekt bestaat niet of is verplaatst."
+  500:
+    title: "Interne serverfout"
+    message: "Er is een fout opgetreden op de server. Probeer het later opnieuw."
+  generic:
+    title: "Fout"
+    message: "Er is een fout opgetreden. Probeer het later opnieuw."
+  home: "Terug naar startpagina"
+
+# Datums en formaten
+date:
+  format:
+    short: "d/m/Y"
+    medium: "d M Y"
+    long: "d MMMM Y"
+    time: "H:i"
+    datetime: "d/m/Y H:i"
+  day:
+    monday: "Maandag"
+    tuesday: "Dinsdag"
+    wednesday: "Woensdag"
+    thursday: "Donderdag"
+    friday: "Vrijdag"
+    saturday: "Zaterdag"
+    sunday: "Zondag"
+  month:
+    january: "Januari"
+    february: "Februari"
+    march: "Maart"
+    april: "April"
+    may: "Mei"
+    june: "Juni"
+    july: "Juli"
+    august: "Augustus"
+    september: "September"
+    october: "Oktober"
+    november: "November"
+    december: "December"
+
+# Landen
+country:
+  BE: "België"
+  FR: "Frankrijk"
+  DE: "Duitsland"
+  NL: "Nederland"
+  LU: "Luxemburg"
+  CH: "Zwitserland"
+  IT: "Italië"
+  ES: "Spanje"
+  GB: "Verenigd Koninkrijk"
+  US: "Verenigde Staten"
+
+# Talen
+locale:
+  fr: "Frans"
+  en: "Engels"
+  nl: "Nederlands"
+  de: "Duits"

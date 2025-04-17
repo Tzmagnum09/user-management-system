@@ -1,65 +1,370 @@
-# Security
-'Login': 'Anmelden'
-'Sign in': 'Einloggen'
-'Email': 'E-Mail'
-'Password': 'Passwort'
-'Remember me': 'Angemeldet bleiben'
-'Create an account': 'Konto erstellen'
-'Forgot your password?': 'Passwort vergessen?'
-'Already have an account? Sign in': 'Haben Sie bereits ein Konto? Melden Sie sich an'
+# Allgemeine Übersetzungen
+app:
+  title: "Benutzerverwaltung"
+  welcome: "Willkommen bei der Benutzerverwaltungsanwendung"
+  footer:
+    copyright: "© %year% Dmqode.be - Alle Rechte vorbehalten"
+  menu:
+    dashboard: "Dashboard"
+    users: "Benutzer"
+    user_list: "Benutzerliste"
+    pending_approval: "Ausstehende Genehmigung"
+    pending_verification: "Ausstehende Verifizierung"
+    email_templates: "E-Mail-Vorlagen"
+    audit_logs: "Audit-Protokolle"
+    profile: "Mein Profil"
+    settings: "Einstellungen"
+    logout: "Abmelden"
+  action:
+    new: "Hinzufügen"
+    edit: "Bearbeiten"
+    delete: "Löschen"
+    show: "Anzeigen"
+    save: "Speichern"
+    cancel: "Abbrechen"
+    back: "Zurück"
+    confirm: "Bestätigen"
+    search: "Suchen"
+    filter: "Filtern"
+    reset: "Zurücksetzen"
+    approve: "Genehmigen"
+    reject: "Ablehnen"
+    verify: "Verifizieren"
+    download: "Herunterladen"
+    refresh: "Aktualisieren"
+    login: "Anmelden"
+    register: "Registrieren"
+    send: "Senden"
+    preview: "Vorschau"
+    update: "Aktualisieren"
+  flash:
+    success:
+      general: "Vorgang erfolgreich."
+      create: "Erfolgreich erstellt."
+      update: "Erfolgreich aktualisiert."
+      delete: "Erfolgreich gelöscht."
+      approve: "Erfolgreich genehmigt."
+      verify: "Erfolgreich verifiziert."
+    error:
+      general: "Ein Fehler ist aufgetreten."
+      create: "Fehler bei der Erstellung."
+      update: "Fehler bei der Aktualisierung."
+      delete: "Fehler beim Löschen."
+      approve: "Fehler bei der Genehmigung."
+      verify: "Fehler bei der Verifizierung."
+  confirm:
+    delete: "Sind Sie sicher, dass Sie dieses Element löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+    approve: "Sind Sie sicher, dass Sie diesen Benutzer genehmigen möchten?"
+    reject: "Sind Sie sicher, dass Sie diesen Benutzer ablehnen möchten?"
+    verify: "Sind Sie sicher, dass Sie diese E-Mail verifizieren möchten?"
 
-# Registration
-'Register': 'Registrieren'
-'First name': 'Vorname'
-'Last name': 'Nachname'
-'Username': 'Benutzername'
-'Repeat Password': 'Passwort wiederholen'
-'Street': 'Straße'
-'House number': 'Hausnummer'
-'Box number': 'Postfach'
-'Postal code': 'Postleitzahl'
-'City': 'Stadt'
-'Country': 'Land'
-'Phone number': 'Telefonnummer'
-'Birth date': 'Geburtsdatum'
-'Preferred language': 'Bevorzugte Sprache'
-'I agree to the terms of service': 'Ich stimme den Nutzungsbedingungen zu'
-'Registration Complete': 'Registrierung abgeschlossen'
-'An email has been sent to': 'Eine E-Mail wurde gesendet an'
-'to verify your email address.': 'um Ihre E-Mail-Adresse zu bestätigen.'
-'Please check your email and click on the verification link to complete your registration.': 'Bitte überprüfen Sie Ihre E-Mail und klicken Sie auf den Bestätigungslink, um Ihre Registrierung abzuschließen.'
-'Once verified, your account will be reviewed by an administrator for approval.': 'Nach der Bestätigung wird Ihr Konto von einem Administrator zur Genehmigung überprüft.'
-'If you do not receive an email within a few minutes, please check your spam folder.': 'Wenn Sie innerhalb weniger Minuten keine E-Mail erhalten, überprüfen Sie bitte Ihren Spam-Ordner.'
-'Return to login': 'Zurück zur Anmeldung'
+# Authentifizierung
+security:
+  login:
+    title: "Anmelden"
+    username: "Benutzername"
+    password: "Passwort"
+    remember_me: "Angemeldet bleiben"
+    submit: "Anmelden"
+    forgot_password: "Passwort vergessen?"
+    register: "Konto erstellen"
+  logout: "Abmelden"
+  register:
+    title: "Registrieren"
+    submit: "Registrieren"
+    already_registered: "Bereits registriert? Anmelden"
+  password:
+    reset:
+      title: "Passwort zurücksetzen"
+      request: "Neues Passwort anfordern"
+      email_sent: "Eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts wurde gesendet."
+      submit: "Mein Passwort zurücksetzen"
+    new:
+      title: "Neues Passwort"
+      submit: "Neues Passwort speichern"
+  verification:
+    email:
+      title: "E-Mail-Verifizierung"
+      success: "Ihre E-Mail-Adresse wurde erfolgreich verifiziert."
+      already_verified: "Ihre E-Mail-Adresse ist bereits verifiziert."
+      check_inbox: "Überprüfen Sie Ihren Posteingang und klicken Sie auf den Link, um Ihre E-Mail-Adresse zu verifizieren."
+      resend: "Verifizierungs-E-Mail erneut senden"
+
+# Benutzer
+user:
+  title: "Benutzer"
+  list:
+    title: "Benutzerliste"
+    empty: "Keine Benutzer gefunden."
+  pending:
+    approval:
+      title: "Benutzer mit ausstehender Genehmigung"
+      empty: "Keine Benutzer mit ausstehender Genehmigung."
+    verification:
+      title: "Benutzer mit ausstehender E-Mail-Verifizierung"
+      empty: "Keine Benutzer mit ausstehender E-Mail-Verifizierung."
+  show:
+    title: "Benutzerdetails"
+  edit:
+    title: "Benutzer bearbeiten"
+  new:
+    title: "Neuer Benutzer"
+  delete:
+    title: "Benutzer löschen"
+  field:
+    id: "ID"
+    username: "Benutzername"
+    email: "E-Mail"
+    roles: "Rollen"
+    firstName: "Vorname"
+    lastName: "Nachname"
+    fullName: "Vollständiger Name"
+    street: "Straße"
+    houseNumber: "Hausnummer"
+    boxNumber: "Postfach"
+    postalCode: "Postleitzahl"
+    city: "Stadt"
+    country: "Land"
+    phone: "Telefon"
+    locale: "Sprache"
+    isVerified: "E-Mail verifiziert"
+    isApproved: "Konto genehmigt"
+    createdAt: "Erstellt am"
+    lastLoginAt: "Letzte Anmeldung"
+    emailVerifiedAt: "E-Mail verifiziert am"
+    approvedAt: "Genehmigt am"
+    birthDate: "Geburtsdatum"
+    password: "Passwort"
+    password_confirmation: "Passwortbestätigung"
+  roles:
+    ROLE_USER: "Benutzer"
+    ROLE_ADMIN: "Administrator"
+    ROLE_SUPER_ADMIN: "Superadministrator"
+  status:
+    active: "Aktiv"
+    inactive: "Inaktiv"
+    pending_verification: "Ausstehende Verifizierung"
+    pending_approval: "Ausstehende Genehmigung"
+    approved: "Genehmigt"
+    not_approved: "Nicht genehmigt"
+    verified: "Verifiziert"
+    not_verified: "Nicht verifiziert"
+
+# E-Mail-Vorlagen
+email_template:
+  title: "E-Mail-Vorlagen"
+  list:
+    title: "Liste der E-Mail-Vorlagen"
+    empty: "Keine E-Mail-Vorlagen gefunden."
+  show:
+    title: "Details der E-Mail-Vorlage"
+  edit:
+    title: "E-Mail-Vorlage bearbeiten"
+  preview:
+    title: "Vorschau der E-Mail-Vorlage"
+  field:
+    id: "ID"
+    code: "Code"
+    subject: "Betreff"
+    htmlContent: "HTML-Inhalt"
+    locale: "Sprache"
+    createdAt: "Erstellt am"
+    updatedAt: "Aktualisiert am"
+  codes:
+    registration_confirmation: "Registrierungsbestätigung"
+    account_approved: "Konto genehmigt"
+    reset_password: "Passwort zurücksetzen"
+    role_change: "Rollenänderung"
+    permission_update: "Berechtigungsaktualisierung"
+  placeholders:
+    firstName: "Vorname"
+    lastName: "Nachname"
+    email: "E-Mail"
+    username: "Benutzername"
+    signedUrl: "Signierte URL"
+    previousRole: "Vorherige Rolle"
+    newRole: "Neue Rolle"
+
+# Audit-Protokoll
+audit_log:
+  title: "Audit-Protokoll"
+  list:
+    title: "Liste der Audit-Protokolle"
+    empty: "Keine Audit-Protokolle gefunden."
+  field:
+    id: "ID"
+    userId: "Benutzer-ID"
+    username: "Benutzername"
+    action: "Aktion"
+    details: "Details"
+    ipAddress: "IP-Adresse"
+    createdAt: "Datum"
+  actions:
+    user_logged_in: "Anmeldung"
+    user_registered: "Registrierung"
+    verify_user_email: "E-Mail-Verifizierung"
+    approve_user: "Benutzergenehmigung"
+    reject_user: "Benutzerablehnung"
+    delete_user: "Benutzerlöschung"
+    edit_user: "Benutzerbearbeitung"
+    change_user_role: "Rollenänderung"
+    view_users: "Benutzer angezeigt"
+    view_pending_approval: "Ausstehende Genehmigungen angezeigt"
+    view_pending_verification: "Ausstehende Verifizierungen angezeigt"
+    view_audit_logs: "Audit-Protokolle angezeigt"
+    view_email_templates: "E-Mail-Vorlagen angezeigt"
+    edit_email_template: "E-Mail-Vorlage bearbeitet"
+    preview_email_template: "Vorschau der E-Mail-Vorlage"
+
+# Profil
+profile:
+  title: "Mein Profil"
+  edit:
+    title: "Mein Profil bearbeiten"
+    success: "Ihr Profil wurde erfolgreich aktualisiert."
+  password:
+    title: "Mein Passwort ändern"
+    current: "Aktuelles Passwort"
+    new: "Neues Passwort"
+    confirm: "Neues Passwort bestätigen"
+    success: "Ihr Passwort wurde erfolgreich geändert."
 
 # Dashboard
-'Dashboard': 'Dashboard'
-'Administration': 'Verwaltung'
-'Users': 'Benutzer'
-'Pending Approval': 'Ausstehende Genehmigung'
-'Email Templates': 'E-Mail-Vorlagen'
-'Audit Logs': 'Prüfprotokolle'
-'Profile': 'Profil'
-'Logout': 'Abmelden'
-'Welcome': 'Willkommen'
-'Account Information': 'Kontoinformationen'
-'Personal Information': 'Persönliche Informationen'
-'Last login': 'Letzte Anmeldung'
-'Name': 'Name'
-'Address': 'Adresse'
-'Phone': 'Telefon'
-'N/A': 'k.A.'
+dashboard:
+  title: "Dashboard"
+  welcome: "Willkommen, %username%!"
+  stats:
+    total_users: "Benutzer insgesamt"
+    pending_approval: "Ausstehende Genehmigung"
+    pending_verification: "Ausstehende Verifizierung"
+    new_today: "Neu heute"
+  recent:
+    users: "Neueste Benutzer"
+    activity: "Neueste Aktivitäten"
+  no_data: "Keine Daten verfügbar."
 
-# Admin
-'Edit': 'Bearbeiten'
-'Delete': 'Löschen'
-'Approve': 'Genehmigen'
-'Verify': 'Bestätigen'
-'Actions': 'Aktionen'
-'Are you sure you want to delete this user?': 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?'
-'User has been updated.': 'Benutzer wurde aktualisiert.'
-'User has been deleted.': 'Benutzer wurde gelöscht.'
-'User email has been verified.': 'Benutzer-E-Mail wurde bestätigt.'
-'User account has been approved.': 'Benutzerkonto wurde genehmigt.'
-'User roles have been updated.': 'Benutzerrollen wurden aktualisiert.'
-'User permissions have been updated.': 'Benutzerberechtigungen wurden aktualisiert.'
+# Berechtigungen
+permission:
+  title: "Berechtigungen"
+  list:
+    title: "Liste der Berechtigungen"
+  edit:
+    title: "Berechtigungen bearbeiten"
+  field:
+    permission: "Berechtigung"
+    isGranted: "Gewährt"
+  permissions:
+    view_users: "Benutzer anzeigen"
+    edit_users: "Benutzer bearbeiten"
+    delete_users: "Benutzer löschen"
+    approve_users: "Benutzer genehmigen"
+    view_audit_logs: "Audit-Protokolle anzeigen"
+    manage_email_templates: "E-Mail-Vorlagen verwalten"
+    manage_permissions: "Berechtigungen verwalten"
+
+# Einstellungen
+settings:
+  title: "Einstellungen"
+  general:
+    title: "Allgemeine Einstellungen"
+    site_name: "Seitenname"
+    admin_email: "Admin-E-Mail"
+    default_locale: "Standardsprache"
+    require_email_verification: "E-Mail-Verifizierung erforderlich"
+    require_account_approval: "Kontogenehmigung erforderlich"
+  email:
+    title: "E-Mail-Einstellungen"
+    sender_name: "Absendername"
+    sender_email: "Absender-E-Mail"
+    smtp_host: "SMTP-Host"
+    smtp_port: "SMTP-Port"
+    smtp_username: "SMTP-Benutzername"
+    smtp_password: "SMTP-Passwort"
+    smtp_encryption: "SMTP-Verschlüsselung"
+
+# Validierung
+validation:
+  not_blank: "Dieses Feld darf nicht leer sein."
+  min_length: "Dieses Feld muss mindestens {{ limit }} Zeichen enthalten."
+  max_length: "Dieses Feld darf nicht mehr als {{ limit }} Zeichen enthalten."
+  email: "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+  unique_email: "Diese E-Mail-Adresse wird bereits verwendet."
+  unique_username: "Dieser Benutzername wird bereits verwendet."
+  password_match: "Die Passwörter müssen übereinstimmen."
+  password_strength: "Das Passwort muss mindestens 8 Zeichen enthalten, einschließlich Großbuchstaben, Kleinbuchstaben, Zahlen und Sonderzeichen."
+  date_format: "Ungültiges Datumsformat."
+  phone_format: "Ungültiges Telefonformat."
+
+# Paginierung
+pagination:
+  previous: "Zurück"
+  next: "Weiter"
+  first: "Erste"
+  last: "Letzte"
+  summary: "Anzeige von %start% bis %end% von %total% Einträgen"
+
+# Ausnahmen und Fehler
+error:
+  403:
+    title: "Zugriff verweigert"
+    message: "Sie haben nicht die erforderlichen Berechtigungen, um auf diese Seite zuzugreifen."
+  404:
+    title: "Seite nicht gefunden"
+    message: "Die gesuchte Seite existiert nicht oder wurde verschoben."
+  500:
+    title: "Interner Serverfehler"
+    message: "Auf dem Server ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
+  generic:
+    title: "Fehler"
+    message: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+  home: "Zurück zur Startseite"
+
+# Daten und Formate
+date:
+  format:
+    short: "d.m.Y"
+    medium: "d. M Y"
+    long: "d. MMMM Y"
+    time: "H:i"
+    datetime: "d.m.Y H:i"
+  day:
+    monday: "Montag"
+    tuesday: "Dienstag"
+    wednesday: "Mittwoch"
+    thursday: "Donnerstag"
+    friday: "Freitag"
+    saturday: "Samstag"
+    sunday: "Sonntag"
+  month:
+    january: "Januar"
+    february: "Februar"
+    march: "März"
+    april: "April"
+    may: "Mai"
+    june: "Juni"
+    july: "Juli"
+    august: "August"
+    september: "September"
+    october: "Oktober"
+    november: "November"
+    december: "Dezember"
+
+# Länder
+country:
+  BE: "Belgien"
+  FR: "Frankreich"
+  DE: "Deutschland"
+  NL: "Niederlande"
+  LU: "Luxemburg"
+  CH: "Schweiz"
+  IT: "Italien"
+  ES: "Spanien"
+  GB: "Vereinigtes Königreich"
+  US: "Vereinigte Staaten"
+
+# Sprachen
+locale:
+  fr: "Französisch"
+  en: "Englisch"
+  nl: "Niederländisch"
+  de: "Deutsch"

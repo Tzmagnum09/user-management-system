@@ -1,192 +1,370 @@
-# Security
-'Login': 'Connexion'
-'Sign in': 'Se connecter'
-'Email': 'Email'
-'Password': 'Mot de passe'
-'Remember me': 'Se souvenir de moi'
-'Create an account': 'Créer un compte'
-'Forgot your password?': 'Mot de passe oublié ?'
-'Already have an account? Sign in': 'Vous avez déjà un compte ? Connectez-vous'
+# Traductions générales
+app:
+  title: "Gestion des utilisateurs"
+  welcome: "Bienvenue sur l'application de gestion des utilisateurs"
+  footer:
+    copyright: "© %year% Dmqode.be - Tous droits réservés"
+  menu:
+    dashboard: "Tableau de bord"
+    users: "Utilisateurs"
+    user_list: "Liste des utilisateurs"
+    pending_approval: "En attente d'approbation"
+    pending_verification: "En attente de vérification"
+    email_templates: "Templates d'email"
+    audit_logs: "Journaux d'audit"
+    profile: "Mon profil"
+    settings: "Paramètres"
+    logout: "Déconnexion"
+  action:
+    new: "Ajouter"
+    edit: "Modifier"
+    delete: "Supprimer"
+    show: "Voir"
+    save: "Enregistrer"
+    cancel: "Annuler"
+    back: "Retour"
+    confirm: "Confirmer"
+    search: "Rechercher"
+    filter: "Filtrer"
+    reset: "Réinitialiser"
+    approve: "Approuver"
+    reject: "Rejeter"
+    verify: "Vérifier"
+    download: "Télécharger"
+    refresh: "Actualiser"
+    login: "Connexion"
+    register: "Inscription"
+    send: "Envoyer"
+    preview: "Prévisualiser"
+    update: "Mettre à jour"
+  flash:
+    success:
+      general: "Opération réussie."
+      create: "Création réussie."
+      update: "Mise à jour réussie."
+      delete: "Suppression réussie."
+      approve: "Approbation réussie."
+      verify: "Vérification réussie."
+    error:
+      general: "Une erreur est survenue."
+      create: "Erreur lors de la création."
+      update: "Erreur lors de la mise à jour."
+      delete: "Erreur lors de la suppression."
+      approve: "Erreur lors de l'approbation."
+      verify: "Erreur lors de la vérification."
+  confirm:
+    delete: "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
+    approve: "Êtes-vous sûr de vouloir approuver cet utilisateur ?"
+    reject: "Êtes-vous sûr de vouloir rejeter cet utilisateur ?"
+    verify: "Êtes-vous sûr de vouloir vérifier cet email ?"
 
-# Registration
-'Register': 'S''inscrire'
-'First name': 'Prénom'
-'Last name': 'Nom de famille'
-'Username': 'Nom d''utilisateur'
-'Repeat Password': 'Répéter le mot de passe'
-'Street': 'Rue'
-'House number': 'Numéro'
-'Box number': 'Boîte'
-'Postal code': 'Code postal'
-'City': 'Ville'
-'Country': 'Pays'
-'Phone number': 'Numéro de téléphone'
-'Birth date': 'Date de naissance'
-'Preferred language': 'Langue préférée'
-'I agree to the terms of service': 'J''accepte les conditions d''utilisation'
-'Registration Complete': 'Inscription terminée'
-'An email has been sent to': 'Un email a été envoyé à'
-'to verify your email address.': 'pour vérifier votre adresse email.'
-'Please check your email and click on the verification link to complete your registration.': 'Veuillez vérifier votre email et cliquer sur le lien de vérification pour terminer votre inscription.'
-'Once verified, your account will be reviewed by an administrator for approval.': 'Une fois vérifiée, votre compte sera examiné par un administrateur pour approbation.'
-'If you do not receive an email within a few minutes, please check your spam folder.': 'Si vous ne recevez pas d''email dans les prochaines minutes, veuillez vérifier votre dossier spam.'
-'Return to login': 'Retour à la connexion'
+# Authentification
+security:
+  login:
+    title: "Connexion"
+    username: "Nom d'utilisateur"
+    password: "Mot de passe"
+    remember_me: "Se souvenir de moi"
+    submit: "Se connecter"
+    forgot_password: "Mot de passe oublié ?"
+    register: "Créer un compte"
+  logout: "Déconnexion"
+  register:
+    title: "Inscription"
+    submit: "S'inscrire"
+    already_registered: "Déjà inscrit ? Connectez-vous"
+  password:
+    reset:
+      title: "Réinitialisation du mot de passe"
+      request: "Demander un nouveau mot de passe"
+      email_sent: "Un email a été envoyé avec les instructions pour réinitialiser votre mot de passe."
+      submit: "Réinitialiser mon mot de passe"
+    new:
+      title: "Nouveau mot de passe"
+      submit: "Enregistrer le nouveau mot de passe"
+  verification:
+    email:
+      title: "Vérification de l'email"
+      success: "Votre adresse email a été vérifiée avec succès."
+      already_verified: "Votre adresse email est déjà vérifiée."
+      check_inbox: "Vérifiez votre boîte mail et cliquez sur le lien pour vérifier votre adresse email."
+      resend: "Renvoyer l'email de vérification"
+
+# Utilisateurs
+user:
+  title: "Utilisateurs"
+  list:
+    title: "Liste des utilisateurs"
+    empty: "Aucun utilisateur trouvé."
+  pending:
+    approval:
+      title: "Utilisateurs en attente d'approbation"
+      empty: "Aucun utilisateur en attente d'approbation."
+    verification:
+      title: "Utilisateurs en attente de vérification d'email"
+      empty: "Aucun utilisateur en attente de vérification d'email."
+  show:
+    title: "Détails de l'utilisateur"
+  edit:
+    title: "Modifier l'utilisateur"
+  new:
+    title: "Nouvel utilisateur"
+  delete:
+    title: "Supprimer l'utilisateur"
+  field:
+    id: "ID"
+    username: "Nom d'utilisateur"
+    email: "Email"
+    roles: "Rôles"
+    firstName: "Prénom"
+    lastName: "Nom"
+    fullName: "Nom complet"
+    street: "Rue"
+    houseNumber: "Numéro"
+    boxNumber: "Boîte"
+    postalCode: "Code postal"
+    city: "Ville"
+    country: "Pays"
+    phone: "Téléphone"
+    locale: "Langue"
+    isVerified: "Email vérifié"
+    isApproved: "Compte approuvé"
+    createdAt: "Créé le"
+    lastLoginAt: "Dernière connexion"
+    emailVerifiedAt: "Email vérifié le"
+    approvedAt: "Approuvé le"
+    birthDate: "Date de naissance"
+    password: "Mot de passe"
+    password_confirmation: "Confirmation du mot de passe"
+  roles:
+    ROLE_USER: "Utilisateur"
+    ROLE_ADMIN: "Administrateur"
+    ROLE_SUPER_ADMIN: "Super Administrateur"
+  status:
+    active: "Actif"
+    inactive: "Inactif"
+    pending_verification: "En attente de vérification"
+    pending_approval: "En attente d'approbation"
+    approved: "Approuvé"
+    not_approved: "Non approuvé"
+    verified: "Vérifié"
+    not_verified: "Non vérifié"
+
+# Templates d'emails
+email_template:
+  title: "Templates d'email"
+  list:
+    title: "Liste des templates d'email"
+    empty: "Aucun template d'email trouvé."
+  show:
+    title: "Détails du template d'email"
+  edit:
+    title: "Modifier le template d'email"
+  preview:
+    title: "Prévisualisation du template d'email"
+  field:
+    id: "ID"
+    code: "Code"
+    subject: "Sujet"
+    htmlContent: "Contenu HTML"
+    locale: "Langue"
+    createdAt: "Créé le"
+    updatedAt: "Mis à jour le"
+  codes:
+    registration_confirmation: "Confirmation d'inscription"
+    account_approved: "Compte approuvé"
+    reset_password: "Réinitialisation de mot de passe"
+    role_change: "Changement de rôle"
+    permission_update: "Mise à jour des permissions"
+  placeholders:
+    firstName: "Prénom"
+    lastName: "Nom"
+    email: "Email"
+    username: "Nom d'utilisateur"
+    signedUrl: "URL signée"
+    previousRole: "Rôle précédent"
+    newRole: "Nouveau rôle"
+
+# Journal d'audit
+audit_log:
+  title: "Journal d'audit"
+  list:
+    title: "Liste des journaux d'audit"
+    empty: "Aucun journal d'audit trouvé."
+  field:
+    id: "ID"
+    userId: "ID Utilisateur"
+    username: "Nom d'utilisateur"
+    action: "Action"
+    details: "Détails"
+    ipAddress: "Adresse IP"
+    createdAt: "Date"
+  actions:
+    user_logged_in: "Connexion"
+    user_registered: "Inscription"
+    verify_user_email: "Vérification d'email"
+    approve_user: "Approbation d'utilisateur"
+    reject_user: "Rejet d'utilisateur"
+    delete_user: "Suppression d'utilisateur"
+    edit_user: "Modification d'utilisateur"
+    change_user_role: "Changement de rôle"
+    view_users: "Consultation des utilisateurs"
+    view_pending_approval: "Consultation des approbations en attente"
+    view_pending_verification: "Consultation des vérifications en attente"
+    view_audit_logs: "Consultation des journaux d'audit"
+    view_email_templates: "Consultation des templates d'email"
+    edit_email_template: "Modification de template d'email"
+    preview_email_template: "Prévisualisation de template d'email"
+
+# Profil
+profile:
+  title: "Mon profil"
+  edit:
+    title: "Modifier mon profil"
+    success: "Votre profil a été mis à jour avec succès."
+  password:
+    title: "Changer mon mot de passe"
+    current: "Mot de passe actuel"
+    new: "Nouveau mot de passe"
+    confirm: "Confirmer le nouveau mot de passe"
+    success: "Votre mot de passe a été modifié avec succès."
 
 # Dashboard
-'Dashboard': 'Tableau de bord'
-'Administration': 'Administration'
-'Users': 'Utilisateurs'
-'Pending Approval': 'En attente d''approbation'
-'Email Templates': 'Modèles d''email'
-'Audit Logs': 'Journaux d''audit'
-'Profile': 'Profil'
-'Logout': 'Déconnexion'
-'Welcome': 'Bienvenue'
-'Account Information': 'Informations du compte'
-'Personal Information': 'Informations personnelles'
-'Last login': 'Dernière connexion'
-'Name': 'Nom'
-'Address': 'Adresse'
-'Phone': 'Téléphone'
-'N/A': 'N/D'
+dashboard:
+  title: "Tableau de bord"
+  welcome: "Bienvenue, %username% !"
+  stats:
+    total_users: "Total des utilisateurs"
+    pending_approval: "En attente d'approbation"
+    pending_verification: "En attente de vérification"
+    new_today: "Nouveaux aujourd'hui"
+  recent:
+    users: "Utilisateurs récents"
+    activity: "Activité récente"
+  no_data: "Aucune donnée disponible."
 
-# Admin
-'Edit': 'Modifier'
-'Delete': 'Supprimer'
-'Approve': 'Approuver'
-'Verify': 'Vérifier'
-'Actions': 'Actions'
-'Are you sure you want to delete this user?': 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?'
-'User has been updated.': 'L''utilisateur a été mis à jour.'
-'User has been deleted.': 'L''utilisateur a été supprimé.'
-'User email has been verified.': 'L''email de l''utilisateur a été vérifié.'
-'User account has been approved.': 'Le compte utilisateur a été approuvé.'
-'User roles have been updated.': 'Les rôles de l''utilisateur ont été mis à jour.'
-'User permissions have been updated.': 'Les permissions de l''utilisateur ont été mises à jour.'
+# Permissions
+permission:
+  title: "Permissions"
+  list:
+    title: "Liste des permissions"
+  edit:
+    title: "Modifier les permissions"
+  field:
+    permission: "Permission"
+    isGranted: "Accordée"
+  permissions:
+    view_users: "Voir les utilisateurs"
+    edit_users: "Modifier les utilisateurs"
+    delete_users: "Supprimer les utilisateurs"
+    approve_users: "Approuver les utilisateurs"
+    view_audit_logs: "Voir les journaux d'audit"
+    manage_email_templates: "Gérer les templates d'email"
+    manage_permissions: "Gérer les permissions"
 
-# Additional Translations
-'Administrator Dashboard': 'Tableau de bord administrateur'
-'You have access to administration features based on your permissions.': 'Vous avez accès aux fonctionnalités d''administration en fonction de vos permissions.'
-'Quick Actions': 'Actions rapides'
-'Manage Users': 'Gérer les utilisateurs'
-'Pending Approvals': 'Approbations en attente'
-'Your Permissions': 'Vos permissions'
-'User Management': 'Gestion des utilisateurs'
-'View Users': 'Voir les utilisateurs'
-'Edit Users': 'Modifier les utilisateurs'
-'Approve Users': 'Approuver les utilisateurs'
-'Delete Users': 'Supprimer les utilisateurs'
-'Role Management': 'Gestion des rôles'
-'Assign Roles': 'Attribuer des rôles'
-'Manage Permissions': 'Gérer les permissions'
-'Email Management': 'Gestion des emails'
-'View Templates': 'Voir les modèles'
-'Edit Templates': 'Modifier les modèles'
-'View Audit Logs': 'Voir les journaux d''audit'
-'Role': 'Rôle'
-'Super Administrator Dashboard': 'Tableau de bord super administrateur'
-'You have full access to all system features and settings.': 'Vous avez un accès complet à toutes les fonctionnalités et paramètres du système.'
-'Users Pending Email Verification': 'Utilisateurs en attente de vérification d''email'
-'Users Pending Approval': 'Utilisateurs en attente d''approbation'
-'Administrators': 'Administrateurs'
-'Active Users': 'Utilisateurs actifs'
-'Total Active Users': 'Nombre total d''utilisateurs actifs'
-'View All Users': 'Voir tous les utilisateurs'
-'No users waiting for email verification.': 'Aucun utilisateur en attente de vérification d''email.'
-'No users waiting for approval.': 'Aucun utilisateur en attente d''approbation.'
-'No administrators found.': 'Aucun administrateur trouvé.'
-'Back to users': 'Retour aux utilisateurs'
-'Edit User': 'Modifier l''utilisateur'
-'Cancel': 'Annuler'
-'Save': 'Enregistrer'
-'User Roles': 'Rôles d''utilisateur'
-'Edit Roles for': 'Modifier les rôles pour'
-'Current Role(s)': 'Rôle(s) actuel(s)'
-'Select Roles': 'Sélectionner les rôles'
-'Warning: Changing user roles will affect their permissions and access throughout the system.': 'Attention : La modification des rôles d''utilisateur affectera ses permissions et son accès dans tout le système.'
-'Save Roles': 'Enregistrer les rôles'
-'User Permissions': 'Permissions d''utilisateur'
-'Edit Permissions for': 'Modifier les permissions pour'
-'Current Role': 'Rôle actuel'
-'Save Permissions': 'Enregistrer les permissions'
-'All Users': 'Tous les utilisateurs'
-'Roles': 'Rôles'
-'Status': 'Statut'
-'Last Login': 'Dernière connexion avancée'
-'Not Verified': 'Non vérifié'
-'Not Approved': 'Non approuvé'
-'Active': 'Actif'
-'Confirm Delete': 'Confirmer la suppression'
-'Pending Admin Approval': 'En attente d''approbation admin'
-'Verification Date': 'Date de vérification'
-'No users pending approval at this time.': 'Aucun utilisateur en attente d''approbation actuellement.'
-'Pending Email Verification': 'En attente de vérification d''email'
-'Registration Date': 'Date d''inscription'
-'All users have verified their email addresses.': 'Tous les utilisateurs ont vérifié leur adresse email.'
-'System activity log showing user actions and system events.': 'Journal d''activité système montrant les actions des utilisateurs et les événements système.'
-'Recent Activity': 'Activité récente'
-'Date/Time': 'Date/Heure'
-'User': 'Utilisateur'
-'Action': 'Action'
-'IP Address': 'Adresse IP'
-'Details': 'Détails'
-'View Details': 'Voir les détails'
-'Log Details': 'Détails du journal'
-'No details provided': 'Aucun détail fourni'
-'No audit logs found.': 'Aucun journal d''audit trouvé.'
-'Close': 'Fermer'
-'Email Templates Management': 'Gestion des modèles d''email'
-'Create new template': 'Créer un nouveau modèle'
-'Language': 'Langue'
-'Subject': 'Sujet'
-'Last Updated': 'Dernière mise à jour'
-'Preview': 'Aperçu'
-'Are you sure you want to delete this email template?': 'Êtes-vous sûr de vouloir supprimer ce modèle d''email ?'
-'No email templates found.': 'Aucun modèle d''email trouvé.'
-'Edit Email Template': 'Modifier le modèle d''email'
-'Back to email templates': 'Retour aux modèles d''email'
-'Template Code': 'Code du modèle'
-'Email Subject': 'Sujet de l''email'
-'HTML Content': 'Contenu HTML'
-'Available Variables': 'Variables disponibles'
-"User's first name": 'Prénom de l''utilisateur'
-"User's last name": 'Nom de l''utilisateur'
-"User's username": 'Nom d''utilisateur'
-'Site domain name': 'Nom de domaine du site'
-'Email verification URL': 'URL de vérification d''email'
-'Password reset URL': 'URL de réinitialisation de mot de passe'
-"User's previous role": 'Rôle précédent de l''utilisateur'
-"User's new role": 'Nouveau rôle de l''utilisateur'
-'Details of permission changes': 'Détails des modifications de permissions'
-'Create New Email Template': 'Créer un nouveau modèle d''email'
-'Email verification URL (for registration templates)': 'URL de vérification d''email (pour les modèles d''inscription)'
-'Password reset URL (for reset templates)': 'URL de réinitialisation de mot de passe (pour les modèles de réinitialisation)'
-"User's previous role (for role change templates)": 'Rôle précédent de l''utilisateur (pour les modèles de changement de rôle)'
-"User's new role (for role change templates)": 'Nouveau rôle de l''utilisateur (pour les modèles de changement de rôle)'
-'Details of permission changes (for permission templates)': 'Détails des modifications de permissions (pour les modèles de permissions)'
-'Template Structure': 'Structure du modèle'
-'Your email template should include proper HTML structure with styling. Consider including:': 'Votre modèle d''email doit inclure une structure HTML appropriée avec du style. Pensez à inclure :'
-'Header section with logo/title': 'Section d''en-tête avec logo/titre'
-'Content section with variables': 'Section de contenu avec variables'
-'Footer section with contact info': 'Section de pied de page avec informations de contact'
-'Inline CSS styles for better email client compatibility': 'Styles CSS en ligne pour une meilleure compatibilité avec les clients email'
-'Create': 'Créer'
-'Registration confirmation': 'Confirmation d''inscription'
-'All rights reserved.': 'Tous droits réservés.'
+# Paramètres
+settings:
+  title: "Paramètres"
+  general:
+    title: "Paramètres généraux"
+    site_name: "Nom du site"
+    admin_email: "Email administrateur"
+    default_locale: "Langue par défaut"
+    require_email_verification: "Exiger la vérification d'email"
+    require_account_approval: "Exiger l'approbation du compte"
+  email:
+    title: "Paramètres d'email"
+    sender_name: "Nom d'expéditeur"
+    sender_email: "Email d'expéditeur"
+    smtp_host: "Hôte SMTP"
+    smtp_port: "Port SMTP"
+    smtp_username: "Nom d'utilisateur SMTP"
+    smtp_password: "Mot de passe SMTP"
+    smtp_encryption: "Chiffrement SMTP"
 
-# Elements manquants identifiés dans les captures d'écran
-'Server Administration Dmqode.be': 'Administration Serveur Dmqode.be'
-'Total des utilisateurs actifs:': 'Total des utilisateurs actifs:'
-'Pending Verification': 'En attente de vérification'
-'Aucun utilisateur en attente de vérification email.': 'Aucun utilisateur en attente de vérification email.'
-'Aucun utilisateur en attente d''approbation pour le moment.': 'Aucun utilisateur en attente d''approbation pour le moment.'
-'Can view users': 'Peut voir les utilisateurs'
-'Can edit users': 'Peut modifier les utilisateurs'
-'Can approve users': 'Peut approuver les utilisateurs'
-'Can delete users': 'Peut supprimer les utilisateurs'
-'Can assign roles': 'Peut attribuer des rôles'
-'Can manage permissions': 'Peut gérer les permissions'
-'Can view email templates': 'Peut voir les modèles d''email'
-'Can edit email templates': 'Peut modifier les modèles d''email'
-'Can view audit logs': 'Peut voir les journaux d''audit'
-'Permissions': 'Permissions'
+# Validation
+validation:
+  not_blank: "Ce champ ne peut pas être vide."
+  min_length: "Ce champ doit contenir au moins {{ limit }} caractères."
+  max_length: "Ce champ ne peut pas contenir plus de {{ limit }} caractères."
+  email: "Veuillez entrer une adresse email valide."
+  unique_email: "Cette adresse email est déjà utilisée."
+  unique_username: "Ce nom d'utilisateur est déjà utilisé."
+  password_match: "Les mots de passe doivent correspondre."
+  password_strength: "Le mot de passe doit contenir au moins 8 caractères, incluant des lettres majuscules, minuscules, des chiffres et des caractères spéciaux."
+  date_format: "Format de date invalide."
+  phone_format: "Format de numéro de téléphone invalide."
+
+# Pagination
+pagination:
+  previous: "Précédent"
+  next: "Suivant"
+  first: "Premier"
+  last: "Dernier"
+  summary: "Affichage de %start% à %end% sur %total% éléments"
+
+# Exceptions et erreurs
+error:
+  403:
+    title: "Accès refusé"
+    message: "Vous n'avez pas les permissions nécessaires pour accéder à cette page."
+  404:
+    title: "Page non trouvée"
+    message: "La page que vous recherchez n'existe pas ou a été déplacée."
+  500:
+    title: "Erreur interne du serveur"
+    message: "Une erreur est survenue sur le serveur. Veuillez réessayer plus tard."
+  generic:
+    title: "Erreur"
+    message: "Une erreur est survenue. Veuillez réessayer plus tard."
+  home: "Retour à l'accueil"
+
+# Dates et formats
+date:
+  format:
+    short: "d/m/Y"
+    medium: "d M Y"
+    long: "d MMMM Y"
+    time: "H:i"
+    datetime: "d/m/Y H:i"
+  day:
+    monday: "Lundi"
+    tuesday: "Mardi"
+    wednesday: "Mercredi"
+    thursday: "Jeudi"
+    friday: "Vendredi"
+    saturday: "Samedi"
+    sunday: "Dimanche"
+  month:
+    january: "Janvier"
+    february: "Février"
+    march: "Mars"
+    april: "Avril"
+    may: "Mai"
+    june: "Juin"
+    july: "Juillet"
+    august: "Août"
+    september: "Septembre"
+    october: "Octobre"
+    november: "Novembre"
+    december: "Décembre"
+
+# Pays
+country:
+  BE: "Belgique"
+  FR: "France"
+  DE: "Allemagne"
+  NL: "Pays-Bas"
+  LU: "Luxembourg"
+  CH: "Suisse"
+  IT: "Italie"
+  ES: "Espagne"
+  GB: "Royaume-Uni"
+  US: "États-Unis"
+
+# Langues
+locale:
+  fr: "Français"
+  en: "Anglais"
+  nl: "Néerlandais"
+  de: "Allemand"
