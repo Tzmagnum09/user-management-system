@@ -16,7 +16,7 @@ class CookieController extends AbstractController
     #[Route('/cookie/preferences', name: 'app_cookie_preferences')]
     public function preferences(): Response
     {
-        return $this->render('cookie/preferences.html.twig');
+        return $this->render('cookie/cookie_preferences.html.twig');
     }
 
     /**
@@ -114,7 +114,7 @@ class CookieController extends AbstractController
                 'managingCookies' => 'Comment gérer les cookies ?',
                 'cookiesManagement' => 'Vous pouvez gérer vos préférences de cookies à tout moment en cliquant sur le lien "Paramètres des cookies" en bas de notre site. Vous pouvez également modifier les paramètres de votre navigateur pour supprimer ou empêcher certains cookies d\'être stockés sur votre ordinateur ou appareil mobile sans votre consentement explicite.',
                 'moreInfo' => 'Plus d\'informations',
-                'moreInfoText' => 'Pour en savoir plus sur notre utilisation des cookies, veuillez consulter notre politique de confidentialité et nos conditions d\'utilisation sur',
+                'moreInfoText' => 'Pour en savoir plus sur notre utilisation des cookies, veuillez nous contacter :',
                 'termsLink' => 'notre page des conditions d\'utilisation',
                 'necessaryOnly' => 'Refuser optionnels',
                 'savePreferences' => 'Enregistrer les préférences'
@@ -134,9 +134,36 @@ class CookieController extends AbstractController
                 'preferencesDescription' => 'These cookies allow us to remember your choices and preferences, such as language preference or the region where you are located.',
                 'statisticsDescription' => 'These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously.',
                 'marketingDescription' => 'These cookies are used to track visitors across websites. The aim is to display ads that are relevant and engaging for the individual user.',
+                'necessaryDetailsDescription' => 'Necessary cookies help make a website usable by enabling basic functions like page navigation and access to secure areas of the website. The website cannot function properly without these cookies.',
+                'preferencesDetailsDescription' => 'Preference cookies enable a website to remember information that changes the way the website behaves or looks, like your preferred language or the region that you are in.',
+                'statisticsDetailsDescription' => 'Statistic cookies help website owners to understand how visitors interact with websites by collecting and reporting information anonymously.',
+                'marketingDetailsDescription' => 'Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
+                'cookieName' => 'Name',
+                'cookieProvider' => 'Provider',
+                'cookiePurpose' => 'Purpose',
+                'cookieExpiry' => 'Expiry',
+                'sessionPurpose' => 'Maintains user session',
+                'consentPurpose' => 'Stores cookie consent preferences',
+                'sessionEnd' => 'Session end',
+                'months' => 'months',
+                'year' => 'year',
+                'years' => 'years',
+                'hours' => 'hours',
+                'languagePurpose' => 'Stores language preference',
+                'analyticsPurpose' => 'Tracks user behavior on the site to improve experience',
+                'userIdPurpose' => 'Distinguishes users',
+                'facebookPurpose' => 'Tracks ad conversions and retargeting',
+                'whatAreCookies' => 'What are cookies?',
+                'cookiesDefinition' => 'Cookies are small text files that are stored on your computer or mobile device when you visit a website. They allow the site to remember your actions and preferences for a period of time, so you don\'t have to re-enter them every time you visit the site or navigate from one page to another.',
+                'howWeUseCookies' => 'How do we use cookies?',
+                'cookiesUsage' => 'We use different types of cookies to run our website, improve your user experience, analyze how the site is used, and personalize the content and advertisements you see.',
+                'managingCookies' => 'How to manage cookies?',
+                'cookiesManagement' => 'You can manage your cookie preferences at any time by clicking on the "Cookie settings" link at the bottom of our site. You can also change your browser settings to delete or prevent certain cookies from being stored on your computer or mobile device without your explicit consent.',
+                'moreInfo' => 'More information',
+                'moreInfoText' => 'To learn more about our use of cookies, please contact us:',
+                'termsLink' => 'our terms of use page',
                 'necessaryOnly' => 'Necessary only',
                 'savePreferences' => 'Save preferences'
-                // Autres traductions anglaises
             ],
             'nl' => [
                 'cookiePreferences' => 'Cookie-instellingen',
@@ -149,6 +176,10 @@ class CookieController extends AbstractController
                 'preferencesCookies' => 'Voorkeurscookies',
                 'statisticsCookies' => 'Statistische cookies',
                 'marketingCookies' => 'Marketing cookies',
+                'necessaryDescription' => 'Deze cookies zijn essentieel voor de basisfunctionaliteit van de website en kunnen niet worden uitgeschakeld.',
+                'preferencesDescription' => 'Deze cookies stellen ons in staat om uw keuzes en voorkeuren te onthouden, zoals taalvoorkeur of de regio waar u zich bevindt.',
+                'statisticsDescription' => 'Deze cookies helpen ons te begrijpen hoe bezoekers met onze website interageren door informatie anoniem te verzamelen en te rapporteren.',
+                'marketingDescription' => 'Deze cookies worden gebruikt om bezoekers op websites te volgen. Het doel is om advertenties weer te geven die relevant en aantrekkelijk zijn voor de individuele gebruiker.',
                 'necessaryOnly' => 'Alleen noodzakelijke',
                 'savePreferences' => 'Voorkeuren opslaan'
                 // Autres traductions néerlandaises
@@ -164,6 +195,10 @@ class CookieController extends AbstractController
                 'preferencesCookies' => 'Präferenz-Cookies',
                 'statisticsCookies' => 'Statistik-Cookies',
                 'marketingCookies' => 'Marketing-Cookies',
+                'necessaryDescription' => 'Diese Cookies sind für die grundlegende Funktionalität der Website unerlässlich und können nicht deaktiviert werden.',
+                'preferencesDescription' => 'Diese Cookies ermöglichen es uns, Ihre Auswahl und Präferenzen zu speichern, wie z.B. Spracheinstellungen oder die Region, in der Sie sich befinden.',
+                'statisticsDescription' => 'Diese Cookies helfen uns zu verstehen, wie Besucher mit unserer Website interagieren, indem sie Informationen anonym sammeln und melden.',
+                'marketingDescription' => 'Diese Cookies werden verwendet, um Besucher auf Websites zu verfolgen. Ziel ist es, Anzeigen zu schalten, die für den einzelnen Nutzer relevant und ansprechend sind.',
                 'necessaryOnly' => 'Nur notwendige',
                 'savePreferences' => 'Einstellungen speichern'
                 // Autres traductions allemandes

@@ -99,157 +99,204 @@
 }
 
 /* Vue d'ensemble */
-.form-check {
+.cookie-setting-item {
     padding: 12px 0;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #eee;
 }
 
-.form-check:last-child {
+.cookie-setting-item:last-child {
     border-bottom: none;
 }
 
-.form-check-label {
-    font-weight: 500;
+.cookie-setting-title {
+    font-weight: 600;
     color: #333;
     margin-bottom: 0;
-    cursor: pointer;
 }
 
-.form-check-input {
-    width: 3rem;
-    height: 1.5rem;
-    margin: 0;
-    cursor: pointer;
-}
-
-.form-switch .form-check-input {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%28255, 255, 255, 1%29'/%3e%3c/svg%3e");
-    background-position: left center;
-    border-radius: 2rem;
-    transition: background-position .15s ease-in-out;
-    background-color: rgba(0, 0, 0, 0.25);
-}
-
-.form-switch .form-check-input:checked {
-    background-position: right center;
-    background-color: #8e44ad;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
-}
-
-.form-switch .form-check-input:disabled {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-.cookie-info-icon {
-    margin-left: 5px;
-    color: #6c757d;
-    cursor: help;
-}
-
-/* Accordéon dans l'onglet Détails */
-.cookie-type-description {
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.cookie-type-description:last-child {
-    border-bottom: none;
+.cookie-setting-description {
+    color: #666;
+    margin-top: 6px;
     margin-bottom: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
-.cookie-type-description h5 {
-    margin-top: 0;
+/* Switch toggle */
+.cookie-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.cookie-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.cookie-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.cookie-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .cookie-toggle-slider {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+}
+
+input:disabled + .cookie-toggle-slider {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+input:checked + .cookie-toggle-slider:before {
+    transform: translateX(26px);
+}
+
+/* Section détails */
+.cookie-type {
     margin-bottom: 10px;
-    color: #333;
-    font-weight: 500;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.cookie-type-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 0;
+    padding: 12px 15px;
     cursor: pointer;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
 }
 
-.cookie-type-description h5 i {
-    transition: transform 0.2s;
+.cookie-type-header h5 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
-.cookie-type-description h5 i.rotated {
+.cookie-type-header .cookie-chevron {
+    transition: transform 0.3s ease;
+}
+
+.cookie-type-content {
+    display: none;
+    padding: 15px;
+    background-color: #f8f0ff;
+    border: 1px solid #e9ecef;
+    border-top: none;
+}
+
+.cookie-type-content.expanded {
+    display: block;
+}
+
+.cookie-chevron.up {
     transform: rotate(180deg);
 }
 
-.cookie-type-description p {
-    color: #666;
-    font-size: 0.9rem;
+.cookie-type-description {
     margin-bottom: 15px;
 }
 
-/* Style pour les tableaux */
-.table {
+/* Tables in details tab */
+.cookie-table {
     width: 100%;
-    margin-bottom: 1rem;
-    color: #212529;
-    vertical-align: top;
-    border-color: #dee2e6;
+    border-collapse: collapse;
+    margin-bottom: 15px;
 }
 
-.table > :not(caption) > * > * {
-    padding: 0.5rem;
-    border-bottom-width: 1px;
-    box-shadow: inset 0 0 0 9999px transparent;
-}
-
-.table-bordered {
+.cookie-table th, 
+.cookie-table td {
+    padding: 8px 12px;
+    text-align: left;
     border: 1px solid #dee2e6;
 }
 
-.table-bordered > :not(caption) > * > * {
-    border-width: 0 1px;
-}
-
-.table th {
+.cookie-table th {
     background-color: #f8f9fa;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.85rem;
 }
 
-/* Style pour l'onglet "À propos" */
-#tab-about h5 {
+.cookie-table td {
+    font-size: 0.85rem;
+}
+
+/* Terms section */
+.terms-section {
+    margin-bottom: 20px;
+}
+
+.terms-section h4 {
     color: #8e44ad;
     margin-top: 20px;
     margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
-#tab-about p {
+.terms-section p {
     color: #333;
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
-
-/* Style pour l'onglet "Conditions d'utilisation" */
-#tab-terms h4, #tab-terms h5 {
-    color: #8e44ad;
-    margin-top: 20px;
+    font-size: 0.9rem;
     margin-bottom: 10px;
+    line-height: 1.6;
 }
 
-#tab-terms p, #tab-terms li {
-    color: #333;
-    margin-bottom: 10px;
-    line-height: 1.5;
-}
-
-#tab-terms ul {
+.terms-section ul {
     padding-left: 20px;
     margin-bottom: 15px;
 }
 
-/* Footer de la modal */
+.terms-section li {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* About section */
+.about-section h4 {
+    color: #8e44ad;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.about-section p {
+    color: #333;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+/* Footer */
 .cookie-modal-footer {
     display: flex;
     justify-content: flex-end;
@@ -258,70 +305,43 @@
     border-top: 1px solid #dee2e6;
 }
 
-.cookie-language-selector {
-    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    background-color: #fff;
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 16px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    margin-right: 10px;
+.cookie-modal-footer button {
+    margin-left: 10px;
 }
 
-.btn-cookie-accept, .btn-cookie-save, #save-preferences-btn {
+.btn-cookie-necessary {
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-cookie-accept {
     background: linear-gradient(135deg, #8e44ad, #3498db);
     color: white;
     border: none;
-    border-radius: 0.25rem;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: opacity 0.15s ease-in-out;
+    font-size: 0.9rem;
 }
 
-.btn-cookie-accept:hover, .btn-cookie-save:hover, #save-preferences-btn:hover {
+.btn-cookie-necessary:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-cookie-accept:hover {
     opacity: 0.9;
-    color: white;
 }
 
-.btn-cookie-necessary, .close-preferences {
-    color: #333;
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
-}
-
-.btn-cookie-necessary:hover, .close-preferences:hover {
-    background-color: #e2e6ea;
-}
-
-/* Détails étendus dans l'onglet Détails */
-.cookie-details-content {
-    background-color: #f0e6f8;
-    padding: 15px;
-    margin-top: 5px;
-    border-radius: 5px;
-    display: none;
-}
-
-.cookie-details-content.expanded {
-    display: block;
-}
-
-/* Responsive design */
+/* Responsive */
 @media (max-width: 768px) {
     .cookie-modal-content {
         width: 95%;
-        max-height: 90vh;
+        max-width: 100%;
     }
     
     .cookie-tabs {
@@ -329,7 +349,7 @@
     }
     
     .cookie-tab {
-        flex: 1 0 50%;
+        flex-basis: 50%;
         text-align: center;
         font-size: 14px;
         padding: 10px 5px;
@@ -337,90 +357,22 @@
     
     .cookie-modal-footer {
         flex-direction: column;
-        align-items: stretch;
         gap: 10px;
     }
     
-    .cookie-language-selector {
+    .cookie-modal-footer button {
         width: 100%;
-        margin-bottom: 10px;
-        margin-right: 0;
+        margin-left: 0;
+        margin-bottom: 8px;
     }
     
-    .form-check {
+    .cookie-setting-item {
         flex-direction: column;
         align-items: flex-start;
     }
     
-    .form-check-input {
+    .cookie-toggle {
         margin-top: 10px;
         align-self: flex-end;
     }
-}
-
-/* Accordéon pour le détail des cookies */
-.cookie-option {
-    border-bottom: 1px solid #f0f0f0;
-    margin-bottom: 10px;
-}
-
-.cookie-option:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.cookie-option-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    padding: 10px 0;
-}
-
-.cookie-option-header h5 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #212529;
-}
-
-.cookie-chevron {
-    color: #6c757d;
-    transition: transform 0.2s ease;
-}
-
-.cookie-chevron.up {
-    transform: rotate(180deg);
-}
-
-/* Style spécifique pour l'onglet Detail avec sections expansibles */
-.cookie-option-expandable {
-    margin-bottom: 10px;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.cookie-option-expandable .cookie-option-header {
-    background-color: #fff;
-    padding: 15px;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.cookie-option-expandable:first-child .cookie-option-header {
-    background-color: #f0e6f8;
-}
-
-.cookie-option-expandable:first-child .cookie-details-content {
-    display: block;
-}
-
-/* Style pour le bouton Enregistrer les préférences */
-.btn-cookie-accept, #save-preferences-btn {
-    background: linear-gradient(135deg, #8e44ad, #3498db);
-    border: none;
-    color: white;
-    font-weight: 500;
-    padding: 8px 20px;
-    border-radius: 5px;
-    cursor: pointer;
 }
