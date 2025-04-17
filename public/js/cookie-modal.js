@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <!-- Onglet Détails -->
                     <div class="cookie-tab-content" id="tab-details">
                         <div class="cookie-type">
-                            <div class="cookie-type-header" data-type="necessary">
+                            <div class="cookie-type-header active" data-type="necessary">
                                 <h5>${getTranslation('necessaryCookies', currentLang)}</h5>
                                 <i class="fas fa-chevron-down cookie-chevron up"></i>
                             </div>
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // Gestion des en-têtes de détails
+        // Gestion des en-têtes de détails - modifié pour ajuster la logique d'inversion
         const typeHeaders = document.querySelectorAll('.cookie-type-header');
         typeHeaders.forEach(header => {
             header.addEventListener('click', function() {
@@ -374,7 +374,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 const content = document.getElementById(type + '-content');
                 const chevron = this.querySelector('.cookie-chevron');
                 
+                // Fermer tous les autres contenus
+                document.querySelectorAll('.cookie-type-content').forEach(c => {
+                    if (c.id !== type + '-content') {
+                        c.classList.remove('expanded');
+                    }
+                });
+                
+                document.querySelectorAll('.cookie-type-header').forEach(h => {
+                    if (h !== this) {
+                        h.classList.remove('active');
+                        const otherChevron = h.querySelector('.cookie-chevron');
+                        if (otherChevron) otherChevron.classList.remove('up');
+                    }
+                });
+                
+                // Toggle l'état actuel
                 content.classList.toggle('expanded');
+                this.classList.toggle('active');
                 chevron.classList.toggle('up');
             });
         });

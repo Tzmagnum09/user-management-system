@@ -28,18 +28,21 @@
     flex-direction: column;
 }
 
+/* Modification de l'en-tête pour avoir un fond dégradé comme le bouton */
 .cookie-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
     border-bottom: 1px solid #dee2e6;
 }
 
 .cookie-modal-header h4 {
     margin: 0;
     font-size: 1.25rem;
-    color: #333;
+    color: white;
     font-weight: 500;
 }
 
@@ -47,7 +50,7 @@
     background: transparent;
     border: none;
     font-size: 1.5rem;
-    color: #6c757d;
+    color: white;
     cursor: pointer;
     padding: 0;
     line-height: 1;
@@ -98,7 +101,7 @@
     display: block;
 }
 
-/* Vue d'ensemble */
+/* Vue d'ensemble - textes plus petits */
 .cookie-setting-item {
     padding: 12px 0;
     margin-bottom: 10px;
@@ -117,14 +120,15 @@
     font-weight: 600;
     color: #333;
     margin-bottom: 0;
+    font-size: 0.85rem; /* Plus petit */
 }
 
 .cookie-setting-description {
     color: #666;
     margin-top: 6px;
     margin-bottom: 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.8rem; /* Plus petit */
+    line-height: 1.4;
 }
 
 /* Switch toggle */
@@ -178,7 +182,7 @@ input:checked + .cookie-toggle-slider:before {
     transform: translateX(26px);
 }
 
-/* Section détails */
+/* Section détails - correction de l'inversion */
 .cookie-type {
     margin-bottom: 10px;
     border-radius: 5px;
@@ -195,6 +199,25 @@ input:checked + .cookie-toggle-slider:before {
     border: 1px solid #e9ecef;
 }
 
+.cookie-type-header:hover {
+    background-color: #f1f3f5;
+}
+
+/* Le titre du menu dans l'onglet "Détails" doit avoir un fond coloré quand actif */
+.cookie-type-header[data-type="necessary"],
+.cookie-type-header[data-type="preferences"],
+.cookie-type-header[data-type="statistics"],
+.cookie-type-header[data-type="marketing"] {
+    transition: background-color 0.3s ease;
+}
+
+/* Fond coloré pour l'en-tête lorsque le contenu est expansé */
+.cookie-type-content.expanded + .cookie-type-header,
+.cookie-type-header.active {
+    background-color: #f8f0ff;
+    border-color: #e3d5f0;
+}
+
 .cookie-type-header h5 {
     margin: 0;
     font-size: 0.9rem;
@@ -208,7 +231,7 @@ input:checked + .cookie-toggle-slider:before {
 .cookie-type-content {
     display: none;
     padding: 15px;
-    background-color: #f8f0ff;
+    background-color: #ffffff; /* Fond blanc normal pour le contenu */
     border: 1px solid #e9ecef;
     border-top: none;
 }
