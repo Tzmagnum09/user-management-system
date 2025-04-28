@@ -1,0 +1,126 @@
+/* Styles optimisés pour les clients email */
+
+/* Styles de base */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    mso-table-lspace: 0pt;
+    mso-table-rspace: 0pt;
+    width: 100%;
+}
+
+table td {
+    vertical-align: top;
+}
+
+/* Conteneur principal */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* En-tête */
+.header {
+    background-color: #8e44ad;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Corps du message */
+.content {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Bouton */
+.button {
+    display: inline-block;
+    background-color: #8e44ad;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* Liens */
+a {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+a.button {
+    color: white;
+    text-decoration: none;
+}
+
+/* Pied de page */
+.footer {
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+/* Changements de permissions */
+.permission-changes {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.permission-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+}
+
+.permission-table th,
+.permission-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.permission-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Utilitaires */
+.text-center {
+    text-align: center;
+}
+
+.mb-15 {
+    margin-bottom: 15px;
+}
+
+.mt-15 {
+    margin-top: 15px;
+}
+
+/* Adaptations pour Outlook */
+.outlook-header {
+    background-color: #8e44ad !important;
+}
+
+.outlook-button {
+    background-color: #8e44ad !important;
+    border: 1px solid #8e44ad !important;
+}
