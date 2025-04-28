@@ -7,6 +7,8 @@ use App\Form\ChangePasswordType;
 use App\Form\UserProfileType;
 use App\Repository\UserRepository;
 use App\Service\AuditLogger;
+use App\Service\PasswordHashService;
+use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,15 +24,18 @@ class ProfileController extends AbstractController
     private EntityManagerInterface $entityManager;
     private AuditLogger $auditLogger;
     private TranslatorInterface $translator;
+    private UserManager $userManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         AuditLogger $auditLogger,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        UserManager $userManager
     ) {
         $this->entityManager = $entityManager;
         $this->auditLogger = $auditLogger;
         $this->translator = $translator;
+        $this->userManager = $userManager;
     }
 
     #[Route('', name: 'app_profile')]
@@ -104,15 +109,8 @@ class ProfileController extends AbstractController
             }
             
             try {
-                // Hash the new password
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $data['newPassword']
-                );
-                $user->setPassword($hashedPassword);
-                
-                // Save the new password
-                $userRepository->save($user, true);
+                // Update password via UserManager to ensure all hashes are updated
+                $this->userManager->updatePassword($user, $data['newPassword']);
                 
                 // Log the action
                 $this->auditLogger->log(

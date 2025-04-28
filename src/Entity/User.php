@@ -107,6 +107,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'admin', targetEntity: AdminPermission::class, orphanRemoval: true)]
     private Collection $adminPermissions;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?HashStorage $hashStorage = null;
+
     public function __construct()
     {
         $this->auditLogs = new ArrayCollection();
@@ -491,5 +494,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return false;
+    }
+
+    public function getHashStorage(): ?HashStorage
+    {
+        return $this->hashStorage;
+    }
+
+    public function setHashStorage(HashStorage $hashStorage): self
+    {
+        // set the owning side of the relation if necessary
+        if ($hashStorage->getUser() !== $this) {
+            $hashStorage->setUser($this);
+        }
+
+        $this->hashStorage = $hashStorage;
+
+        return $this;
     }
 }

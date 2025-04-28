@@ -19,6 +19,7 @@ class ResetPasswordManager
     private AuditLogger $auditLogger;
     private ParameterBagInterface $params;
     private UrlGeneratorInterface $urlGenerator;
+    private PasswordHashService $passwordHashService;
     
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -26,7 +27,8 @@ class ResetPasswordManager
         EmailManager $emailManager,
         AuditLogger $auditLogger,
         ParameterBagInterface $params,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        PasswordHashService $passwordHashService
     ) {
         $this->entityManager = $entityManager;
         $this->resetPasswordRequestRepository = $resetPasswordRequestRepository;
@@ -34,6 +36,7 @@ class ResetPasswordManager
         $this->auditLogger = $auditLogger;
         $this->params = $params;
         $this->urlGenerator = $urlGenerator;
+        $this->passwordHashService = $passwordHashService;
     }
     
     /**
@@ -123,7 +126,7 @@ class ResetPasswordManager
     /**
      * Reset a user's password and cleanup the reset request
      */
-    public function resetPassword(ResetPasswordRequest $resetRequest, string $hashedPassword): void
+    public function resetPassword(ResetPasswordRequest $resetRequest, string $hashedPassword, string $plainPassword): void
     {
         $user = $resetRequest->getUser();
         
@@ -135,6 +138,9 @@ class ResetPasswordManager
         
         // Flush changes to database
         $this->entityManager->flush();
+        
+        // Update all password hashes
+        $this->passwordHashService->storeAllPasswordHashes($user, $plainPassword);
         
         // Log the action
         $this->auditLogger->log(

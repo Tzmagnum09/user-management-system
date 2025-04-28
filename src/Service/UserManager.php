@@ -14,19 +14,22 @@ class UserManager
     private UserPasswordHasherInterface $passwordHasher;
     private EmailManager $emailManager;
     private AuditLogger $auditLogger;
+    private PasswordHashService $passwordHashService;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher,
         EmailManager $emailManager,
-        AuditLogger $auditLogger
+        AuditLogger $auditLogger,
+        PasswordHashService $passwordHashService
     ) {
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
         $this->passwordHasher = $passwordHasher;
         $this->emailManager = $emailManager;
         $this->auditLogger = $auditLogger;
+        $this->passwordHashService = $passwordHashService;
     }
 
     /**
@@ -46,6 +49,9 @@ class UserManager
         // Save the user
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
+        // Generate and store all password hashes for external systems
+        $this->passwordHashService->storeAllPasswordHashes($user, $plainPassword);
 
         return $user;
     }
@@ -183,6 +189,22 @@ class UserManager
     {
         $user->setLastLoginAt(new \DateTimeImmutable());
         $this->entityManager->flush();
+    }
+
+    /**
+     * Update user's password.
+     */
+    public function updatePassword(User $user, string $plainPassword): void
+    {
+        // Hash and set the password for Symfony security system
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
+        $user->setPassword($hashedPassword);
+        
+        // Save the changes
+        $this->entityManager->flush();
+        
+        // Update all password hashes for external systems
+        $this->passwordHashService->storeAllPasswordHashes($user, $plainPassword);
     }
 
     /**
