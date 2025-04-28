@@ -33,35 +33,35 @@
                 <div class="stats-types">
                     <div class="stat-type-item stat-view">
                         <div class="stat-number">{{ stats.by_type.view }}</div>
-                        <div class="stat-label">{{ log_types.view }}</div>
+                        <div class="stat-label">{{ 'Consultation'|trans }}</div>
                     </div>
                     <div class="stat-type-item stat-create">
                         <div class="stat-number">{{ stats.by_type.create }}</div>
-                        <div class="stat-label">{{ log_types.create }}</div>
+                        <div class="stat-label">{{ 'Création'|trans }}</div>
                     </div>
                     <div class="stat-type-item stat-update">
                         <div class="stat-number">{{ stats.by_type.update }}</div>
-                        <div class="stat-label">{{ log_types.update }}</div>
+                        <div class="stat-label">{{ 'Modification'|trans }}</div>
                     </div>
                     <div class="stat-type-item stat-delete">
                         <div class="stat-number">{{ stats.by_type.delete }}</div>
-                        <div class="stat-label">{{ log_types.delete }}</div>
+                        <div class="stat-label">{{ 'Suppression'|trans }}</div>
                     </div>
                     <div class="stat-type-item stat-login">
                         <div class="stat-number">{{ stats.by_type.login }}</div>
-                        <div class="stat-label">{{ log_types.login }}</div>
+                        <div class="stat-label">{{ 'Connexion'|trans }}</div>
                     </div>
                     <div class="stat-type-item stat-security">
                         <div class="stat-number">{{ stats.by_type.security }}</div>
-                        <div class="stat-label">{{ log_types.security }}</div>
+                        <div class="stat-label">{{ 'Sécurité'|trans }}</div>
                     </div>
                     <div class="stat-type-item stat-error">
                         <div class="stat-number">{{ stats.by_type.error }}</div>
-                        <div class="stat-label">{{ log_types.error }}</div>
+                        <div class="stat-label">{{ 'Erreur'|trans }}</div>
                     </div>
                     <div class="stat-type-item stat-system">
                         <div class="stat-number">{{ stats.by_type.system }}</div>
-                        <div class="stat-label">{{ log_types.system }}</div>
+                        <div class="stat-label">{{ 'Système'|trans }}</div>
                     </div>
                 </div>
                 
@@ -168,7 +168,7 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if current_type == 'view' %}active{% endif %}" 
                        href="{{ path('admin_audit_logs', filters|merge({'type': 'view', 'page': 1})) }}">
-                        <i class="fas fa-eye me-1"></i> {{ log_types.view }}
+                        <i class="fas fa-eye me-1"></i> {{ 'Consultation'|trans }}
                         <span class="badge tab-badge">{{ stats.by_type.view }}</span>
                     </a>
                 </li>
@@ -176,7 +176,7 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if current_type == 'create' %}active{% endif %}" 
                        href="{{ path('admin_audit_logs', filters|merge({'type': 'create', 'page': 1})) }}">
-                        <i class="fas fa-plus-circle me-1"></i> {{ log_types.create }}
+                        <i class="fas fa-plus-circle me-1"></i> {{ 'Création'|trans }}
                         <span class="badge tab-badge">{{ stats.by_type.create }}</span>
                     </a>
                 </li>
@@ -184,7 +184,7 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if current_type == 'update' %}active{% endif %}" 
                        href="{{ path('admin_audit_logs', filters|merge({'type': 'update', 'page': 1})) }}">
-                        <i class="fas fa-edit me-1"></i> {{ log_types.update }}
+                        <i class="fas fa-edit me-1"></i> {{ 'Modification'|trans }}
                         <span class="badge tab-badge">{{ stats.by_type.update }}</span>
                     </a>
                 </li>
@@ -192,7 +192,7 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if current_type == 'delete' %}active{% endif %}" 
                        href="{{ path('admin_audit_logs', filters|merge({'type': 'delete', 'page': 1})) }}">
-                        <i class="fas fa-trash-alt me-1"></i> {{ log_types.delete }}
+                        <i class="fas fa-trash-alt me-1"></i> {{ 'Suppression'|trans }}
                         <span class="badge tab-badge">{{ stats.by_type.delete }}</span>
                     </a>
                 </li>
@@ -200,7 +200,7 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if current_type == 'login' %}active{% endif %}" 
                        href="{{ path('admin_audit_logs', filters|merge({'type': 'login', 'page': 1})) }}">
-                        <i class="fas fa-sign-in-alt me-1"></i> {{ log_types.login }}
+                        <i class="fas fa-sign-in-alt me-1"></i> {{ 'Connexion'|trans }}
                         <span class="badge tab-badge">{{ stats.by_type.login }}</span>
                     </a>
                 </li>
@@ -208,7 +208,7 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if current_type == 'security' %}active{% endif %}" 
                        href="{{ path('admin_audit_logs', filters|merge({'type': 'security', 'page': 1})) }}">
-                        <i class="fas fa-shield-alt me-1"></i> {{ log_types.security }}
+                        <i class="fas fa-shield-alt me-1"></i> {{ 'Sécurité'|trans }}
                         <span class="badge tab-badge">{{ stats.by_type.security }}</span>
                     </a>
                 </li>
@@ -216,7 +216,7 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if current_type == 'error' %}active{% endif %}" 
                        href="{{ path('admin_audit_logs', filters|merge({'type': 'error', 'page': 1})) }}">
-                        <i class="fas fa-exclamation-triangle me-1"></i> {{ log_types.error }}
+                        <i class="fas fa-exclamation-triangle me-1"></i> {{ 'Erreur'|trans }}
                         <span class="badge tab-badge">{{ stats.by_type.error }}</span>
                     </a>
                 </li>
@@ -224,7 +224,7 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link {% if current_type == 'system' %}active{% endif %}" 
                        href="{{ path('admin_audit_logs', filters|merge({'type': 'system', 'page': 1})) }}">
-                        <i class="fas fa-cogs me-1"></i> {{ log_types.system }}
+                        <i class="fas fa-cogs me-1"></i> {{ 'Système'|trans }}
                         <span class="badge tab-badge">{{ stats.by_type.system }}</span>
                     </a>
                 </li>
@@ -237,7 +237,24 @@
                 <h4 class="mb-0">
                     {% if current_type %}
                         <i class="fas fa-{% if current_type == 'view' %}eye{% elseif current_type == 'create' %}plus-circle{% elseif current_type == 'update' %}edit{% elseif current_type == 'delete' %}trash-alt{% elseif current_type == 'login' %}sign-in-alt{% elseif current_type == 'security' %}shield-alt{% elseif current_type == 'error' %}exclamation-triangle{% else %}cogs{% endif %} me-2"></i>
-                        {{ log_types[current_type] }} {{ 'Logs'|trans }}
+                        {% if current_type == 'view' %}
+                            {{ 'Consultation'|trans }}
+                        {% elseif current_type == 'create' %}
+                            {{ 'Création'|trans }}
+                        {% elseif current_type == 'update' %}
+                            {{ 'Modification'|trans }}
+                        {% elseif current_type == 'delete' %}
+                            {{ 'Suppression'|trans }}
+                        {% elseif current_type == 'login' %}
+                            {{ 'Connexion'|trans }}
+                        {% elseif current_type == 'security' %}
+                            {{ 'Sécurité'|trans }}
+                        {% elseif current_type == 'error' %}
+                            {{ 'Erreur'|trans }}
+                        {% elseif current_type == 'system' %}
+                            {{ 'Système'|trans }}
+                        {% endif %}
+                        {{ 'Logs'|trans }}
                     {% else %}
                         <i class="fas fa-list me-2"></i> {{ 'All Logs'|trans }}
                     {% endif %}
@@ -304,7 +321,25 @@
                                         </td>
                                         <td>
                                             <span class="badge badge-{{ log.type }}">
-                                                {{ log.typeLabel }}
+                                                {% if log.type == 'view' %}
+                                                    {{ 'Consultation'|trans }}
+                                                {% elseif log.type == 'create' %}
+                                                    {{ 'Création'|trans }}
+                                                {% elseif log.type == 'update' %}
+                                                    {{ 'Modification'|trans }}
+                                                {% elseif log.type == 'delete' %}
+                                                    {{ 'Suppression'|trans }}
+                                                {% elseif log.type == 'login' %}
+                                                    {{ 'Connexion'|trans }}
+                                                {% elseif log.type == 'security' %}
+                                                    {{ 'Sécurité'|trans }}
+                                                {% elseif log.type == 'error' %}
+                                                    {{ 'Erreur'|trans }}
+                                                {% elseif log.type == 'system' %}
+                                                    {{ 'Système'|trans }}
+                                                {% else %}
+                                                    {{ log.typeLabel }}
+                                                {% endif }}
                                             </span>
                                         </td>
                                         <td>
