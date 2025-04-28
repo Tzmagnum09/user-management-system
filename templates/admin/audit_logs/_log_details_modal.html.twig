@@ -1,0 +1,82 @@
+<!-- Modal de détails du log -->
+<div class="modal fade" id="detailsModal{{ log.id }}" tabindex="-1" aria-labelledby="detailsModalLabel{{ log.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel{{ log.id }}">{{ 'Log Details'|trans }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <dl class="row">
+                    <dt class="col-sm-3">{{ 'Date/Time'|trans }}</dt>
+                    <dd class="col-sm-9">{{ log.createdAt|date('d/m/Y H:i:s') }}</dd>
+                    
+                    <dt class="col-sm-3">{{ 'User'|trans }}</dt>
+                    <dd class="col-sm-9">{{ log.user.firstName }} {{ log.user.lastName }} ({{ log.user.email }})</dd>
+                    
+                    <dt class="col-sm-3">{{ 'Type'|trans }}</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge badge-{{ log.type }}">
+                            {{ log.typeLabel }}
+                        </span>
+                    </dd>
+                    
+                    <dt class="col-sm-3">{{ 'Action'|trans }}</dt>
+                    <dd class="col-sm-9">{{ log.action|replace({'_': ' '})|title }}</dd>
+                    
+                    <dt class="col-sm-3">{{ 'IP Address'|trans }}</dt>
+                    <dd class="col-sm-9">{{ log.ipAddress }}</dd>
+                    
+                    {% if log.details %}
+                        <dt class="col-sm-3">{{ 'Details'|trans }}</dt>
+                        <dd class="col-sm-9">{{ log.details|nl2br }}</dd>
+                    {% endif %}
+
+                    <dt class="col-sm-12 text-primary mt-3 mb-2"><hr>{{ 'Device Information'|trans }}</dt>
+                    
+                    <dt class="col-sm-3">{{ 'Device'|trans }}</dt>
+                    <dd class="col-sm-9">
+                        {% if log.deviceBrand is defined and log.deviceBrand != 'Unknown' %}
+                            {{ log.deviceBrand }}
+                            {% if log.deviceModel != 'Unknown' and log.deviceModel != log.deviceBrand %}
+                                {{ log.deviceModel }}
+                            {% endif %}
+                        {% else %}
+                            {{ 'Unknown'|trans }}
+                        {% endif %}
+                    </dd>
+                    
+                    <dt class="col-sm-3">{{ 'Operating System'|trans }}</dt>
+                    <dd class="col-sm-9">
+                        {% if log.osName is defined and log.osName != 'Unknown' %}
+                            {{ log.osName }} {% if log.osVersion != 'Unknown' %}{{ log.osVersion }}{% endif %}
+                        {% else %}
+                            {{ 'Unknown'|trans }}
+                        {% endif %}
+                    </dd>
+                    
+                    <dt class="col-sm-3">{{ 'Browser'|trans }}</dt>
+                    <dd class="col-sm-9">
+                        {% if log.browserName is defined and log.browserName != 'Unknown' %}
+                            {{ log.browserName }} {% if log.browserVersion != 'Unknown' %}{{ log.browserVersion }}{% endif %}
+                        {% else %}
+                            {{ 'Unknown'|trans }}
+                        {% endif %}
+                    </dd>
+                    
+                    {% if log.userAgent %}
+                        <dt class="col-sm-3">{{ 'User Agent'|trans }}</dt>
+                        <dd class="col-sm-9">
+                            <div class="user-agent-content p-2 bg-light border rounded" style="overflow-wrap: break-word; font-family: monospace; font-size: 0.8rem;">
+                                {{ log.userAgent }}
+                            </div>
+                        </dd>
+                    {% endif %}
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>

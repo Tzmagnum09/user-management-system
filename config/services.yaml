@@ -1,0 +1,62 @@
+parameters:
+    app.email_sender_address: '%env(EMAIL_SENDER_ADDRESS)%'
+    app.email_sender_name: '%env(EMAIL_SENDER_NAME)%'
+    app.locale: '%env(APP_LOCALE)%'
+    app.supported_locales: '%env(APP_SUPPORTED_LOCALES)%'
+    app.url: '%env(APP_URL)%'
+    app.name: '%env(APP_NAME)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $appName: '%app.name%'
+            $appUrl: '%app.url%'
+            $defaultLocale: '%app.locale%'
+            $supportedLocales: '%app.supported_locales%'
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+    
+    # Explicitement configurer les subscribers avec priorité élevée
+    App\EventSubscriber\LocaleSubscriber:
+        tags:
+            - { name: kernel.event_subscriber, priority: 20 }
+            
+    App\EventSubscriber\ClientInfoSubscriber:
+        tags:
+            - { name: kernel.event_subscriber, priority: 9999 }
+            
+    App\EventSubscriber\HttpErrorSubscriber:
+        tags:
+            - { name: kernel.event_subscriber, priority: -100 }
+            
+    App\EventSubscriber\LoginSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+            
+    App\EventSubscriber\LogoutSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+    
+    # Service pour les traductions
+    App\Service\LanguageService:
+        arguments:
+            $requestStack: '@request_stack'
+            $params: '@parameter_bag'
+    
+    # Monolog configuration for audit logs
+    monolog.logger.audit:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: ['audit']
+        calls:
+            - [pushHandler, ['@monolog.handler.audit']]
+    
+    monolog.handler.audit:
+        class: Monolog\Handler\RotatingFileHandler
+        arguments: ['%kernel.logs_dir%/audit.log', 10, 'debug']

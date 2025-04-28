@@ -1,0 +1,285 @@
+/* Styles pour la gestion des templates d'emails */
+
+/* Structure principale */
+.email-editor-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.variables-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.variables-header {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 16px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.variables-content {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.variables-description {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.variables-group {
+    margin-bottom: 20px;
+}
+
+.variables-group:last-child {
+    margin-bottom: 0;
+}
+
+.variables-group-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+.variable-input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}
+
+.variable-input:hover {
+    background-color: #f1f1f1;
+}
+
+/* Accordéon des templates d'emails */
+.template-header {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.template-header:hover {
+    background-color: #e9ecef;
+}
+
+.template-header h4 {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.template-header .toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.template-header.collapsed .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Badges de langue */
+.badge-language {
+    display: inline-block;
+    min-width: 90px;
+    text-align: center;
+    font-weight: normal;
+}
+
+/* Style pour les boutons d'action */
+.btn-preview {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-preview:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+.btn-modifier {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-modifier:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+/* Styles pour l'interface TinyMCE */
+.tox-tinymce {
+    border-radius: 4px;
+}
+
+/* Mise en page des boutons d'action */
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Styles pour les modales d'aperçu */
+.preview-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.preview-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-modal-content {
+    background-color: #fefefe;
+    margin: 2% auto;
+    padding: 0;
+    border: 1px solid #888;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-modal-header {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    padding: 15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preview-modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.preview-modal-close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 0.8;
+}
+
+.preview-modal-close:hover {
+    color: #f1f1f1;
+}
+
+.preview-modal-body {
+    padding: 15px;
+    max-height: calc(90vh - 130px);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.preview-modal-footer {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-top: 1px solid #e9ecef;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    text-align: right;
+}
+
+.preview-iframe {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.preview-loading {
+    text-align: center;
+    padding: 50px 0;
+}
+
+/* Gestion des états de chargement */
+.help-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* Style pour les champs personnalisés */
+#custom_code_container {
+    transition: all 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .action-buttons > div {
+        width: 100%;
+    }
+
+    .action-buttons button,
+    .action-buttons a {
+        width: 100%;
+    }
+
+    .variables-group .row {
+        flex-direction: column;
+    }
+
+    .variables-group .col-md-3,
+    .variables-group .col-md-4,
+    .variables-group .col-md-6 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .preview-modal-content {
+        width: 95%;
+        height: 95vh;
+        margin: 10px auto;
+    }
+
+    .preview-iframe {
+        height: 400px;
+    }
+}

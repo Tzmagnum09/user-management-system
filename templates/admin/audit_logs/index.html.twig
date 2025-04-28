@@ -1,0 +1,516 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Audit Logs'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('css/audit-logs.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <h2>{{ 'Audit Logs'|trans }}</h2>
+        <p class="text-muted">{{ 'System activity log showing user actions and system events.'|trans }}</p>
+    </div>
+
+    <div class="col-md-12">
+        <!-- Statistiques améliorées -->
+        <div class="stats-card">
+            <div class="stats-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i> {{ 'Statistics'|trans }}</h5>
+            </div>
+            <div class="stats-body">
+                <!-- Statistique principale -->
+                <div class="stats-main">
+                    <div class="stat-number">{{ stats.total }}</div>
+                    <div class="stat-label">{{ 'Total Logs'|trans }}</div>
+                </div>
+                
+                <!-- Statistiques par type de log -->
+                <h6 class="mb-3">{{ 'Logs by Type'|trans }}:</h6>
+                <div class="stats-types">
+                    <div class="stat-type-item stat-view">
+                        <div class="stat-number">{{ stats.by_type.view }}</div>
+                        <div class="stat-label">{{ log_types.view }}</div>
+                    </div>
+                    <div class="stat-type-item stat-create">
+                        <div class="stat-number">{{ stats.by_type.create }}</div>
+                        <div class="stat-label">{{ log_types.create }}</div>
+                    </div>
+                    <div class="stat-type-item stat-update">
+                        <div class="stat-number">{{ stats.by_type.update }}</div>
+                        <div class="stat-label">{{ log_types.update }}</div>
+                    </div>
+                    <div class="stat-type-item stat-delete">
+                        <div class="stat-number">{{ stats.by_type.delete }}</div>
+                        <div class="stat-label">{{ log_types.delete }}</div>
+                    </div>
+                    <div class="stat-type-item stat-login">
+                        <div class="stat-number">{{ stats.by_type.login }}</div>
+                        <div class="stat-label">{{ log_types.login }}</div>
+                    </div>
+                    <div class="stat-type-item stat-security">
+                        <div class="stat-number">{{ stats.by_type.security }}</div>
+                        <div class="stat-label">{{ log_types.security }}</div>
+                    </div>
+                    <div class="stat-type-item stat-error">
+                        <div class="stat-number">{{ stats.by_type.error }}</div>
+                        <div class="stat-label">{{ log_types.error }}</div>
+                    </div>
+                    <div class="stat-type-item stat-system">
+                        <div class="stat-number">{{ stats.by_type.system }}</div>
+                        <div class="stat-label">{{ log_types.system }}</div>
+                    </div>
+                </div>
+                
+                <!-- Statistiques additionnelles -->
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="h3 mb-0">{{ stats.last_24h }}</div>
+                                <div class="text-muted">{{ 'Last 24 Hours'|trans }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filtres améliorés -->
+        <div class="filters-card">
+            <div class="filters-header" id="filtersToggle">
+                <h5 class="mb-0"><i class="fas fa-filter me-2"></i> {{ 'Filters'|trans }} <i class="fas fa-chevron-down float-end"></i></h5>
+            </div>
+            <div class="filters-body" id="filtersBody">
+                <form action="{{ path('admin_audit_logs') }}" method="get" id="logsFilterForm">
+                    {% if current_type %}
+                        <input type="hidden" name="type" value="{{ current_type }}">
+                    {% endif %}
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="filter-label" for="user_id">{{ 'User'|trans }}</label>
+                            <select class="form-select filter-input" id="user_id" name="user_id">
+                                <option value="">{{ 'All Users'|trans }}</option>
+                                {% for user in users %}
+                                    <option value="{{ user.id }}" {% if filters.user_id == user.id %}selected{% endif %}>
+                                        {{ user.firstName }} {{ user.lastName }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3 mb-3">
+                            <label class="filter-label" for="action">{{ 'Action'|trans }}</label>
+                            <input type="text" class="filter-input" id="action" name="action" value="{{ filters.action }}" placeholder="{{ 'Filter by action...'|trans }}">
+                        </div>
+                        
+                        <div class="col-md-3 mb-3">
+                            <label class="filter-label" for="ip">{{ 'IP Address'|trans }}</label>
+                            <input type="text" class="filter-input" id="ip" name="ip" value="{{ filters.ip }}" placeholder="{{ 'Filter by IP...'|trans }}">
+                        </div>
+                        
+                        <div class="col-md-3 mb-3">
+                            <label class="filter-label" for="browser">{{ 'Browser'|trans }}</label>
+                            <input type="text" class="filter-input" id="browser" name="browser" value="{{ filters.browser }}" placeholder="{{ 'Filter by browser...'|trans }}">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="filter-label" for="device">{{ 'Device'|trans }}</label>
+                            <input type="text" class="filter-input" id="device" name="device" value="{{ filters.device }}" placeholder="{{ 'Filter by device...'|trans }}">
+                        </div>
+                        
+                        <div class="col-md-3 mb-3">
+                            <label class="filter-label" for="date_from">{{ 'Date From'|trans }}</label>
+                            <input type="text" class="filter-input datepicker" id="date_from" name="date_from" value="{{ filters.date_from }}" placeholder="{{ 'From date...'|trans }}">
+                        </div>
+                        
+                        <div class="col-md-3 mb-3">
+                            <label class="filter-label" for="date_to">{{ 'Date To'|trans }}</label>
+                            <input type="text" class="filter-input datepicker" id="date_to" name="date_to" value="{{ filters.date_to }}" placeholder="{{ 'To date...'|trans }}">
+                        </div>
+                        
+                        <div class="col-md-3 mb-3">
+                            <label class="filter-label" for="details">{{ 'Details'|trans }}</label>
+                            <input type="text" class="filter-input" id="details" name="details" value="{{ filters.details }}" placeholder="{{ 'Search in details...'|trans }}">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <a href="{{ path('admin_audit_logs') }}" class="btn btn-reset-filters">
+                            <i class="fas fa-undo me-1"></i> {{ 'Reset'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-apply-filters">
+                            <i class="fas fa-search me-1"></i> {{ 'Apply Filters'|trans }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Onglets pour les types de logs - Harmonisés avec le thème -->
+        <div class="mb-4">
+            <h5 class="filter-section-title"><i class="fas fa-filter me-2"></i>{{ 'Filter by log type'|trans }}</h5>
+            <ul class="nav nav-tabs" id="logsTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == '' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': null, 'page': 1})) }}">
+                        <i class="fas fa-list me-1"></i> {{ 'All'|trans }}
+                        <span class="badge tab-badge">{{ stats.total }}</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == 'view' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': 'view', 'page': 1})) }}">
+                        <i class="fas fa-eye me-1"></i> {{ log_types.view }}
+                        <span class="badge tab-badge">{{ stats.by_type.view }}</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == 'create' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': 'create', 'page': 1})) }}">
+                        <i class="fas fa-plus-circle me-1"></i> {{ log_types.create }}
+                        <span class="badge tab-badge">{{ stats.by_type.create }}</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == 'update' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': 'update', 'page': 1})) }}">
+                        <i class="fas fa-edit me-1"></i> {{ log_types.update }}
+                        <span class="badge tab-badge">{{ stats.by_type.update }}</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == 'delete' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': 'delete', 'page': 1})) }}">
+                        <i class="fas fa-trash-alt me-1"></i> {{ log_types.delete }}
+                        <span class="badge tab-badge">{{ stats.by_type.delete }}</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == 'login' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': 'login', 'page': 1})) }}">
+                        <i class="fas fa-sign-in-alt me-1"></i> {{ log_types.login }}
+                        <span class="badge tab-badge">{{ stats.by_type.login }}</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == 'security' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': 'security', 'page': 1})) }}">
+                        <i class="fas fa-shield-alt me-1"></i> {{ log_types.security }}
+                        <span class="badge tab-badge">{{ stats.by_type.security }}</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == 'error' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': 'error', 'page': 1})) }}">
+                        <i class="fas fa-exclamation-triangle me-1"></i> {{ log_types.error }}
+                        <span class="badge tab-badge">{{ stats.by_type.error }}</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if current_type == 'system' %}active{% endif %}" 
+                       href="{{ path('admin_audit_logs', filters|merge({'type': 'system', 'page': 1})) }}">
+                        <i class="fas fa-cogs me-1"></i> {{ log_types.system }}
+                        <span class="badge tab-badge">{{ stats.by_type.system }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Tableau des logs -->
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    {% if current_type %}
+                        <i class="fas fa-{% if current_type == 'view' %}eye{% elseif current_type == 'create' %}plus-circle{% elseif current_type == 'update' %}edit{% elseif current_type == 'delete' %}trash-alt{% elseif current_type == 'login' %}sign-in-alt{% elseif current_type == 'security' %}shield-alt{% elseif current_type == 'error' %}exclamation-triangle{% else %}cogs{% endif %} me-2"></i>
+                        {{ log_types[current_type] }} {{ 'Logs'|trans }}
+                    {% else %}
+                        <i class="fas fa-list me-2"></i> {{ 'All Logs'|trans }}
+                    {% endif %}
+                </h4>
+                
+                <div>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <button type="button" id="btnDeleteSelected" class="btn btn-delete-selected me-2">
+                            <i class="fas fa-trash-alt me-1"></i> {{ 'Delete Selected'|trans }}
+                        </button>
+                    {% endif %}
+                    <a href="{{ path('admin_audit_logs_export', filters|merge({'type': current_type})) }}" class="btn btn-light export-button">
+                        <i class="fas fa-file-export me-1"></i> {{ 'Export to CSV'|trans }}
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% include 'admin/audit_logs/_debug_buttons.html.twig' %}
+                {% if logs|length > 0 %}
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <form id="logsDeleteForm" action="{{ path('admin_audit_logs_delete_bulk', app.request.query.all) }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_bulk_logs') }}">
+                            
+                            <div class="bulk-actions mb-3">
+                                <div class="custom-control custom-checkbox log-select-all">
+                                    <input type="checkbox" class="custom-control-input" id="selectAllLogs">
+                                    <label class="custom-control-label" for="selectAllLogs">{{ 'Select All Logs'|trans }}</label>
+                                </div>
+                            </div>
+                    {% endif %}
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped logs-table">
+                            <thead>
+                                <tr>
+                                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                        <th style="width: 40px;"></th>
+                                    {% endif %}
+                                    <th>{{ 'Date/Time'|trans }}</th>
+                                    <th>{{ 'User'|trans }}</th>
+                                    <th>{{ 'Type'|trans }}</th>
+                                    <th>{{ 'Action'|trans }}</th>
+                                    <th>{{ 'IP Address'|trans }}</th>
+                                    <th>{{ 'Device/Browser'|trans }}</th>
+                                    <th>{{ 'Details'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in logs %}
+                                    <tr>
+                                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input log-checkbox" id="log{{ log.id }}" name="logs[]" value="{{ log.id }}">
+                                                    <label class="custom-control-label" for="log{{ log.id }}"></label>
+                                                </div>
+                                            </td>
+                                        {% endif %}
+                                        <td>{{ log.createdAt|date('d/m/Y H:i:s') }}</td>
+                                        <td>
+                                            <a href="{{ path('admin_audit_logs_user', {'id': log.user.id}) }}">
+                                                {{ log.user.firstName }} {{ log.user.lastName }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-{{ log.type }}">
+                                                {{ log.typeLabel }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{ log.action|replace({'_': ' '})|title }}
+                                        </td>
+                                        <td>{{ log.ipAddress }}</td>
+                                        <td>
+                                            {% include 'admin/audit_logs/_device_info.html.twig' with {'log': log} %}
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#detailsModal{{ log.id }}">
+                                                <i class="fas fa-info-circle"></i> {{ 'View Details'|trans }}
+                                            </button>
+                                            
+                                            {# Inclure la modal #}
+                                            {% include 'admin/audit_logs/_log_details_modal.html.twig' with {'log': log} %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        </form>
+                        
+                        <!-- Modal de confirmation de suppression -->
+                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel">{{ 'Confirm Deletion'|trans }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p id="confirmDeleteMessage">{{ 'Are you sure you want to delete the selected logs? This action cannot be undone.'|trans }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Cancel'|trans }}</button>
+                                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">{{ 'Delete'|trans }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {# Pagination #}
+                    <div class="pagination-wrapper">
+                        <div class="pagination-info">
+                            {{ 'Showing'|trans }} {{ ((pagination.page - 1) * pagination.limit) + 1 }} 
+                            {{ 'to'|trans }} {{ min(pagination.page * pagination.limit, pagination.total_items) }} 
+                            {{ 'of'|trans }} {{ pagination.total_items }} {{ 'entries'|trans }}
+                        </div>
+                        
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li class="page-item {% if pagination.page == 1 %}disabled{% endif %}">
+                                    <a class="page-link" href="{{ path('admin_audit_logs', filters|merge({'type': current_type, 'page': pagination.page - 1})) }}">
+                                        {{ 'Previous'|trans }}
+                                    </a>
+                                </li>
+                                
+                                {% for i in max(1, pagination.page - 2)..min(pagination.total_pages, pagination.page + 2) %}
+                                    <li class="page-item {% if pagination.page == i %}active{% endif %}">
+                                        <a class="page-link" href="{{ path('admin_audit_logs', filters|merge({'type': current_type, 'page': i})) }}">
+                                            {{ i }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                                
+                                <li class="page-item {% if pagination.page >= pagination.total_pages %}disabled{% endif %}">
+                                    <a class="page-link" href="{{ path('admin_audit_logs', filters|merge({'type': current_type, 'page': pagination.page + 1})) }}">
+                                        {{ 'Next'|trans }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>{{ 'No audit logs found matching your criteria.'|trans }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="{{ asset('js/audit-logs-debug.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialisation du sélecteur de date
+            const datepickers = document.querySelectorAll('.datepicker');
+            datepickers.forEach(function(picker) {
+                flatpickr(picker, {
+                    dateFormat: "Y-m-d",
+                    allowInput: true,
+                    enableTime: false,
+                    time_24hr: true,
+                    disableMobile: false,
+                    locale: {
+                        firstDayOfWeek: 1,
+                        weekdays: {
+                            shorthand: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+                            longhand: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
+                        },
+                        months: {
+                            shorthand: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"],
+                            longhand: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+                        }
+                    }
+                });
+            });
+
+            // Toggle des filtres
+            const filtersToggle = document.getElementById('filtersToggle');
+            const filtersBody = document.getElementById('filtersBody');
+            
+            // Montrer les filtres s'ils sont actifs
+            const hasActiveFilters = {{ (filters.user_id or filters.action or filters.ip or filters.browser or filters.device or filters.date_from or filters.date_to or filters.details) ? 'true' : 'false' }};
+            
+            if (hasActiveFilters) {
+                filtersBody.classList.add('show');
+                filtersToggle.querySelector('.fa-chevron-down').classList.add('fa-rotate-180');
+            }
+            
+            if (filtersToggle) {
+                filtersToggle.addEventListener('click', function() {
+                    filtersBody.classList.toggle('show');
+                    filtersToggle.querySelector('.fa-chevron-down').classList.toggle('fa-rotate-180');
+                });
+            }
+            
+            // Gestion des cases à cocher pour la suppression en masse
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                const selectAllCheckbox = document.getElementById('selectAllLogs');
+                const logCheckboxes = document.querySelectorAll('.log-checkbox');
+                const deleteButton = document.getElementById('btnDeleteSelected');
+                const logsDeleteForm = document.getElementById('logsDeleteForm');
+                const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                
+                if (selectAllCheckbox) {
+                    // Cocher/décocher toutes les cases
+                    selectAllCheckbox.addEventListener('change', function() {
+                        const isChecked = this.checked;
+                        logCheckboxes.forEach(function(checkbox) {
+                            checkbox.checked = isChecked;
+                        });
+                        
+                        // Afficher ou masquer le bouton de suppression
+                        updateDeleteButtonVisibility();
+                    });
+                }
+                
+                // Mettre à jour la visibilité du bouton "Supprimer la sélection"
+                function updateDeleteButtonVisibility() {
+                    const anyChecked = Array.from(logCheckboxes).some(checkbox => checkbox.checked);
+                    if (anyChecked) {
+                        deleteButton.style.display = 'inline-block';
+                    } else {
+                        deleteButton.style.display = 'none';
+                    }
+                }
+                
+                // Ajouter l'écouteur d'événements pour chaque case à cocher
+                logCheckboxes.forEach(function(checkbox) {
+                    checkbox.addEventListener('change', updateDeleteButtonVisibility);
+                });
+                
+                // Initialiser la visibilité du bouton
+                updateDeleteButtonVisibility();
+                
+                // Gestion du clic sur le bouton "Supprimer la sélection"
+                if (deleteButton) {
+                    deleteButton.addEventListener('click', function() {
+                        const checkedCount = Array.from(logCheckboxes).filter(checkbox => checkbox.checked).length;
+                        
+                        if (checkedCount === 0) {
+                            alert("{{ 'Please select at least one log to delete.'|trans }}");
+                            return;
+                        }
+                        
+                        // Mettre à jour le message de confirmation
+                        document.getElementById('confirmDeleteMessage').textContent = 
+                            "{{ 'Are you sure you want to delete'|trans }} " + checkedCount + 
+                            " {{ 'selected logs? This action cannot be undone.'|trans }}";
+                        
+                        // Afficher la modal de confirmation
+                        confirmDeleteModal.show();
+                    });
+                }
+                
+                // Gestion du clic sur le bouton "Confirmer" dans la modal
+                if (confirmDeleteBtn) {
+                    confirmDeleteBtn.addEventListener('click', function() {
+                        // Soumettre le formulaire pour supprimer les logs sélectionnés
+                        logsDeleteForm.submit();
+                    });
+                }
+            {% endif %}
+        });
+        
+    </script>
+{% endblock %}

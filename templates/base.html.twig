@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{{ app_name }}{% endblock %}</title>
+        <link rel="icon" href="{{ asset('favicon.png') }}">
+        {% block stylesheets %}
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/cookie-modal.css') }}">
+            {% block page_stylesheets %}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block navbar %}
+            {% if app.user %}
+                <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+                    <div class="container">
+                        <a class="navbar-brand" href="{{ path('app_dashboard') }}">
+                            <img src="{{ asset('images/logo.png') }}" alt="Dmqode.be">
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('app_dashboard') }}"><i class="fas fa-home"></i> {{ 'Dashboard'|trans }}</a>
+                                </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-users-cog"></i> {{ 'Administration'|trans }}
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <li><a class="dropdown-item" href="{{ path('admin_users') }}"><i class="fas fa-users"></i> {{ 'Users'|trans }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ path('admin_users_pending_approval') }}"><i class="fas fa-user-clock"></i> {{ 'Pending Approval'|trans }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ path('admin_email_templates') }}"><i class="fas fa-envelope-open-text"></i> {{ 'Email Templates'|trans }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ path('admin_audit_logs') }}"><i class="fas fa-history"></i> {{ 'Audit Logs'|trans }}</a></li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-globe"></i> {{ app.request.locale|upper }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                                        {% set locales = app_supported_locales|split(',') %}
+                                        {% for locale in locales %}
+                                            <li>
+                                                <a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" 
+                                                   href="{{ path('app_change_language', {'locale': locale}) }}">
+                                                    {% if locale == 'fr' %}Français{% endif %}
+                                                    {% if locale == 'en' %}English{% endif %}
+                                                    {% if locale == 'nl' %}Nederlands{% endif %}
+                                                    {% if locale == 'de' %}Deutsch{% endif %}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user"></i> {{ app.user.firstName }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="{{ path('app_profile') }}"><i class="fas fa-user-circle"></i> {{ 'Profile'|trans }}</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> {{ 'Logout'|trans }}</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            {% endif %}
+        {% endblock %}
+
+        <div class="container mt-4">
+            {% block flash_messages %}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endblock %}
+
+            {% block body %}{% endblock %}
+        </div>
+
+        {% block footer %}
+            <footer class="footer mt-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <p>&copy; {{ 'now'|date('Y') }} {{ app_name|default('Dmqode.be') }}. {{ 'Tous droits réservés.'|trans }}</p>
+                            <p>
+                                <a href="{{ path('app_cookie_preferences') }}" id="cookie-settings-link" class="cookie-settings-footer-link me-2">
+                                    {{ 'Préférences des cookies'|trans }}
+                                </a>
+                                <span class="mx-2">|</span>
+                                <a href="javascript:void(0);" id="terms-link" class="cookie-settings-footer-link ms-2">
+                                    {{ 'Conditions d\'utilisation'|trans }}
+                                </a>
+                            </p>
+                            <div class="language-switcher mt-2">
+                                {% set locales = app_supported_locales|split(',') %}
+                                {% for locale in locales %}
+                                    <a href="{{ path('app_change_language', {'locale': locale}) }}" 
+                                       class="btn btn-sm {% if app.request.locale == locale %}btn-primary{% else %}btn-outline-secondary{% endif %} mx-1">
+                                        {{ locale|upper }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        {% endblock %}
+
+        <!-- Modal des conditions d'utilisation -->
+        <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header" style="background: linear-gradient(135deg, #8e44ad, #3498db); color: white;">
+                        <h5 class="modal-title" id="termsModalLabel">{{ 'Conditions d\'utilisation'|trans }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1) brightness(200%);"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="terms-section mb-4">
+                            <h4>1. Introduction</h4>
+                            <p>Bienvenue sur DMQode.be. Les présentes conditions d'utilisation régissent votre utilisation de notre site web et de nos services. En vous inscrivant sur notre site, vous acceptez d'être lié par ces conditions. Veuillez les lire attentivement.</p>
+                        </div>
+                        
+                        <div class="terms-section mb-4">
+                            <h4>2. Définitions</h4>
+                            <ul>
+                                <li><strong>'Service'</strong> désigne le site web DMQode.be</li>
+                                <li><strong>'Utilisateur'</strong> désigne toute personne qui accède au Service et crée un compte</li>
+                                <li><strong>'Compte'</strong> désigne l'accès personnalisé au Service</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="terms-section mb-4">
+                            <h4>3. Inscription et compte</h4>
+                            <p>Pour utiliser certaines fonctionnalités du Service, vous devez créer un compte. Lors de l'inscription, vous acceptez de fournir des informations exactes, à jour et complètes. Vous êtes responsable de la confidentialité de votre mot de passe et de toutes les activités qui se produisent sous votre compte.</p>
+                            <p>Après votre inscription, vous devrez vérifier votre adresse e-mail. Ensuite, un administrateur devra approuver votre compte avant que vous puissiez accéder à toutes les fonctionnalités du service.</p>
+                        </div>
+                        
+                        <div class="terms-section mb-4">
+                            <h4>4. Droits et responsabilités</h4>
+                            <p>En utilisant notre Service, vous acceptez de ne pas :</p>
+                            <ul>
+                                <li>Violer les lois applicables</li>
+                                <li>Distribuer des virus ou tout autre code malveillant</li>
+                                <li>Perturber ou interférer avec la sécurité du Service</li>
+                                <li>Recueillir des informations sur d'autres utilisateurs sans leur consentement</li>
+                                <li>Utiliser le Service d'une manière qui pourrait endommager, désactiver, surcharger ou altérer le Service</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="terms-section mb-4">
+                            <h4>5. Protection des données personnelles</h4>
+                            <p>Nous respectons votre vie privée et protégeons vos données personnelles conformément à notre politique de confidentialité et aux lois applicables, notamment le Règlement Général sur la Protection des Données (RGPD).</p>
+                            <p>Les données personnelles que vous nous fournissez lors de l'inscription sont utilisées uniquement dans le cadre de la fourniture de nos services et ne seront pas partagées avec des tiers sans votre consentement explicite.</p>
+                        </div>
+                        
+                        <div class="terms-section mb-4">
+                            <h4>6. Modification des conditions d'utilisation</h4>
+                            <p>Nous nous réservons le droit de modifier ces conditions d'utilisation à tout moment. Les modifications entrent en vigueur dès leur publication sur le Service. Il est de votre responsabilité de consulter régulièrement ces conditions.</p>
+                        </div>
+                        
+                        <div class="terms-section mb-4">
+                            <h4>7. Résiliation</h4>
+                            <p>Nous nous réservons le droit de suspendre ou de résilier votre compte et votre accès au Service à notre seule discrétion, sans préavis, pour conduite que nous jugeons contraire à ces conditions d'utilisation ou à toute loi applicable.</p>
+                        </div>
+                        
+                        <div class="terms-section mb-4">
+                            <h4>8. Contact</h4>
+                            <p>Si vous avez des questions concernant ces conditions d'utilisation, veuillez nous contacter à l'adresse suivante : <a href="mailto:contact@dmqode.be">contact@dmqode.be</a></p>
+                        </div>
+                        
+                        <div class="last-update">
+                            Dernière mise à jour : 23/04/2025
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Fermer'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="{{ asset('js/browser-detection.js') }}"></script>
+            <script src="{{ asset('js/cookie-modal.js') }}"></script>
+            <script src="{{ asset('js/cookie-banner.js') }}"></script>
+            <script>
+                // Initialisation du consentement aux cookies
+                document.addEventListener('cookiePreferencesUpdated', function(event) {
+                    console.log('Préférences de cookies mises à jour:', event.detail);
+                    
+                    // Si les cookies d'analytics sont acceptés
+                    if (event.detail.statistics) {
+                        // Ici vous pourriez initialiser des outils d'analyse comme Google Analytics
+                        console.log('Analytics acceptés, initialisation...');
+                    }
+                    
+                    // Si les cookies marketing sont acceptés
+                    if (event.detail.marketing) {
+                        // Ici vous pourriez initialiser des outils marketing
+                        console.log('Marketing accepté, initialisation...');
+                    }
+                    
+                    // Si les cookies fonctionnels sont acceptés
+                    if (event.detail.preferences) {
+                        // Ici vous pourriez initialiser des fonctionnalités supplémentaires
+                        console.log('Fonctionnalités acceptées, initialisation...');
+                    }
+                });
+
+                // Gestion de la modal des conditions d'utilisation
+                document.addEventListener('DOMContentLoaded', function() {
+                    const termsLink = document.getElementById('terms-link');
+                    const termsModal = document.getElementById('termsModal');
+                    
+                    if (termsLink && termsModal) {
+                        // Initialiser la modal Bootstrap
+                        const bsModal = new bootstrap.Modal(termsModal);
+                        
+                        // Ouvrir la modal au clic sur le lien
+                        termsLink.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            bsModal.show();
+                        });
+                    }
+                    
+                    // Gérer le changement de langue
+                    const languageLinks = document.querySelectorAll('.language-switcher a, #languageDropdown + .dropdown-menu a');
+                    languageLinks.forEach(link => {
+                        link.addEventListener('click', function(e) {
+                            // L'événement est géré par le contrôleur, on ne fait rien de spécial ici
+                            console.log('Changement de langue vers:', this.getAttribute('href'));
+                        });
+                    });
+                });
+            </script>
+            {% block page_javascripts %}{% endblock %}
+        {% endblock %}
+    </body>
+</html>

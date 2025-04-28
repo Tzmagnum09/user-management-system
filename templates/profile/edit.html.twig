@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Edit Profile'|trans }} - {{ parent() }}{% endblock %}
+
+{% block page_stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">{{ 'Dashboard'|trans }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_profile') }}">{{ 'My Profile'|trans }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ 'Edit'|trans }}</li>
+                </ol>
+            </nav>
+        </div>
+        
+        <div class="col-lg-8 mx-auto">
+            <div class="edit-profile-card">
+                <div class="edit-profile-header">
+                    <h1 class="edit-profile-title">{{ 'Edit Your Profile'|trans }}</h1>
+                </div>
+                
+                <div class="edit-profile-content">
+                    {{ form_start(form) }}
+                        <div class="form-section">
+                            <h2 class="form-section-title">{{ 'Personal Information'|trans }}</h2>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.firstName) }}
+                                        {{ form_widget(form.firstName) }}
+                                        {{ form_errors(form.firstName) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.lastName) }}
+                                        {{ form_widget(form.lastName) }}
+                                        {{ form_errors(form.lastName) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.phoneNumber) }}
+                                        {{ form_widget(form.phoneNumber) }}
+                                        {{ form_errors(form.phoneNumber) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.birthDate) }}
+                                        {{ form_widget(form.birthDate) }}
+                                        {{ form_errors(form.birthDate) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ form_label(form.locale) }}
+                                {{ form_widget(form.locale) }}
+                                {{ form_errors(form.locale) }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h2 class="form-section-title">{{ 'Address'|trans }}</h2>
+                            
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        {{ form_label(form.street) }}
+                                        {{ form_widget(form.street) }}
+                                        {{ form_errors(form.street) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        {{ form_label(form.houseNumber) }}
+                                        {{ form_widget(form.houseNumber) }}
+                                        {{ form_errors(form.houseNumber) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        {{ form_label(form.boxNumber) }}
+                                        {{ form_widget(form.boxNumber) }}
+                                        {{ form_errors(form.boxNumber) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        {{ form_label(form.postalCode) }}
+                                        {{ form_widget(form.postalCode) }}
+                                        {{ form_errors(form.postalCode) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        {{ form_label(form.city) }}
+                                        {{ form_widget(form.city) }}
+                                        {{ form_errors(form.city) }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ form_label(form.country) }}
+                                {{ form_widget(form.country) }}
+                                {{ form_errors(form.country) }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <a href="{{ path('app_profile') }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> {{ 'Cancel'|trans }}
+                            </a>
+                            <button type="submit" class="btn btn-gradient">
+                                <i class="fas fa-save"></i> {{ 'Save Changes'|trans }}
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

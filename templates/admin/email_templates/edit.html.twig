@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Edit Email Template'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/email-templates.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <a href="{{ path('admin_email_templates') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> {{ 'Back to email templates'|trans }}
+        </a>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4>{{ 'Edit Email Template'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.code, {
+                                label: 'Template Code'|trans
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.locale, {
+                                label: 'Language'|trans
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(form.subject, {
+                            label: 'Email Subject'|trans
+                        }) }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ 'HTML Content'|trans }}</label>
+                        <div class="alert alert-info">
+                            <strong>{{ 'Available Variables'|trans }}:</strong>
+                            <ul class="mb-0">
+                                <li><code>firstName</code> - {{ 'User\'s first name'|trans }}</li>
+                                <li><code>lastName</code> - {{ 'User\'s last name'|trans }}</li>
+                                <li><code>username</code> - {{ 'User\'s username'|trans }}</li>
+                                <li><code>domain</code> - {{ 'Site domain name'|trans }}</li>
+                                {% if email_template.code == 'registration_confirmation' %}
+                                    <li><code>signedUrl</code> - {{ 'Email verification URL'|trans }}</li>
+                                {% elseif email_template.code == 'reset_password' %}
+                                    <li><code>resetToken</code> - {{ 'Password reset URL'|trans }}</li>
+                                {% elseif email_template.code == 'role_change' %}
+                                    <li><code>previousRole</code> - {{ 'User\'s previous role'|trans }}</li>
+                                    <li><code>newRole</code> - {{ 'User\'s new role'|trans }}</li>
+                                {% elseif email_template.code == 'permission_update' %}
+                                    <li><code>permissionChanges</code> - {{ 'Details of permission changes'|trans }}</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {{ form_widget(form.htmlContent, {
+                            'attr': {'rows': 20}
+                        }) }}
+                        {{ form_errors(form.htmlContent) }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ path('admin_email_templates') }}" class="btn btn-secondary me-md-2">
+                            {{ 'Cancel'|trans }}
+                        </a>
+                        <a href="{{ path('admin_email_template_preview', {'id': email_template.id}) }}" class="btn btn-info me-md-2" target="_blank">
+                            <i class="fas fa-eye"></i> {{ 'Preview'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {{ 'Save'|trans }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Add editor enhancement here if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            // If you want to add a rich text editor like CodeMirror or TinyMCE,
+            // this would be the place to initialize it
+        });
+    </script>
+{% endblock %}

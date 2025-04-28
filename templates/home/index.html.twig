@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block page_stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/logo.png') }}" height="30" alt="Dmqode.be">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ path('app_home') }}">{{ 'Accueil'|trans }}</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_login') }}">
+                        <i class="fas fa-sign-in-alt"></i> {{ 'Connexion'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_register') }}">
+                        <i class="fas fa-user-plus"></i> {{ 'Inscription'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe"></i> {{ app.request.locale|upper }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                        {% set locales = app_supported_locales|split(',') %}
+                        {% for locale in locales %}
+                            <li><a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({_locale: locale})) }}">{{ locale|upper }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="welcome-container">
+        <div class="welcome-header">
+            <h5 class="m-0">{{ 'Bienvenue sur notre site'|trans }}</h5>
+        </div>
+        
+        <div class="welcome-content">
+            <div class="logo-container">
+                <img src="{{ asset('images/logo_black.png') }}" alt="Dmqode.be">
+            </div>
+            
+            <div class="welcome-description">
+                <p class="m-0">{{ 'Découvrez notre plateforme avec des fonctionnalités adaptées à vos besoins.'|trans }}</p>
+            </div>
+            
+            <div class="features-container">
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-purple">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="feature-title">{{ 'Inscription simple'|trans }}</div>
+                    <div class="feature-description">{{ 'Créez votre compte en quelques minutes et accédez à tous nos services.'|trans }}</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-blue">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="feature-title">{{ 'Multilingue'|trans }}</div>
+                    <div class="feature-description">{{ 'Notre site est disponible en français, néerlandais, anglais et allemand.'|trans }}</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon feature-icon-purple-dark">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-title">{{ 'Sécurisé'|trans }}</div>
+                    <div class="feature-description">{{ 'Vos données sont protégées et sécurisées selon les dernières normes.'|trans }}</div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="{{ path('app_register') }}" class="btn btn-register">{{ 'S\'inscrire'|trans }}</a>
+                <a href="{{ path('app_login') }}" class="btn btn-login">{{ 'Se connecter'|trans }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer mt-5">
+    <div class="container text-center">
+        <p>&copy; {{ 'now'|date('Y') }} {{ app_name }}. {{ 'Tous droits réservés.'|trans }}</p>
+        <p>
+            <a href="{{ path('app_cookie_preferences') }}" id="cookie-settings-link" class="cookie-settings-footer-link me-2">
+                {{ 'Préférences des cookies'|trans }}
+            </a>
+            <span class="mx-2">|</span>
+            <a href="javascript:void(0);" id="terms-link" class="cookie-settings-footer-link ms-2">
+                {{ 'Conditions d\'utilisation'|trans }}
+            </a>
+        </p>
+    </div>
+</footer>
+{% endblock %}

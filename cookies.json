@@ -1,0 +1,22 @@
+[
+    {
+        "name": "PHPSESSID",
+        "value": "rf4i78demd35oe8a7t5j796r5u",
+        "domain": "server.dmqode.be",
+        "path": "/",
+        "expires": -1,
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "main_auth_profile_token",
+        "value": "30e95d",
+        "domain": "server.dmqode.be",
+        "path": "/",
+        "expires": -1,
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "Lax"
+    }
+]

@@ -1,0 +1,224 @@
+/* Modal principale */
+.cookie-consent-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.cookie-hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+body.cookie-modal-open {
+    overflow: hidden;
+}
+
+/* Contenu de la modal */
+.cookie-modal-content {
+    background-color: #fff;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+/* En-tête de la modal */
+.cookie-modal-header {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cookie-modal-header h4 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.cookie-modal-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+/* Corps de la modal */
+.cookie-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.cookie-options {
+    margin-top: 15px;
+}
+
+.cookie-option {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.cookie-option:last-child {
+    border-bottom: none;
+}
+
+.cookie-option-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.cookie-option-title {
+    font-weight: bold;
+}
+
+.cookie-option-description {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Pied de la modal */
+.cookie-modal-footer {
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cookie-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.cookie-language-selector {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+}
+
+/* Boutons */
+.cookie-button {
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s ease;
+}
+
+.cookie-button:hover {
+    opacity: 0.9;
+}
+
+.cookie-accept {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+}
+
+.cookie-reject {
+    background: #f1f1f1;
+    color: #333;
+}
+
+.cookie-save {
+    background: #6c757d;
+    color: white;
+}
+
+/* Toggles pour les options */
+.cookie-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.cookie-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.cookie-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.cookie-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .cookie-toggle-slider {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+}
+
+input:disabled + .cookie-toggle-slider {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+input:checked + .cookie-toggle-slider:before {
+    transform: translateX(26px);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .cookie-modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .cookie-language-selector {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .cookie-buttons {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .cookie-button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}

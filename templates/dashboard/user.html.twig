@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Dashboard'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ 'Welcome'|trans }}, {{ app.user.firstName }}!</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h4>{{ 'Account Information'|trans }}</h4>
+                    <p><strong>{{ 'Email'|trans }}:</strong> {{ app.user.email }}</p>
+                    <p><strong>{{ 'Username'|trans }}:</strong> {{ app.user.username }}</p>
+                    <p><strong>{{ 'Last login'|trans }}:</strong> {{ app.user.lastLoginAt ? app.user.lastLoginAt|date('d/m/Y H:i') : 'N/A'|trans }}</p>
+                </div>
+                <div class="alert alert-light">
+                    <h4>{{ 'Personal Information'|trans }}</h4>
+                    <p><strong>{{ 'Name'|trans }}:</strong> {{ app.user.firstName }} {{ app.user.lastName }}</p>
+                    <p><strong>{{ 'Address'|trans }}:</strong> {{ app.user.street }} {{ app.user.houseNumber }}{% if app.user.boxNumber %}/{{ app.user.boxNumber }}{% endif %}, {{ app.user.postalCode }} {{ app.user.city }}, {{ app.user.country }}</p>
+                    <p><strong>{{ 'Phone'|trans }}:</strong> {{ app.user.phoneNumber }}</p>
+                    <p><strong>{{ 'Birth Date'|trans }}:</strong> {{ app.user.birthDate ? app.user.birthDate|date('d/m/Y') : 'N/A'|trans }}</p>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <a href="{{ path('app_profile') }}" class="btn btn-gradient">
+                        <i class="fas fa-user-circle"></i> {{ 'View Complete Profile'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

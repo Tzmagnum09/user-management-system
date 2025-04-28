@@ -1,0 +1,216 @@
+/* Styles pour les formulaires globaux */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: block;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:hover {
+    border-color: #3498db;
+    box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.3);
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+    outline: none;
+}
+
+.form-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    background-color: white;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-select:hover {
+    border-color: #3498db;
+    box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.3);
+}
+
+.form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+    outline: none;
+}
+
+.form-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 5px;
+    display: block;
+}
+
+.form-check {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 8px;
+}
+
+.form-check-label {
+    font-size: 0.9rem;
+}
+
+/* Style pour les champs avec icônes */
+.input-with-icon {
+    position: relative;
+}
+
+.field-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 16px;
+}
+
+.input-with-icon .form-control {
+    padding-left: 40px;
+}
+
+/* Style pour les actions de formulaire */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+/* Style pour les règles de mot de passe */
+.password-rules {
+    background-color: #f0f7fd;
+    border-left: 4px solid #3498db;
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 0 5px 5px 0;
+}
+
+.password-rules h5 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #3498db;
+}
+
+.password-rules ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.password-rules li {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Styles d'alerte */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+/* Custom Switch */
+.custom-switch {
+    padding-left: 2.5rem;
+}
+
+.custom-control-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.custom-control-label {
+    position: relative;
+    margin-bottom: 0;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.custom-control-label::before {
+    position: absolute;
+    top: 0.25rem;
+    left: -2.5rem;
+    display: block;
+    width: 2rem;
+    height: 1rem;
+    content: "";
+    background-color: #dee2e6;
+    border-radius: 1rem;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.custom-control-label::after {
+    position: absolute;
+    top: 0.25rem;
+    left: -2.5rem;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    content: "";
+    background-color: #fff;
+    border-radius: 1rem;
+    transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transform: translateX(0);
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    border-color: #8e44ad;
+}
+
+.custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(1rem);
+}

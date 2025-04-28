@@ -1,0 +1,27 @@
+{% if log.deviceBrand is defined %}
+    <div class="device-info">
+        {% if log.deviceBrand != 'Unknown' %}
+            <div class="device-brand">{{ log.deviceBrand }}</div>
+        {% endif %}
+        
+        {% if log.deviceModel != 'Unknown' and log.deviceModel != log.deviceBrand %}
+            <div class="device-model">{{ log.deviceModel }}</div>
+        {% endif %}
+        
+        {% if log.browserName != 'Unknown' %}
+            <div class="browser-name">{{ log.browserName }}</div>
+        {% endif %}
+        
+        {% if log.osName != 'Unknown' and log.osName != log.browserName and log.deviceBrand != log.osName %}
+            <div class="os-name text-muted small">{{ log.osName }}</div>
+        {% endif %}
+        
+        {% if is_granted('ROLE_SUPER_ADMIN') and app.request.query.get('debug') == '1' %}
+            <div class="user-agent-debug small text-muted mt-2" style="word-break: break-all; font-size: 0.7rem; max-width: 200px;">
+                {{ log.userAgent|slice(0, 100) }}{% if log.userAgent|length > 100 %}...{% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% else %}
+    <small class="text-muted">{{ 'Not available'|trans }}</small>
+{% endif %}

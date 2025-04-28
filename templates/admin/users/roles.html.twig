@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Edit User Roles'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/permissions.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('admin_users') }}">{{ 'Users Management'|trans }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ 'Edit User Roles'|trans }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header card-header-gradient">
+            <h3 class="mb-0">{{ 'Edit Roles for'|trans }} {{ user.firstName }} {{ user.lastName }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="alert alert-info">
+                        <strong>{{ 'Email'|trans }}:</strong> {{ user.email }}<br>
+                        <strong>{{ 'Username'|trans }}:</strong> {{ user.username }}<br>
+                        <strong>{{ 'Status'|trans }}:</strong> 
+                        {% if user.isVerified and user.isApproved %}
+                            <span class="badge bg-success">{{ 'Active'|trans }}</span>
+                        {% elseif user.isVerified and not user.isApproved %}
+                            <span class="badge bg-warning text-dark">{{ 'Pending Approval'|trans }}</span>
+                        {% else %}
+                            <span class="badge bg-danger">{{ 'Email Not Verified'|trans }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="current-roles-section">
+                        <div class="current-roles-title">
+                            <i class="fas fa-tags"></i> {{ 'Current Roles'|trans }}
+                        </div>
+                        
+                        {% if user.roles|length > 0 %}
+                            {# Trier les rôles par ordre de privilège #}
+                            {% set sortedRoles = [] %}
+                            {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+                                {% set sortedRoles = sortedRoles|merge(['ROLE_SUPER_ADMIN']) %}
+                            {% endif %}
+                            {% if 'ROLE_ADMIN' in user.roles %}
+                                {% set sortedRoles = sortedRoles|merge(['ROLE_ADMIN']) %}
+                            {% endif %}
+                            {% if 'ROLE_USER' in user.roles %}
+                                {% set sortedRoles = sortedRoles|merge(['ROLE_USER']) %}
+                            {% endif %}
+                            
+                            {# Ajouter tous les autres rôles non standard #}
+                            {% for role in user.roles %}
+                                {% if role != 'ROLE_SUPER_ADMIN' and role != 'ROLE_ADMIN' and role != 'ROLE_USER' %}
+                                    {% set sortedRoles = sortedRoles|merge([role]) %}
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {# Afficher les rôles #}
+                            {% for role in sortedRoles %}
+                                {% set roleBadgeClass = '' %}
+                                {% if role == 'ROLE_SUPER_ADMIN' %}
+                                    {% set roleBadgeClass = 'role-super-admin' %}
+                                {% elseif role == 'ROLE_ADMIN' %}
+                                    {% set roleBadgeClass = 'role-admin' %}
+                                {% elseif role == 'ROLE_USER' %}
+                                    {% set roleBadgeClass = 'role-user' %}
+                                {% endif %}
+                                
+                                <span class="badge {{ roleBadgeClass }} role-badge">
+                                    {{ role|replace({'ROLE_': ''}) }}
+                                </span>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-roles">{{ 'No roles currently assigned'|trans }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" class="roles-form">
+                <div class="alert alert-warning mb-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    {{ 'Warning: Users need appropriate roles to access the system. A user without any role will not be able to log in properly.'|trans }}
+                </div>
+                
+                {# ROLE_USER #}
+                <div class="role-checkbox-container">
+                    <div class="role-header">
+                        <div class="role-title">
+                            {{ 'User Role'|trans }}
+                            <span class="badge role-user">USER</span>
+                        </div>
+                        <div class="custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="role_user" name="form[roles][]" value="ROLE_USER" 
+                                {% if 'ROLE_USER' in user.roles %}checked{% endif %}>
+                            <label class="custom-control-label" for="role_user"></label>
+                        </div>
+                    </div>
+                    <div class="role-content">
+                        <div class="role-description">
+                            {{ 'Basic user role that allows access to the frontend and user dashboard. This is the minimum role required for any active user.'|trans }}
+                        </div>
+                        <div class="permissions-list-container">
+                            <strong>{{ 'Permissions'|trans }}:</strong>
+                            <ul class="permissions-list">
+                                <li>{{ 'Access to user dashboard'|trans }}</li>
+                                <li>{{ 'Edit own profile'|trans }}</li>
+                                <li>{{ 'View own data'|trans }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                {# ROLE_ADMIN #}
+                <div class="role-checkbox-container">
+                    <div class="role-header">
+                        <div class="role-title">
+                            {{ 'Administrator Role'|trans }}
+                            <span class="badge role-admin">ADMIN</span>
+                        </div>
+                        <div class="custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="role_admin" name="form[roles][]" value="ROLE_ADMIN" 
+                                {% if 'ROLE_ADMIN' in user.roles %}checked{% endif %}>
+                            <label class="custom-control-label" for="role_admin"></label>
+                        </div>
+                    </div>
+                    <div class="role-content">
+                        <div class="role-description">
+                            {{ 'Administrative role with access to the administration panel. Permissions for specific administrative actions can be configured separately.'|trans }}
+                        </div>
+                        <div class="permissions-list-container">
+                            <strong>{{ 'Permissions'|trans }}:</strong>
+                            <ul class="permissions-list">
+                                <li>{{ 'Access to admin dashboard'|trans }}</li>
+                                <li>{{ 'Manage users (depending on specific permissions)'|trans }}</li>
+                                <li>{{ 'Manage email templates (depending on specific permissions)'|trans }}</li>
+                                <li>{{ 'View audit logs (depending on specific permissions)'|trans }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                {# ROLE_SUPER_ADMIN #}
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div class="role-checkbox-container">
+                    <div class="role-header">
+                        <div class="role-title">
+                            {{ 'Super Administrator Role'|trans }}
+                            <span class="badge role-super-admin">SUPER_ADMIN</span>
+                        </div>
+                        <div class="custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="role_super_admin" name="form[roles][]" value="ROLE_SUPER_ADMIN" 
+                                {% if 'ROLE_SUPER_ADMIN' in user.roles %}checked{% endif %}>
+                            <label class="custom-control-label" for="role_super_admin"></label>
+                        </div>
+                    </div>
+                    <div class="role-content">
+                        <div class="role-description">
+                            {{ 'Highest level administrator role with unrestricted access to all system features and settings. This role overrides all permission settings.'|trans }}
+                        </div>
+                        <div class="permissions-list-container">
+                            <strong>{{ 'Permissions'|trans }}:</strong>
+                            <ul class="permissions-list">
+                                <li>{{ 'Full unrestricted access to all system features'|trans }}</li>
+                                <li>{{ 'Can manage other administrators'|trans }}</li>
+                                <li>{{ 'Can assign super admin privileges'|trans }}</li>
+                                <li>{{ 'System configuration and maintenance'|trans }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {# CSRF Protection #}
+                <input type="hidden" name="_token" value="{{ csrf_token('roles_' ~ user.id) }}">
+                
+                <div class="d-flex mt-4">
+                    <a href="{{ path('admin_users') }}" class="btn btn-secondary me-2">{{ 'Cancel'|trans }}</a>
+                    <button type="submit" class="btn btn-primary">{{ 'Update Roles'|trans }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+/* Styles pour profil, édition de profil, changement de mot de passe */
+
+/* Carte de profil */
+.profile-card, 
+.edit-profile-card,
+.password-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+}
+
+.profile-header,
+.edit-profile-header,
+.password-header {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    padding: 20px 25px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #8e44ad;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.profile-name {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.profile-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.edit-profile-title,
+.password-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.profile-content,
+.edit-profile-content,
+.password-content {
+    padding: 25px;
+    background-color: white;
+}
+
+/* Sections d'informations */
+.info-section {
+    margin-bottom: 25px;
+}
+
+.info-section:last-child {
+    margin-bottom: 0;
+}
+
+.info-title,
+.form-section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.info-label {
+    flex: 0 0 40%;
+    font-weight: 600;
+    color: #666;
+}
+
+.info-value {
+    flex: 0 0 60%;
+}
+
+/* Sections de formulaire */
+.form-section {
+    margin-bottom: 30px;
+}
+
+.form-section-title {
+    margin-bottom: 20px;
+}
+
+/* Boutons d'action */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.action-buttons .btn {
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+/* Formulaires */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #555;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    width: 100%;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:hover {
+    border-color: #3498db;
+    box-shadow: 0 0 0 1px rgba(52, 152, 219, 0.3);
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+    outline: none;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .info-row {
+        flex-direction: column;
+    }
+    
+    .info-label, .info-value {
+        flex: 0 0 100%;
+    }
+    
+    .info-label {
+        margin-bottom: 5px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+    }
+}

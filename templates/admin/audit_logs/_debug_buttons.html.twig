@@ -1,0 +1,14 @@
+{% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="debug-tools mb-3">
+        {% if app.request.query.get('debug') == '1' %}
+            <button id="toggleUserAgentDebug" class="btn btn-sm btn-danger">
+                <i class="fas fa-bug me-1"></i> {{ 'Disable Debug Mode'|trans }}
+            </button>
+            <small class="ms-2 text-muted">{{ 'Debug mode is active - showing User-Agents'|trans }}</small>
+        {% else %}
+            <button id="toggleUserAgentDebug" class="btn btn-sm btn-secondary">
+                <i class="fas fa-bug me-1"></i> {{ 'Enable Debug Mode'|trans }}
+            </button>
+        {% endif %}
+    </div>
+{% endif %}

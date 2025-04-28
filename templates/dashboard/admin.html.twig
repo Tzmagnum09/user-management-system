@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Dashboard'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ 'Welcome'|trans }}, {{ app.user.firstName }}!</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <p><strong>{{ 'Administrator Dashboard'|trans }}</strong></p>
+                    <p>{{ 'You have access to administration features based on your permissions.'|trans }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>{{ 'Quick Actions'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% if app.user.hasPermission('view_users') %}
+                        <a href="{{ path('admin_users') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-users fa-fw me-2"></i> {{ 'Manage Users'|trans }}
+                        </a>
+                    {% endif %}
+                    
+                    {% if app.user.hasPermission('approve_users') %}
+                        <a href="{{ path('admin_users_pending_approval') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user-check fa-fw me-2"></i> {{ 'Pending Approvals'|trans }}
+                        </a>
+                    {% endif %}
+                    
+                    {% if app.user.hasPermission('view_email_templates') %}
+                        <a href="{{ path('admin_email_templates') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-envelope-open-text fa-fw me-2"></i> {{ 'Email Templates'|trans }}
+                        </a>
+                    {% endif %}
+                    
+                    {% if app.user.hasPermission('view_audit_logs') %}
+                        <a href="{{ path('admin_audit_logs') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-history fa-fw me-2"></i> {{ 'Audit Logs'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h4>{{ 'Account Information'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>{{ 'Name'|trans }}:</strong> {{ app.user.firstName }} {{ app.user.lastName }}</p>
+                <p><strong>{{ 'Email'|trans }}:</strong> {{ app.user.email }}</p>
+                <p><strong>{{ 'Role'|trans }}:</strong> 
+                    {% for role in app.user.roles %}
+                        {% if role != 'ROLE_USER' %}
+                            {{ role|replace({'ROLE_': ''}) }}
+                            {% if not loop.last %}, {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </p>
+                <p><strong>{{ 'Last login'|trans }}:</strong> {{ app.user.lastLoginAt ? app.user.lastLoginAt|date('d/m/Y H:i') : 'N/A'|trans }}</p>
+                
+                <div class="mt-3">
+                    <a href="{{ path('app_profile') }}" class="btn btn-gradient">
+                        <i class="fas fa-user-circle"></i> {{ 'View Profile'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h4>{{ 'Your Permissions'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-header">{{ 'User Management'|trans }}</div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('view_users') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'View Users'|trans }}
+                                    </li>
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('edit_users') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'Edit Users'|trans }}
+                                    </li>
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('approve_users') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'Approve Users'|trans }}
+                                    </li>
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('delete_users') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'Delete Users'|trans }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-header">{{ 'Role Management'|trans }}</div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('assign_roles') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'Assign Roles'|trans }}
+                                    </li>
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('manage_permissions') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'Manage Permissions'|trans }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-header">{{ 'Email Management'|trans }}</div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('view_email_templates') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'View Templates'|trans }}
+                                    </li>
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('edit_email_templates') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'Edit Templates'|trans }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-header">{{ 'Audit Logs'|trans }}</div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <i class="fas {% if app.user.hasPermission('view_audit_logs') %}fa-check text-success{% else %}fa-times text-danger{% endif %} me-2"></i>
+                                        {{ 'View Audit Logs'|trans }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

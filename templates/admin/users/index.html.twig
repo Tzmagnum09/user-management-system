@@ -1,0 +1,217 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Users Management'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .role-badge {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        .role-super-admin {
+            background-color: #dc3545;
+            color: white;
+        }
+        .role-admin {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .role-user {
+            background-color: #6c757d;
+            color: white;
+        }
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .status-active {
+            background-color: #28a745;
+            color: white;
+        }
+        .status-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .status-unverified {
+            background-color: #dc3545;
+            color: white;
+        }
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .action-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .table th.roles-column {
+            width: 150px;
+        }
+        .table th.status-column {
+            width: 180px;
+        }
+        .table th.actions-column {
+            width: 120px;
+        }
+        .no-roles {
+            font-style: italic;
+            color: #999;
+            text-align: center;
+        }
+        .delete-form {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">{{ 'Users Management'|trans }}</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a href="{{ path('admin_users_pending_verification') }}" class="btn btn-primary me-2">
+                <i class="fas fa-envelope-open-text"></i> {{ 'Users Pending Verification'|trans }}
+            </a>
+            <a href="{{ path('admin_users_pending_approval') }}" class="btn btn-primary">
+                <i class="fas fa-user-check"></i> {{ 'Users Pending Approval'|trans }}
+            </a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header card-header-gradient">
+            <h3 class="mb-0">{{ 'All Users'|trans }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>{{ 'Name'|trans }}</th>
+                            <th>{{ 'Email'|trans }}</th>
+                            <th>{{ 'Username'|trans }}</th>
+                            <th class="roles-column">{{ 'Roles'|trans }}</th>
+                            <th class="status-column">{{ 'Status'|trans }}</th>
+                            <th>{{ 'Last login'|trans }}</th>
+                            <th class="actions-column">{{ 'Actions'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.firstName }} {{ user.lastName }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>
+                                    {% if user.roles|length > 0 %}
+                                        {# Trier les rôles par ordre de privilège #}
+                                        {% set sortedRoles = [] %}
+                                        {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+                                            {% set sortedRoles = sortedRoles|merge(['ROLE_SUPER_ADMIN']) %}
+                                        {% endif %}
+                                        {% if 'ROLE_ADMIN' in user.roles %}
+                                            {% set sortedRoles = sortedRoles|merge(['ROLE_ADMIN']) %}
+                                        {% endif %}
+                                        {% if 'ROLE_USER' in user.roles %}
+                                            {% set sortedRoles = sortedRoles|merge(['ROLE_USER']) %}
+                                        {% endif %}
+                                        
+                                        {# Ajouter tous les autres rôles non standard #}
+                                        {% for role in user.roles %}
+                                            {% if role != 'ROLE_SUPER_ADMIN' and role != 'ROLE_ADMIN' and role != 'ROLE_USER' %}
+                                                {% set sortedRoles = sortedRoles|merge([role]) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        
+                                        {# Afficher les rôles avec un badge par ligne #}
+                                        {% for role in sortedRoles %}
+                                            {% set roleBadgeClass = '' %}
+                                            {% if role == 'ROLE_SUPER_ADMIN' %}
+                                                {% set roleBadgeClass = 'role-super-admin' %}
+                                            {% elseif role == 'ROLE_ADMIN' %}
+                                                {% set roleBadgeClass = 'role-admin' %}
+                                            {% elseif role == 'ROLE_USER' %}
+                                                {% set roleBadgeClass = 'role-user' %}
+                                            {% endif %}
+                                            
+                                            <span class="badge {{ roleBadgeClass }} role-badge">
+                                                {{ role|replace({'ROLE_': ''}) }}
+                                            </span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="no-roles">{{ 'No roles assigned'|trans }}</div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.isVerified and user.isApproved %}
+                                        <span class="status-badge status-active">{{ 'Active'|trans }}</span>
+                                    {% elseif user.isVerified and not user.isApproved %}
+                                        <span class="status-badge status-pending">{{ 'Pending Approval'|trans }}</span>
+                                    {% else %}
+                                        <span class="status-badge status-unverified">{{ 'Email Not Verified'|trans }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ user.lastLoginAt ? user.lastLoginAt|date('d/m/Y H:i') : 'N/A'|trans }}
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-primary btn-sm action-btn">
+                                            <i class="fas fa-edit"></i> {{ 'Edit'|trans }}
+                                        </a>
+                                        
+                                        <a href="{{ path('admin_user_roles', {'id': user.id}) }}" class="btn btn-info btn-sm action-btn">
+                                            <i class="fas fa-user-tag"></i> {{ 'Roles'|trans }}
+                                        </a>
+                                        
+                                        {% if is_granted('ROLE_SUPER_ADMIN') or (is_granted('ROLE_ADMIN') and app.user.hasPermission('manage_permissions')) %}
+                                            {% if 'ROLE_ADMIN' in user.roles %}
+                                                <a href="{{ path('admin_user_permissions', {'id': user.id}) }}" class="btn btn-warning btn-sm action-btn">
+                                                    <i class="fas fa-key"></i> {{ 'Permissions'|trans }}
+                                                </a>
+                                            {% endif %}
+                                        {% endif %}
+                                        
+                                        <form action="{{ path('admin_user_delete', {'id': user.id}) }}" method="post" onsubmit="return confirm('{{ 'Are you sure you want to delete this user?'|trans }}');" class="delete-form">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm action-btn">
+                                                <i class="fas fa-trash"></i> {{ 'Delete'|trans }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center">{{ 'No users found'|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

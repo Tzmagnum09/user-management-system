@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Users Pending Verification'|trans }} - {{ parent() }}{% endblock %}
+
+{% block navbar %}
+    <div class="admin-header py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <a href="{{ path('app_dashboard') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="Dmqode.be">
+                </a>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="{{ path('app_dashboard') }}" class="nav-link me-3">
+                    <i class="fas fa-home"></i> {{ 'Dashboard'|trans }}
+                </a>
+                <div class="dropdown me-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cogs"></i> {{ 'Administration'|trans }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="{{ path('admin_users') }}"><i class="fas fa-users"></i> {{ 'Users'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_users_pending_approval') }}"><i class="fas fa-user-clock"></i> {{ 'Pending Approval'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_email_templates') }}"><i class="fas fa-envelope-open-text"></i> {{ 'Email Templates'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_audit_logs') }}"><i class="fas fa-history"></i> {{ 'Audit Logs'|trans }}</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown me-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe"></i> {{ app.request.locale|upper }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        {% set locales = app_supported_locales|split(',') %}
+                        {% for locale in locales %}
+                            <li><a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({_locale: locale})) }}">{{ locale|upper }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> {{ app.user.firstName }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> {{ 'Profile'|trans }}</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> {{ 'Logout'|trans }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>{{ 'Users Pending Email Verification'|trans }}</h2>
+            <div>
+                <a href="{{ path('admin_users') }}" class="btn btn-gradient">
+                    <i class="fas fa-arrow-left"></i> {{ 'Back to users'|trans }}
+                </a>
+                <a href="{{ path('admin_users_pending_approval') }}" class="btn btn-gradient">
+                    <i class="fas fa-user-clock"></i> {{ 'Pending Approval'|trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-gradient">
+                <h4>{{ 'Pending Email Verification'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {% if users|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'Name'|trans }}</th>
+                                    <th>{{ 'Email'|trans }}</th>
+                                    <th>{{ 'Username'|trans }}</th>
+                                    <th>{{ 'Registration Date'|trans }}</th>
+                                    <th>{{ 'Actions'|trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.firstName }} {{ user.lastName }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.username }}</td>
+                                        <td>{{ user.createdAt|date('d/m/Y H:i') }}</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <form method="post" action="{{ path('admin_user_verify', {'id': user.id}) }}" class="d-inline">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('verify' ~ user.id) }}">
+                                                    <button type="submit" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-check"></i> {{ 'Verify'|trans }}
+                                                    </button>
+                                                </form>
+                                                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-edit"></i> {{ 'Edit'|trans }}
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.id }}">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+
+                                            <!-- Delete Modal -->
+                                            <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ user.id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="deleteModalLabel{{ user.id }}">{{ 'Confirm Delete'|trans }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {{ 'Are you sure you want to delete this user?'|trans }} <br>
+                                                            <strong>{{ user.firstName }} {{ user.lastName }} ({{ user.email }})</strong>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Cancel'|trans }}</button>
+                                                            <form action="{{ path('admin_user_delete', {'id': user.id}) }}" method="post">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                                                <button type="submit" class="btn btn-danger">{{ 'Delete'|trans }}</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-success">
+                        <p>{{ 'All users have verified their email addresses.'|trans }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{{ path('admin_users') }}" class="btn btn-gradient">
+        <i class="fas fa-users"></i> {{ 'View all users'|trans }}
+    </a>
+</div>
+{% endblock %}

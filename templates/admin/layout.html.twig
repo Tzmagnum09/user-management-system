@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{{ app_name }}{% endblock %}</title>
+        <link rel="icon" href="{{ asset('favicon.png') }}">
+        {% block stylesheets %}
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+            {% block page_stylesheets %}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="admin-header">
+            <div class="container d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{{ path('app_dashboard') }}">
+                        <img src="{{ asset('images/logo.png') }}" alt="Dmqode.be">
+                    </a>
+                </div>
+                <div class="d-flex align-items-center">
+                    <a href="{{ path('app_dashboard') }}" class="me-3">
+                        <i class="fas fa-home"></i> {{ 'Dashboard'|trans }}
+                    </a>
+                    <div class="dropdown me-3">
+                        <a class="dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cogs"></i> {{ 'Administration'|trans }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <li><a class="dropdown-item" href="{{ path('admin_users') }}"><i class="fas fa-users"></i> {{ 'Users'|trans }}</a></li>
+                            <li><a class="dropdown-item" href="{{ path('admin_users_pending_approval') }}"><i class="fas fa-user-clock"></i> {{ 'Pending Approval'|trans }}</a></li>
+                            <li><a class="dropdown-item" href="{{ path('admin_email_templates') }}"><i class="fas fa-envelope-open-text"></i> {{ 'Email Templates'|trans }}</a></li>
+                            <li><a class="dropdown-item" href="{{ path('admin_audit_logs') }}"><i class="fas fa-history"></i> {{ 'Audit Logs'|trans }}</a></li>
+                            <li><a class="dropdown-item" href="{{ path('admin_http_errors') }}"><i class="fas fa-exclamation-triangle"></i> {{ 'HTTP Errors'|trans }}</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown me-3">
+                        <a class="dropdown-toggle" href="#" role="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ app.request.locale|upper }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                            {% set locales = app_supported_locales|split(',') %}
+                            {% for locale in locales %}
+                                <li><a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({_locale: locale})) }}">{{ locale|upper }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ app.user.firstName }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{{ path('app_profile') }}"><i class="fas fa-user-circle"></i> {{ 'Profile'|trans }}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> {{ 'Logout'|trans }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            {% block flash_messages %}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endblock %}
+
+            {% block body %}{% endblock %}
+        </div>
+
+        {% block footer %}
+            <footer class="footer mt-5">
+                <div class="container text-center">
+                    <p>&copy; {{ 'now'|date('Y') }} {{ app_name }}. {{ 'All rights reserved.'|trans }}</p>
+                </div>
+            </footer>
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            {% block page_javascripts %}{% endblock %}
+        {% endblock %}
+    </body>
+</html>

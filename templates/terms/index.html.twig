@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Conditions d\'utilisation'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header card-header-gradient">
+                    <h1 class="h3 mb-0">{{ 'Conditions d\'utilisation'|trans }}</h1>
+                </div>
+                <div class="card-body">
+                    <div class="terms-section mb-4">
+                        <h4>1. Introduction</h4>
+                        <p>Bienvenue sur DMQode.be. Les présentes conditions d'utilisation régissent votre utilisation de notre site web et de nos services. En vous inscrivant sur notre site, vous acceptez d'être lié par ces conditions. Veuillez les lire attentivement.</p>
+                    </div>
+                    
+                    <div class="terms-section mb-4">
+                        <h4>2. Définitions</h4>
+                        <ul>
+                            <li><strong>'Service'</strong> désigne le site web DMQode.be</li>
+                            <li><strong>'Utilisateur'</strong> désigne toute personne qui accède au Service et crée un compte</li>
+                            <li><strong>'Compte'</strong> désigne l'accès personnalisé au Service</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="terms-section mb-4">
+                        <h4>3. Inscription et compte</h4>
+                        <p>Pour utiliser certaines fonctionnalités du Service, vous devez créer un compte. Lors de l'inscription, vous acceptez de fournir des informations exactes, à jour et complètes. Vous êtes responsable de la confidentialité de votre mot de passe et de toutes les activités qui se produisent sous votre compte.</p>
+                        <p>Après votre inscription, vous devrez vérifier votre adresse e-mail. Ensuite, un administrateur devra approuver votre compte avant que vous puissiez accéder à toutes les fonctionnalités du service.</p>
+                    </div>
+                    
+                    <div class="terms-section mb-4">
+                        <h4>4. Droits et responsabilités</h4>
+                        <p>En utilisant notre Service, vous acceptez de ne pas :</p>
+                        <ul>
+                            <li>Violer les lois applicables</li>
+                            <li>Distribuer des virus ou tout autre code malveillant</li>
+                            <li>Perturber ou interférer avec la sécurité du Service</li>
+                            <li>Recueillir des informations sur d'autres utilisateurs sans leur consentement</li>
+                            <li>Utiliser le Service d'une manière qui pourrait endommager, désactiver, surcharger ou altérer le Service</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="terms-section mb-4">
+                        <h4>5. Protection des données personnelles</h4>
+                        <p>Nous respectons votre vie privée et protégeons vos données personnelles conformément à notre politique de confidentialité et aux lois applicables, notamment le Règlement Général sur la Protection des Données (RGPD).</p>
+                        <p>Les données personnelles que vous nous fournissez lors de l'inscription sont utilisées uniquement dans le cadre de la fourniture de nos services et ne seront pas partagées avec des tiers sans votre consentement explicite.</p>
+                    </div>
+                    
+                    <div class="terms-section mb-4">
+                        <h4>6. Modification des conditions d'utilisation</h4>
+                        <p>Nous nous réservons le droit de modifier ces conditions d'utilisation à tout moment. Les modifications entrent en vigueur dès leur publication sur le Service. Il est de votre responsabilité de consulter régulièrement ces conditions.</p>
+                    </div>
+                    
+                    <div class="terms-section mb-4">
+                        <h4>7. Résiliation</h4>
+                        <p>Nous nous réservons le droit de suspendre ou de résilier votre compte et votre accès au Service à notre seule discrétion, sans préavis, pour conduite que nous jugeons contraire à ces conditions d'utilisation ou à toute loi applicable.</p>
+                    </div>
+                    
+                    <div class="terms-section mb-4">
+                        <h4>8. Contact</h4>
+                        <p>Si vous avez des questions concernant ces conditions d'utilisation, veuillez nous contacter à l'adresse suivante : <a href="mailto:contact@dmqode.be">contact@dmqode.be</a></p>
+                        <p class="mt-3 text-muted">Dernière mise à jour : {{ last_update }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

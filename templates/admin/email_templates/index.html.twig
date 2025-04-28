@@ -1,0 +1,428 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Email Templates'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Style pour les boutons d'actions */
+        .actions-cell {
+            text-align: center;
+        }
+        
+        .actions-cell .btn {
+            margin: 0 5px;
+        }
+        
+        /* Style de l'accordéon des templates */
+        .template-header {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .template-header:hover {
+            background-color: #e9ecef;
+        }
+        
+        .template-header h4 {
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .template-header .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .template-header.collapsed .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Style de la fenêtre modale pour l'aperçu */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .preview-modal-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 0;
+            border: 1px solid #888;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .preview-modal-header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .preview-modal-title {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        
+        .preview-modal-close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 0.8;
+        }
+        
+        .preview-modal-close:hover {
+            color: #f1f1f1;
+        }
+        
+        .preview-modal-body {
+            padding: 15px;
+            max-height: calc(90vh - 130px);
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .preview-modal-footer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-top: 1px solid #e9ecef;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            text-align: right;
+        }
+        
+        .preview-iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .preview-loading {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        /* Style des badges de langue */
+        .badge-language {
+            display: inline-block;
+            min-width: 90px;
+            text-align: center;
+            font-weight: normal;
+        }
+        
+        /* Style pour les boutons d'action dans chaque ligne */
+        .btn-preview {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            border: none;
+        }
+        
+        .btn-preview:hover {
+            opacity: 0.9;
+            color: white;
+        }
+        
+        .btn-modifier {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+        }
+        
+        .btn-modifier:hover {
+            opacity: 0.9;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+    <div class="admin-header py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <a href="{{ path('app_dashboard') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="Dmqode.be">
+                </a>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="{{ path('app_dashboard') }}" class="nav-link me-3">
+                    <i class="fas fa-home"></i> {{ 'Dashboard'|trans }}
+                </a>
+                <div class="dropdown me-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cogs"></i> {{ 'Administration'|trans }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="{{ path('admin_users') }}"><i class="fas fa-users"></i> {{ 'Users'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_users_pending_approval') }}"><i class="fas fa-user-clock"></i> {{ 'Pending Approval'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_email_templates') }}"><i class="fas fa-envelope-open-text"></i> {{ 'Email Templates'|trans }}</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_audit_logs') }}"><i class="fas fa-history"></i> {{ 'Audit Logs'|trans }}</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown me-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe"></i> {{ app.request.locale|upper }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        {% set locales = app_supported_locales|split(',') %}
+                        {% for locale in locales %}
+                            <li><a class="dropdown-item {% if app.request.locale == locale %}active{% endif %}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({_locale: locale})) }}">{{ locale|upper }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> {{ app.user.firstName }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> {{ 'Profile'|trans }}</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> {{ 'Logout'|trans }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>{{ 'Gestion des modèles d\'email'|trans }}</h2>
+            <a href="{{ path('admin_email_template_new') }}" class="btn btn-gradient">
+                <i class="fas fa-plus"></i> {{ 'Créer un nouveau modèle'|trans }}
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-gradient">
+                <h4>{{ 'Modèles d\'email'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {% if templates|length > 0 %}
+                    <div class="accordion" id="emailTemplatesAccordion">
+                        {% for template_code, locales in templates %}
+                            <div class="mb-3">
+                                <div class="template-header {% if loop.index > 1 %}collapsed{% endif %}" data-bs-toggle="collapse" data-bs-target="#collapse{{ template_code|replace({'.': '-', '_': '-'}) }}" aria-expanded="{{ loop.index == 1 ? 'true' : 'false' }}" aria-controls="collapse{{ template_code|replace({'.': '-', '_': '-'}) }}">
+                                    <h4>
+                                        {{ template_code|replace({'_': ' '})|title }}
+                                        <i class="fas fa-chevron-down toggle-icon"></i>
+                                    </h4>
+                                </div>
+                                <div id="collapse{{ template_code|replace({'.': '-', '_': '-'}) }}" class="collapse {% if loop.index == 1 %}show{% endif %}" data-bs-parent="#emailTemplatesAccordion">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ 'Langue'|trans }}</th>
+                                                    <th>{{ 'Sujet'|trans }}</th>
+                                                    <th>{{ 'Dernière mise à jour'|trans }}</th>
+                                                    <th class="text-center">{{ 'Actions'|trans }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for locale, template in locales %}
+                                                    <tr>
+                                                        <td>
+                                                            {% if locale == 'fr' %}
+                                                                <span class="badge bg-primary badge-language">Français</span>
+                                                            {% elseif locale == 'en' %}
+                                                                <span class="badge bg-success badge-language">English</span>
+                                                            {% elseif locale == 'nl' %}
+                                                                <span class="badge bg-warning badge-language">Nederlands</span>
+                                                            {% elseif locale == 'de' %}
+                                                                <span class="badge bg-danger badge-language">Deutsch</span>
+                                                            {% else %}
+                                                                <span class="badge bg-secondary badge-language">{{ locale }}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ template.subject }}</td>
+                                                        <td>{{ template.updatedAt ? template.updatedAt|date('d/m/Y H:i') : template.createdAt|date('d/m/Y H:i') }}</td>
+                                                        <td class="actions-cell">
+                                                            <button type="button" class="btn btn-preview preview-btn" data-id="{{ template.id }}">
+                                                                <i class="fas fa-eye"></i> {{ 'Aperçu'|trans }}
+                                                            </button>
+                                                            
+                                                            <a href="{{ path('admin_email_template_edit', {'id': template.id}) }}" class="btn btn-modifier">
+                                                                <i class="fas fa-edit"></i> {{ 'Modifier'|trans }}
+                                                            </a>
+                                                            
+                                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ template.id }}">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                            
+                                                            <!-- Delete Modal -->
+                                                            <div class="modal fade" id="deleteModal{{ template.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ template.id }}" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="deleteModalLabel{{ template.id }}">{{ 'Confirm Delete'|trans }}</h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            {{ 'Are you sure you want to delete this email template?'|trans }} <br>
+                                                                            <strong>{{ template.code }} ({{ locale }})</strong>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Cancel'|trans }}</button>
+                                                                            <form action="{{ path('admin_email_template_delete', {'id': template.id}) }}" method="post">
+                                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ template.id) }}">
+                                                                                <button type="submit" class="btn btn-danger">{{ 'Delete'|trans }}</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>{{ 'No email templates found.'|trans }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fonctionnalité d'aperçu du modèle
+            const previewButtons = document.querySelectorAll('.preview-btn');
+            const previewModal = document.createElement('div');
+            previewModal.id = 'previewModal';
+            previewModal.className = 'preview-modal';
+            previewModal.innerHTML = `
+                <div class="preview-modal-content">
+                    <div class="preview-modal-header">
+                        <h5 class="preview-modal-title">{{ 'Aperçu du modèle'|trans }}</h5>
+                        <button type="button" class="preview-modal-close">&times;</button>
+                    </div>
+                    <div class="preview-modal-body">
+                        <div id="previewLoading" class="preview-loading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Chargement...</span>
+                            </div>
+                            <p class="mt-2">Chargement de l'aperçu...</p>
+                        </div>
+                        <iframe id="previewFrame" class="preview-iframe" style="display: none;"></iframe>
+                    </div>
+                    <div class="preview-modal-footer">
+                        <button type="button" class="btn btn-secondary" id="previewCloseButton">{{ 'Fermer'|trans }}</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(previewModal);
+
+            const modalElement = document.getElementById('previewModal');
+            const modalCloseBtn = modalElement.querySelector('.preview-modal-close');
+            const closeButton = modalElement.querySelector('#previewCloseButton');
+            const previewFrame = document.getElementById('previewFrame');
+            const previewLoading = document.getElementById('previewLoading');
+
+            // Fonction pour ouvrir la modal
+            function openModal(templateId) {
+                modalElement.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Empêcher le défilement en arrière-plan
+                
+                // Afficher le chargement et masquer l'iframe
+                previewLoading.style.display = 'block';
+                previewFrame.style.display = 'none';
+                
+                // Construire l'URL de prévisualisation
+                const previewUrl = '{{ path("admin_email_template_preview", {"id": "TEMPLATE_ID"}) }}'.replace('TEMPLATE_ID', templateId);
+                
+                // Charger l'aperçu dans l'iframe
+                previewFrame.onload = function() {
+                    // Masquer le chargement et afficher l'iframe une fois chargé
+                    previewLoading.style.display = 'none';
+                    previewFrame.style.display = 'block';
+                };
+                
+                previewFrame.src = previewUrl;
+            }
+
+            // Fonction pour fermer la modal
+            function closeModal() {
+                modalElement.style.display = 'none';
+                document.body.style.overflow = ''; // Restaurer le défilement
+                // Réinitialiser l'iframe
+                previewFrame.src = 'about:blank';
+            }
+
+            // Ajouter les écouteurs d'événements aux boutons d'aperçu
+            previewButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const templateId = this.getAttribute('data-id');
+                    openModal(templateId);
+                });
+            });
+
+            // Ajouter les écouteurs d'événements pour fermer la modal
+            modalCloseBtn.addEventListener('click', closeModal);
+            closeButton.addEventListener('click', closeModal);
+
+            // Fermer la modal en cliquant en dehors
+            window.addEventListener('click', function(event) {
+                if (event.target === modalElement) {
+                    closeModal();
+                }
+            });
+
+            // Fermer la modal avec la touche Échap
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modalElement.style.display === 'block') {
+                    closeModal();
+                }
+            });
+            
+            // Animation des en-têtes d'accordéon
+            const templateHeaders = document.querySelectorAll('.template-header');
+            templateHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('collapsed');
+                });
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,458 @@
+/* Styles pour les pages d'administration */
+
+/* Header d'administration */
+.admin-header {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    padding: 10px 0;
+}
+
+.admin-header a {
+    color: white;
+    text-decoration: none;
+}
+
+.admin-header img {
+    max-height: 40px;
+}
+
+.admin-header .nav-link {
+    color: white !important;
+}
+
+.admin-header .nav-link:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Tableaux */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    padding: 12px 8px;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+/* Badges pour rôles */
+.role-badge {
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.role-super-admin {
+    background-color: #dc3545;
+    color: white;
+}
+
+.role-admin {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.role-user {
+    background-color: #6c757d;
+    color: white;
+}
+
+.no-roles {
+    font-style: italic;
+    color: #999;
+    text-align: center;
+}
+
+/* Badges de statut */
+.status-badge {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.status-active {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-pending {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.status-unverified {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Gestion des utilisateurs */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.action-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* Gestion des rôles */
+.role-checkbox-container {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.role-header {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.role-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.role-title .badge {
+    margin-left: 10px;
+}
+
+.role-content {
+    padding: 15px;
+    background-color: #f9f9fa;
+}
+
+.role-description {
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.permissions-list {
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+
+.permissions-list li {
+    margin-bottom: 5px;
+}
+
+.current-roles-section {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.current-roles-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.current-roles-title i {
+    margin-right: 8px;
+    color: #6c757d;
+}
+
+/* Templates d'emails */
+.variables-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.variables-header {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 16px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.variables-content {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.variables-group {
+    margin-bottom: 20px;
+}
+
+.variables-group-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+.variable-input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}
+
+.variable-input:hover {
+    background-color: #f1f1f1;
+}
+
+.email-editor-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+/* Accordéon des templates d'emails */
+.template-header {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.template-header:hover {
+    background-color: #e9ecef;
+}
+
+.template-header h4 {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.template-header .toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.template-header.collapsed .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Badges de langue */
+.badge-language {
+    display: inline-block;
+    min-width: 90px;
+    text-align: center;
+    font-weight: normal;
+}
+
+/* Style pour les boutons d'action dans chaque ligne */
+.btn-preview {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    border: none;
+}
+
+.btn-preview:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+.btn-modifier {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+}
+
+.btn-modifier:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+/* Modal d'aperçu d'email */
+.preview-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.preview-modal.show {
+    display: flex;
+}
+
+.preview-modal-content {
+    background-color: #fefefe;
+    margin: 2% auto;
+    padding: 0;
+    border: 1px solid #888;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-modal-header {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    padding: 15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preview-modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.preview-modal-close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 0.8;
+}
+
+.preview-modal-close:hover {
+    color: #f1f1f1;
+}
+
+.preview-modal-body {
+    padding: 15px;
+    max-height: calc(90vh - 130px);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.preview-modal-footer {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-top: 1px solid #e9ecef;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    text-align: right;
+}
+
+.preview-iframe {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.preview-loading {
+    text-align: center;
+    padding: 50px 0;
+}
+
+/* Audit logs */
+.delete-form {
+    margin: 0;
+    padding: 0;
+}
+
+.card-header-gradient {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.permissions-list {
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+
+.permissions-list li {
+    margin-bottom: 5px;
+}
+
+.list-group-item {
+    border: 1px solid rgba(0,0,0,.125);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 10px;
+}
+
+.form-check-label {
+    font-weight: 500;
+}
+
+.permissions-card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: white;
+    border: none;
+    transition: opacity 0.3s;
+}
+
+.btn-gradient:hover {
+    opacity: 0.9;
+    color: white;
+}

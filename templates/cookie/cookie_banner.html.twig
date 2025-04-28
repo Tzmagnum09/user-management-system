@@ -1,0 +1,33 @@
+<!-- Bannière de cookies -->
+<div id="cookie-banner" class="cookie-banner d-none">
+    <div class="cookie-banner-content">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h5>{{ 'cookie.banner.title'|trans }}</h5>
+                <p>{{ 'cookie.banner.content'|trans }}</p>
+            </div>
+            <div class="col-md-4 cookie-banner-buttons">
+                <select id="cookie-language-selector" class="form-select mb-2">
+                    {% set locales = app_supported_locales|split(',') %}
+                    {% for locale in locales %}
+                        <option value="{{ locale }}" {% if app.request.locale == locale %}selected{% endif %}>
+                            {% if locale == 'fr' %}Français{% endif %}
+                            {% if locale == 'en' %}English{% endif %}
+                            {% if locale == 'nl' %}Nederlands{% endif %}
+                            {% if locale == 'de' %}Deutsch{% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button id="customize-cookies-btn" class="btn btn-cookie-customize me-2">
+                    {{ 'cookie.banner.customize'|trans }}
+                </button>
+                <button id="necessary-cookies-btn" class="btn btn-cookie-necessary me-2">
+                    {{ 'cookie.banner.necessary_only'|trans }}
+                </button>
+                <button id="accept-all-cookies-btn" class="btn btn-cookie-accept">
+                    {{ 'cookie.banner.accept_all'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

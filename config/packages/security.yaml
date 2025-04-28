@@ -1,0 +1,44 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                default_target_path: app_dashboard
+                username_parameter: email
+                password_parameter: password
+            logout:
+                path: app_logout
+                target: app_home  # Modifié pour rediriger vers la page d'accueil après déconnexion
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2592000 # 30 jours
+            
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/super-admin, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        - { path: ^/verify/email, roles: PUBLIC_ACCESS }
+        - { path: ^/$, roles: PUBLIC_ACCESS }  # Ajout de cette ligne pour permettre l'accès à la page d'accueil
+        - { path: ^/, roles: ROLE_USER }

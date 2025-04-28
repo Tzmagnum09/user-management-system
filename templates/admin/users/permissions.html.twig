@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'User Permissions'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/permissions.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('admin_users') }}">{{ 'Users Management'|trans }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ 'Edit Permissions for'|trans }} {{ user.firstName }} {{ user.lastName }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 col-md-12 mx-auto">
+            <!-- User Info Card -->
+            <div class="user-info-card">
+                <div class="user-info-header">
+                    <i class="fas fa-user-shield me-2"></i> {{ 'Edit Permissions for'|trans }} {{ user.firstName }} {{ user.lastName }}
+                </div>
+                <div class="user-info-body">
+                    <div class="user-avatar">
+                        {{ user.firstName|first }}{{ user.lastName|first }}
+                    </div>
+                    <div class="user-details">
+                        <p><i class="fas fa-envelope"></i> <strong>{{ 'Email'|trans }}:</strong> {{ user.email }}</p>
+                        <p><i class="fas fa-user-tag"></i> <strong>{{ 'Current Role'|trans }}:</strong> 
+                            {% for role in user.roles %}
+                                {% if role != 'ROLE_USER' %}
+                                    <span class="badge {% if role == 'ROLE_SUPER_ADMIN' %}bg-danger{% elseif role == 'ROLE_ADMIN' %}bg-warning text-dark{% else %}bg-secondary{% endif %} ms-1">
+                                        {{ role|replace({'ROLE_': ''}) }}
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p><i class="fas fa-calendar-alt"></i> <strong>{{ 'Registration Date'|trans }}:</strong> {{ user.createdAt|date('d/m/Y H:i') }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" action="{{ path('admin_user_permissions', {'id': user.id}) }}">
+                <!-- Permissions Cards -->
+                <div class="permissions-wrapper">
+                    <!-- User Management Card -->
+                    <div class="permission-card">
+                        <div class="permission-header">
+                            <i class="fas fa-users-cog"></i> {{ 'User Management'|trans }}
+                        </div>
+                        <div class="permission-body">
+                            {% if permissions['user_management'] is defined %}
+                                {% for permission_key, permission_label in permissions['user_management'] %}
+                                    <div class="permission-item">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" 
+                                                name="permissions[]" 
+                                                value="{{ permission_key }}"
+                                                {% if userPermissions[permission_key] is defined and userPermissions[permission_key] %}checked{% endif %}
+                                            >
+                                            <span class="checkmark"></span>
+                                            {{ permission_label|trans }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-center text-muted py-3">{{ 'No permissions available'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Role Management Card -->
+                    <div class="permission-card">
+                        <div class="permission-header">
+                            <i class="fas fa-user-tag"></i> {{ 'Role Management'|trans }}
+                        </div>
+                        <div class="permission-body">
+                            {% if permissions['role_management'] is defined %}
+                                {% for permission_key, permission_label in permissions['role_management'] %}
+                                    <div class="permission-item">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" 
+                                                name="permissions[]" 
+                                                value="{{ permission_key }}"
+                                                {% if userPermissions[permission_key] is defined and userPermissions[permission_key] %}checked{% endif %}
+                                            >
+                                            <span class="checkmark"></span>
+                                            {{ permission_label|trans }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-center text-muted py-3">{{ 'No permissions available'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Email Management Card -->
+                    <div class="permission-card">
+                        <div class="permission-header">
+                            <i class="fas fa-envelope-open-text"></i> {{ 'Email Management'|trans }}
+                        </div>
+                        <div class="permission-body">
+                            {% if permissions['email_management'] is defined %}
+                                {% for permission_key, permission_label in permissions['email_management'] %}
+                                    <div class="permission-item">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" 
+                                                name="permissions[]" 
+                                                value="{{ permission_key }}"
+                                                {% if userPermissions[permission_key] is defined and userPermissions[permission_key] %}checked{% endif %}
+                                            >
+                                            <span class="checkmark"></span>
+                                            {{ permission_label|trans }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-center text-muted py-3">{{ 'No permissions available'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Audit Logs Card -->
+                    <div class="permission-card">
+                        <div class="permission-header">
+                            <i class="fas fa-history"></i> {{ 'Audit Logs'|trans }}
+                        </div>
+                        <div class="permission-body">
+                            {% if permissions['audit_logs'] is defined %}
+                                {% for permission_key, permission_label in permissions['audit_logs'] %}
+                                    <div class="permission-item">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" 
+                                                name="permissions[]" 
+                                                value="{{ permission_key }}"
+                                                {% if userPermissions[permission_key] is defined and userPermissions[permission_key] %}checked{% endif %}
+                                            >
+                                            <span class="checkmark"></span>
+                                            {{ permission_label|trans }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-center text-muted py-3">{{ 'No permissions available'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="{{ path('admin_users') }}" class="btn btn-cancel">
+                        <i class="fas fa-times me-2"></i>{{ 'Cancel'|trans }}
+                    </a>
+                    <button type="submit" class="btn btn-gradient">
+                        <i class="fas fa-save me-2"></i>{{ 'Save Permissions'|trans }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

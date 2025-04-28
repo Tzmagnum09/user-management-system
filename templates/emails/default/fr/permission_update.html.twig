@@ -1,0 +1,75 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mise à jour de vos permissions</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .header {
+        background: linear-gradient(135deg, #8e44ad, #3498db);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    .content {
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+    .button {
+        display: inline-block;
+        background: linear-gradient(135deg, #8e44ad, #3498db);
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+        margin-top: 20px;
+    }
+    .permission-changes {
+        background-color: #f1f1f1;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="container">
+    <div class="header">
+        <h1>Modification de vos permissions</h1>
+    </div>
+    <div class="content">
+        <p>Bonjour {{ firstName }},</p>
+        
+        <p>Nous vous informons que vos permissions sur le site Dmqode.be ont été modifiées.</p>
+
+        <div class="permission-changes">
+            <h3>Détails des modifications</h3>
+            <p>{{ permissionChanges|raw }}</p>
+        </div>
+        
+        <p>Si vous avez des questions sur ces modifications, n'hésitez pas à contacter notre support.</p>
+        
+        <p style="text-align: center;">
+            <a href="https://{{ domain }}/login" class="button">Se connecter</a>
+        </p>
+        
+        <p>Cordialement,<br>L'équipe Dmqode.be</p>
+    </div>
+    <div class="footer">
+        <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+    </div>
+</div>

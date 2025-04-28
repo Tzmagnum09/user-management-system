@@ -1,0 +1,515 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'New Email Template'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .email-editor-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .variables-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .variables-header {
+            background: linear-gradient(135deg, #8e44ad, #3498db);
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .variables-content {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+        .variables-description {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .variables-group {
+            margin-bottom: 20px;
+        }
+        .variables-group-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+        .variable-input {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 8px;
+            margin-bottom: 8px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+        }
+        .variable-input:hover {
+            background-color: #f1f1f1;
+        }
+        .tox-tinymce {
+            border-radius: 4px;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        /* Ajout pour gérer l'affichage du champ de code personnalisé */
+        #custom_code_container {
+            transition: all 0.3s ease;
+        }
+        .help-text {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <a href="{{ path('admin_email_templates') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> {{ 'Back to email templates'|trans }}
+        </a>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4>{{ 'Create New Email Template'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                    {% if form.template_selection is defined %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.template_selection) }}
+                        </div>
+                        <div class="col-md-6" id="custom_code_container">
+                            {{ form_row(form.code) }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form_row(form.code) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.locale) }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        {{ form_row(form.subject) }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form_row(form.locale) }}
+                    </div>
+
+                    <!-- Éditeur HTML -->
+                    <div class="email-editor-container">
+                        {{ form_widget(form.htmlContent, { 'attr': {'class': 'tinymce-editor'} }) }}
+                    </div>
+
+                    <!-- Variables disponibles - Déplacé en dessous de l'éditeur -->
+                    <div class="variables-container">
+                        <p>Vous pouvez utiliser les variables ci-dessous dans votre modèle. Elles seront remplacées par les valeurs réelles lors de l'envoi.</p>
+                        
+                        <div class="variables-header">
+                            Variables disponibles
+                        </div>
+                        <div class="variables-content">
+                            <!-- Informations personnelles -->
+                            <div class="variables-group">
+                                <div class="variables-group-title">Informations personnelles</div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Prénom de l'utilisateur" data-var="firstName">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Nom de l'utilisateur" data-var="lastName">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Nom complet de l'utilisateur" data-var="fullName">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Adresse email de l'utilisateur" data-var="email">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Nom d'utilisateur" data-var="username">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Numéro de téléphone" data-var="phoneNumber">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Date de naissance" data-var="birthDate">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Âge de l'utilisateur" data-var="age">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Adresse -->
+                            <div class="variables-group">
+                                <div class="variables-group-title">Adresse</div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Rue" data-var="street">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Numéro de maison" data-var="houseNumber">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Numéro de boîte" data-var="boxNumber">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Code postal" data-var="postalCode">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Ville" data-var="city">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Pays" data-var="country">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Adresse complète" data-var="fullAddress">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Système et dates -->
+                            <div class="variables-group">
+                                <div class="variables-group-title">Système et dates</div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text" readonly class="variable-input" value="Langue préférée de l'utilisateur" data-var="locale">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" readonly class="variable-input" value="Nom de domaine du site" data-var="domain">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" readonly class="variable-input" value="Date d'inscription" data-var="createdAt">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Variables spécifiques -->
+                            <div class="variables-group">
+                                <div class="variables-group-title">Variables spécifiques</div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="URL de vérification d'email" data-var="signedUrl">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Token de réinitialisation de mot de passe" data-var="resetToken">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Rôle précédent" data-var="previousRole">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Nouveau rôle" data-var="newRole">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-6">
+                                        <input type="text" readonly class="variable-input" value="Détails des modifications de permissions" data-var="permissionChanges">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" readonly class="variable-input" value="Durée de validité du lien" data-var="tokenLifetime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <div>
+                            <a href="{{ path('admin_email_templates') }}" class="btn btn-secondary">
+                                {{ 'Cancel'|trans }}
+                            </a>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> {{ 'Create'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- TinyMCE avec API key -->
+    <script src="https://cdn.tiny.cloud/1/mdyxgt84w9fonoc3bvhrh3kfezt64bf9ah4fc8zitm8w1gjb/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion du champ de code personnalisé
+            const templateSelector = document.getElementById('template_selection');
+            const customCodeContainer = document.getElementById('custom_code_container');
+            const customCodeInput = document.getElementById('custom_code');
+            
+            // Fonction pour afficher/masquer le champ de code personnalisé
+            if (templateSelector && customCodeContainer && customCodeInput) {
+                // Initialisation au chargement de la page
+                if (templateSelector.value !== 'custom') {
+                    customCodeInput.value = templateSelector.value;
+                    customCodeInput.readOnly = true;
+                } else {
+                    customCodeInput.readOnly = false;
+                }
+                
+                // Écouteur d'événement pour le changement de sélection
+                templateSelector.addEventListener('change', function() {
+                    if (this.value === 'custom') {
+                        // Option personnalisée sélectionnée
+                        customCodeInput.value = '';
+                        customCodeInput.readOnly = false;
+                        customCodeInput.placeholder = 'Saisissez votre code personnalisé';
+                        customCodeInput.focus();
+                    } else {
+                        // Option prédéfinie sélectionnée
+                        customCodeInput.value = this.value;
+                        customCodeInput.readOnly = true;
+                    }
+                });
+            }
+            
+            // Obtenir la langue de l'utilisateur depuis la locale de l'application
+            const userLocale = '{{ app.request.locale }}';
+            
+            // Conversion de la locale vers le format TinyMCE
+            let tinyMceLanguage = 'fr_FR'; // Par défaut le français
+            
+            // Correspondance des locales
+            const localeMapping = {
+                'fr': 'fr_FR',
+                'en': 'en_US',
+                'de': 'de',
+                'nl': 'nl'
+            };
+            
+            // Si la locale est supportée, utilisez-la
+            if (localeMapping[userLocale]) {
+                tinyMceLanguage = localeMapping[userLocale];
+            }
+            
+            // Initialisation de TinyMCE avec la langue adaptée
+            tinymce.init({
+                selector: '.tinymce-editor',
+                height: 500,
+                menubar: true,
+                plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                ],
+                toolbar: 'undo redo | blocks | ' +
+                    'bold italic forecolor backcolor | ' +
+                    'alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | removeformat | ' +
+                    'link image media table | code | help',
+                // Activation des styles en ligne
+                inline_styles: true,
+                // Configuration des styles de contenu
+                content_style: `
+                    body {
+                        font-family: Arial, sans-serif;
+                        line-height: 1.6;
+                        color: #333;
+                        margin: 0;
+                        padding: 20px;
+                    }
+                    .header {
+                        background: linear-gradient(135deg, #8e44ad, #3498db);
+                        color: white;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    .content {
+                        padding: 20px;
+                        background-color: #f9f9f9;
+                    }
+                    .button {
+                        display: inline-block;
+                        background: linear-gradient(135deg, #8e44ad, #3498db);
+                        color: white;
+                        text-decoration: none;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        margin-top: 20px;
+                    }
+                    .footer {
+                        text-align: center;
+                        font-size: 12px;
+                        color: #777;
+                        margin-top: 20px;
+                    }
+                `,
+                language: tinyMceLanguage, // Utiliser la langue détectée
+                branding: false, // Supprimer la marque TinyMCE
+                promotion: false, // Supprimer la promotion
+                setup: function(editor) {
+                    // Ajout d'un événement pour notifier quand l'éditeur est prêt
+                    editor.on('init', function() {
+                        window.tinyMCEInitialized = true;
+                    });
+                }
+            });
+            
+            // Variables cliquables avec format %variableName%
+            const variables = document.querySelectorAll('.variable-input');
+            variables.forEach(function(variable) {
+                variable.addEventListener('click', function() {
+                    const variableName = this.getAttribute('data-var');
+                    const activeEditor = tinymce.activeEditor;
+                    
+                    if (activeEditor) {
+                        // Insertion au format %variableName%
+                        activeEditor.execCommand('mceInsertContent', false, '%' + variableName + '%');
+                        activeEditor.focus();
+                    }
+                });
+            });
+
+            // Écouteur d'événement pour le changement de langue
+            const localeSelect = document.querySelector('#email_template_locale');
+            
+            // Initialiser le chargement du template par défaut une fois que TinyMCE est initialisé
+            const waitForInitialLoad = setInterval(function() {
+                if (window.tinyMCEInitialized && tinymce.activeEditor) {
+                    clearInterval(waitForInitialLoad);
+                    // Attendre un peu pour s'assurer que tout est bien initialisé
+                    setTimeout(() => {
+                        // Charger le template par défaut basé sur les valeurs initiales
+                        if (templateSelector && templateSelector.value && templateSelector.value !== 'custom') {
+                            loadTemplateForCodeAndLocale(templateSelector.value, localeSelect.value);
+                        }
+                    }, 500);
+                }
+            }, 100);
+            
+            // Fonction pour charger le template correspondant au code et à la locale
+            function loadTemplateForCodeAndLocale(code, locale) {
+                if (!code || !locale || code === 'custom') return;
+                
+                // Afficher un indicateur de chargement
+                const loadingIndicator = document.createElement('div');
+                loadingIndicator.id = 'template-loading-indicator';
+                loadingIndicator.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Chargement...</span></div><p class="mt-2">Chargement du template...</p>';
+                loadingIndicator.style.position = 'fixed';
+                loadingIndicator.style.top = '50%';
+                loadingIndicator.style.left = '50%';
+                loadingIndicator.style.transform = 'translate(-50%, -50%)';
+                loadingIndicator.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                loadingIndicator.style.padding = '20px';
+                loadingIndicator.style.borderRadius = '5px';
+                loadingIndicator.style.zIndex = '9999';
+                loadingIndicator.style.textAlign = 'center';
+                document.body.appendChild(loadingIndicator);
+                
+                // Créer et envoyer la requête AJAX
+                const formData = new FormData();
+                formData.append('code', code);
+                formData.append('locale', locale);
+                
+                fetch('{{ path("admin_email_template_by_code_locale") }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Supprimer l'indicateur de chargement
+                    document.body.removeChild(loadingIndicator);
+                    
+                    if (data.success && data.template) {
+                        // Mettre à jour le sujet
+                        const subjectField = document.querySelector('#email_template_subject');
+                        if (subjectField) {
+                            subjectField.value = data.template.subject;
+                        }
+                        
+                        // Mettre à jour le contenu de l'éditeur TinyMCE
+                        if (tinymce.activeEditor) {
+                            tinymce.activeEditor.setContent(data.template.htmlContent);
+                        }
+
+                        // Afficher un message si c'est un template par défaut
+                        if (data.isDefault) {
+                            // Créer une notification
+                            const alertDiv = document.createElement('div');
+                            alertDiv.className = 'alert alert-info alert-dismissible fade show mt-3';
+                            alertDiv.innerHTML = `
+                                <strong>Information :</strong> Nous avons chargé un modèle par défaut pour ce type d'email. Vous pouvez le modifier selon vos besoins.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            `;
+                            
+                            // Ajouter la notification avant les variables
+                            const variablesContainer = document.querySelector('.variables-container');
+                            if (variablesContainer) {
+                                variablesContainer.parentNode.insertBefore(alertDiv, variablesContainer);
+                            }
+                            
+                            // Suppression automatique après 5 secondes
+                            setTimeout(() => {
+                                alertDiv.remove();
+                            }, 5000);
+                        }
+                    } else {
+                        // Afficher un message d'erreur
+                        const errorMessage = data.message || 'Erreur lors du chargement du template';
+                        alert(errorMessage);
+                    }
+                })
+                .catch(error => {
+                    // Supprimer l'indicateur de chargement
+                    document.body.removeChild(loadingIndicator);
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors du chargement du template');
+                });
+            }
+            
+            // Ajouter un écouteur d'événement pour le changement de modèle
+            if (templateSelector) {
+                templateSelector.addEventListener('change', function() {
+                    if (this.value && this.value !== 'custom') {
+                        loadTemplateForCodeAndLocale(this.value, localeSelect.value);
+                    }
+                });
+            }
+            
+            // Ajouter un écouteur d'événement pour le changement de langue
+            if (localeSelect && templateSelector) {
+                localeSelect.addEventListener('change', function() {
+                    if (templateSelector.value && templateSelector.value !== 'custom') {
+                        loadTemplateForCodeAndLocale(templateSelector.value, this.value);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}
