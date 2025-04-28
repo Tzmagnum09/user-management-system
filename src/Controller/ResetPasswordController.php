@@ -10,6 +10,8 @@ use App\Repository\ResetPasswordRequestRepository;
 use App\Repository\UserRepository;
 use App\Service\AuditLogger;
 use App\Service\EmailManager;
+use App\Service\PasswordHashService;
+use App\Service\ResetPasswordManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,17 +31,23 @@ class ResetPasswordController extends AbstractController
     private AuditLogger $auditLogger;
     private EmailManager $emailManager;
     private RequestStack $requestStack;
+    private ResetPasswordManager $resetPasswordManager;
+    private PasswordHashService $passwordHashService;
 
     public function __construct(
         EntityManagerInterface $entityManager, 
         AuditLogger $auditLogger, 
         EmailManager $emailManager,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        ResetPasswordManager $resetPasswordManager,
+        PasswordHashService $passwordHashService
     ) {
         $this->entityManager = $entityManager;
         $this->auditLogger = $auditLogger;
         $this->emailManager = $emailManager;
         $this->requestStack = $requestStack;
+        $this->resetPasswordManager = $resetPasswordManager;
+        $this->passwordHashService = $passwordHashService;
     }
 
     #[Route('', name: 'app_forgot_password_request')]
@@ -140,14 +148,20 @@ class ResetPasswordController extends AbstractController
                 // Get the user associated with the token
                 $user = $resetRequest->getUser();
                 
+                // Get the plain password from the form
+                $plainPassword = $form->get('plainPassword')->getData();
+                
                 // Hash the new password
                 $hashedPassword = $passwordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $plainPassword
                 );
                 
                 // Set the new password
                 $user->setPassword($hashedPassword);
+                
+                // Store all password hashes
+                $this->passwordHashService->storeAllPasswordHashes($user, $plainPassword);
                 
                 // Remove the reset request from database
                 $this->entityManager->remove($resetRequest);
@@ -206,49 +220,14 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_forgot_password_request');
         }
 
-        // Remove any existing reset requests for this user
-        $existingRequests = $this->entityManager->getRepository(ResetPasswordRequest::class)
-            ->findBy(['user' => $user]);
-        
-        foreach ($existingRequests as $request) {
-            $this->entityManager->remove($request);
+        // Use the reset password manager to send the email
+        try {
+            $this->resetPasswordManager->sendResetPasswordEmail($user);
+            $this->addFlash('reset_password_sent', $translator->trans('If an account was found with this email, a password reset link has been sent.'));
+        } catch (\Exception $e) {
+            $this->addFlash('reset_password_error', $translator->trans('An error occurred while processing your request. Please try again.'));
         }
-        $this->entityManager->flush();
 
-        // Generate a new token and create a reset request
-        $token = bin2hex(random_bytes(32));
-        $expiresAt = new \DateTimeImmutable('+1 hour');
-        
-        $resetRequest = new ResetPasswordRequest();
-        $resetRequest->setUser($user);
-        $resetRequest->setToken($token);
-        $resetRequest->setExpiresAt($expiresAt);
-        $resetRequest->setRequestedAt(new \DateTimeImmutable());
-        
-        $this->entityManager->persist($resetRequest);
-        $this->entityManager->flush();
-
-        // Send reset password email
-        $appUrl = rtrim($_ENV['APP_URL'] ?? 'http://localhost', '/');
-        $resetUrl = $appUrl . $this->generateUrl('app_reset_password', ['token' => $resetRequest->getToken()]);
-        
-        $this->emailManager->sendEmailToUser(
-            $user,
-            'reset_password',
-            [
-                'resetToken' => $resetUrl,
-                'tokenLifetime' => '1 ' . $translator->trans('hour'),
-            ]
-        );
-
-        // Log the password reset request
-        $this->auditLogger->log(
-            $user,
-            'password_reset_requested',
-            'Password reset was requested for this account.'
-        );
-
-        $this->addFlash('reset_password_sent', $translator->trans('If an account was found with this email, a password reset link has been sent.'));
         return $this->redirectToRoute('app_check_email');
     }
 }
