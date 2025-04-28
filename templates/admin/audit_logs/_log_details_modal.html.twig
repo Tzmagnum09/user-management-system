@@ -17,7 +17,25 @@
                     <dt class="col-sm-3">{{ 'Type'|trans }}</dt>
                     <dd class="col-sm-9">
                         <span class="badge badge-{{ log.type }}">
-                            {{ log.typeLabel }}
+                            {% if log.type == 'view' %}
+                                {{ 'Consultation'|trans }}
+                            {% elseif log.type == 'create' %}
+                                {{ 'Création'|trans }}
+                            {% elseif log.type == 'update' %}
+                                {{ 'Modification'|trans }}
+                            {% elseif log.type == 'delete' %}
+                                {{ 'Suppression'|trans }}
+                            {% elseif log.type == 'login' %}
+                                {{ 'Connexion'|trans }}
+                            {% elseif log.type == 'security' %}
+                                {{ 'Sécurité'|trans }}
+                            {% elseif log.type == 'error' %}
+                                {{ 'Erreur'|trans }}
+                            {% elseif log.type == 'system' %}
+                                {{ 'Système'|trans }}
+                            {% else %}
+                                {{ log.typeLabel }}
+                            {% endif %}
                         </span>
                     </dd>
                     

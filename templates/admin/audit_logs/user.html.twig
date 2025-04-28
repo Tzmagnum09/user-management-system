@@ -111,7 +111,25 @@
                     <li class="nav-item">
                         <a class="nav-link {% if current_type == type %}active{% endif %}" 
                            href="{{ path('admin_audit_logs_user', {'id': user.id, 'type': type, 'action': current_action}) }}">
-                            {{ label }}
+                            {% if type == 'view' %}
+                                {{ 'Consultation'|trans }}
+                            {% elseif type == 'create' %}
+                                {{ 'Création'|trans }}
+                            {% elseif type == 'update' %}
+                                {{ 'Modification'|trans }}
+                            {% elseif type == 'delete' %}
+                                {{ 'Suppression'|trans }}
+                            {% elseif type == 'login' %}
+                                {{ 'Connexion'|trans }}
+                            {% elseif type == 'security' %}
+                                {{ 'Sécurité'|trans }}
+                            {% elseif type == 'error' %}
+                                {{ 'Erreur'|trans }}
+                            {% elseif type == 'system' %}
+                                {{ 'Système'|trans }}
+                            {% else %}
+                                {{ label }}
+                            {% endif %}
                         </a>
                     </li>
                 {% endfor %}
@@ -123,7 +141,25 @@
             <div class="card-header bg-gradient-primary text-white">
                 <h4>
                     {% if current_type %}
-                        {{ log_types[current_type] }} {{ 'Logs'|trans }}
+                        {% if current_type == 'view' %}
+                            {{ 'Consultation'|trans }}
+                        {% elseif current_type == 'create' %}
+                            {{ 'Création'|trans }}
+                        {% elseif current_type == 'update' %}
+                            {{ 'Modification'|trans }}
+                        {% elseif current_type == 'delete' %}
+                            {{ 'Suppression'|trans }}
+                        {% elseif current_type == 'login' %}
+                            {{ 'Connexion'|trans }}
+                        {% elseif current_type == 'security' %}
+                            {{ 'Sécurité'|trans }}
+                        {% elseif current_type == 'error' %}
+                            {{ 'Erreur'|trans }}
+                        {% elseif current_type == 'system' %}
+                            {{ 'Système'|trans }}
+                        {% else %}
+                            {{ log_types[current_type] }}
+                        {% endif %} {{ 'Logs'|trans }}
                     {% else %}
                         {{ 'All Logs'|trans }}
                     {% endif %}
@@ -153,7 +189,25 @@
                                         <td>{{ log.createdAt|date('d/m/Y H:i:s') }}</td>
                                         <td>
                                             <span class="badge badge-{{ log.type }}">
-                                                {{ log.typeLabel }}
+                                                {% if log.type == 'view' %}
+                                                    {{ 'Consultation'|trans }}
+                                                {% elseif log.type == 'create' %}
+                                                    {{ 'Création'|trans }}
+                                                {% elseif log.type == 'update' %}
+                                                    {{ 'Modification'|trans }}
+                                                {% elseif log.type == 'delete' %}
+                                                    {{ 'Suppression'|trans }}
+                                                {% elseif log.type == 'login' %}
+                                                    {{ 'Connexion'|trans }}
+                                                {% elseif log.type == 'security' %}
+                                                    {{ 'Sécurité'|trans }}
+                                                {% elseif log.type == 'error' %}
+                                                    {{ 'Erreur'|trans }}
+                                                {% elseif log.type == 'system' %}
+                                                    {{ 'Système'|trans }}
+                                                {% else %}
+                                                    {{ log.typeLabel }}
+                                                {% endif %}
                                             </span>
                                         </td>
                                         <td>{{ log.action|replace({'_': ' '})|title }}</td>
