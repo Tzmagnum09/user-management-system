@@ -519,44 +519,57 @@ class AuditLogger
      * Déterminer automatiquement le type de log en fonction de l'action.
      */
     private function determineLogType(string $action): string
-    {
-        $action = strtolower($action);
-        
-        if (strpos($action, 'view') === 0 || strpos($action, 'list') === 0 || strpos($action, 'show') === 0) {
-            return AuditLog::TYPE_VIEW;
-        }
-        
-        if (strpos($action, 'create') === 0 || strpos($action, 'add') === 0 || strpos($action, 'new') === 0) {
-            return AuditLog::TYPE_CREATE;
-        }
-        
-        if (strpos($action, 'update') === 0 || strpos($action, 'edit') === 0 || strpos($action, 'modify') === 0) {
-            return AuditLog::TYPE_UPDATE;
-        }
-        
-        if (strpos($action, 'delete') === 0 || strpos($action, 'remove') === 0) {
-            return AuditLog::TYPE_DELETE;
-        }
-        
-        // Correction pour détecter également les actions de connexion/déconnexion
-        if (strpos($action, 'login') === 0 || 
-            strpos($action, 'logout') === 0 || 
-            strpos($action, 'log_in') === 0 || 
-            strpos($action, 'log_out') === 0 || 
-            strpos($action, 'logged_in') !== false || 
-            strpos($action, 'logged_out') !== false) {
-            return AuditLog::TYPE_LOGIN;
-        }
-        
-        if (strpos($action, 'security') === 0 || strpos($action, 'permission') === 0 || strpos($action, 'role') === 0) {
-            return AuditLog::TYPE_SECURITY;
-        }
-        
-        if (strpos($action, 'error') === 0 || strpos($action, 'exception') === 0 || strpos($action, 'fail') === 0) {
-            return AuditLog::TYPE_ERROR;
-        }
-        
-        // Par défaut, retourner le type système
-        return AuditLog::TYPE_SYSTEM;
+{
+    $action = strtolower($action);
+    
+    if (strpos($action, 'view') === 0 || 
+        strpos($action, 'list') === 0 || 
+        strpos($action, 'show') === 0 || 
+        strpos($action, 'preview') === 0) { // Ajout de "preview"
+        return AuditLog::TYPE_VIEW;
     }
-}
+    
+    if (strpos($action, 'create') === 0 || 
+        strpos($action, 'add') === 0 || 
+        strpos($action, 'new') === 0) {
+        return AuditLog::TYPE_CREATE;
+    }
+    
+    if (strpos($action, 'update') === 0 || 
+        strpos($action, 'edit') === 0 || 
+        strpos($action, 'modify') === 0 || 
+        strpos($action, 'updated') !== false || // Ajout de "updated"
+        strpos($action, 'preferences') !== false) { // Ajout de "preferences"
+        return AuditLog::TYPE_UPDATE;
+    }
+    
+    if (strpos($action, 'delete') === 0 || 
+        strpos($action, 'remove') === 0) {
+        return AuditLog::TYPE_DELETE;
+    }
+    
+    // Correction pour détecter également les actions de connexion/déconnexion
+    if (strpos($action, 'login') === 0 || 
+        strpos($action, 'logout') === 0 || 
+        strpos($action, 'log_in') === 0 || 
+        strpos($action, 'log_out') === 0 || 
+        strpos($action, 'logged_in') !== false || 
+        strpos($action, 'logged_out') !== false) {
+        return AuditLog::TYPE_LOGIN;
+    }
+    
+    if (strpos($action, 'security') === 0 || 
+        strpos($action, 'permission') === 0 || 
+        strpos($action, 'role') === 0) {
+        return AuditLog::TYPE_SECURITY;
+    }
+    
+    if (strpos($action, 'error') === 0 || 
+        strpos($action, 'exception') === 0 || 
+        strpos($action, 'fail') === 0) {
+        return AuditLog::TYPE_ERROR;
+    }
+    
+    // Par défaut, retourner le type système
+    return AuditLog::TYPE_SYSTEM;
+}}
