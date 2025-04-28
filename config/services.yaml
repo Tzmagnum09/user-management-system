@@ -23,6 +23,11 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
     
+    # Service de détection de navigateur
+    App\Service\BrowserDetectionService:
+        arguments:
+            $logger: '@logger'
+    
     # Explicitement configurer les subscribers avec priorité élevée
     App\EventSubscriber\LocaleSubscriber:
         tags:

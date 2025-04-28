@@ -13,7 +13,7 @@
         {% endif %}
         
         {% if log.osName != 'Unknown' and log.osName != log.browserName and log.deviceBrand != log.osName %}
-            <div class="os-name text-muted small">{{ log.osName }}</div>
+            <div class="os-name text-muted small">{{ log.osName }}{% if log.osVersion != 'Unknown' %} {{ log.osVersion }}{% endif %}</div>
         {% endif %}
         
         {% if is_granted('ROLE_SUPER_ADMIN') and app.request.query.get('debug') == '1' %}

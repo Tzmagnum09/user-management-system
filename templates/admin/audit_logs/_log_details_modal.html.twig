@@ -37,7 +37,7 @@
                     <dt class="col-sm-3">{{ 'Device'|trans }}</dt>
                     <dd class="col-sm-9">
                         {% if log.deviceBrand is defined and log.deviceBrand != 'Unknown' %}
-                            {{ log.deviceBrand }}
+                            <strong>{{ log.deviceBrand }}</strong>
                             {% if log.deviceModel != 'Unknown' and log.deviceModel != log.deviceBrand %}
                                 {{ log.deviceModel }}
                             {% endif %}
@@ -49,7 +49,7 @@
                     <dt class="col-sm-3">{{ 'Operating System'|trans }}</dt>
                     <dd class="col-sm-9">
                         {% if log.osName is defined and log.osName != 'Unknown' %}
-                            {{ log.osName }} {% if log.osVersion != 'Unknown' %}{{ log.osVersion }}{% endif %}
+                            <strong>{{ log.osName }}</strong> {% if log.osVersion != 'Unknown' %}{{ log.osVersion }}{% endif %}
                         {% else %}
                             {{ 'Unknown'|trans }}
                         {% endif %}
@@ -58,7 +58,7 @@
                     <dt class="col-sm-3">{{ 'Browser'|trans }}</dt>
                     <dd class="col-sm-9">
                         {% if log.browserName is defined and log.browserName != 'Unknown' %}
-                            {{ log.browserName }} {% if log.browserVersion != 'Unknown' %}{{ log.browserVersion }}{% endif %}
+                            <strong>{{ log.browserName }}</strong> {% if log.browserVersion != 'Unknown' %}{{ log.browserVersion }}{% endif %}
                         {% else %}
                             {{ 'Unknown'|trans }}
                         {% endif %}
